@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<JUCERPROJECT id="YfdhAp" name="Project_Chromatic_Aberation" projectType="audioplug"
+              useAppConfig="0" addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1">
+  <MAINGROUP id="PNlQAD" name="Project_Chromatic_Aberation">
+    <GROUP id="{BA4A925D-0D27-D341-425B-2B0900B84085}" name="Source">
+      <FILE id="Q7AQ30" name="Looper.h" compile="0" resource="0" file="Source/Looper.h"/>
+      <GROUP id="{7AE63851-2A0F-B86E-0A67-0603C06DFCE4}" name="stk">
+        <FILE id="HxN2gr" name="Chorus.cpp" compile="1" resource="0" file="Source/stk/Chorus.cpp"/>
+        <FILE id="ETb4bZ" name="Chorus.h" compile="0" resource="0" file="Source/stk/Chorus.h"/>
+        <FILE id="T7ntzs" name="Delay.cpp" compile="1" resource="0" file="Source/stk/Delay.cpp"/>
+        <FILE id="RKSeAn" name="Delay.h" compile="0" resource="0" file="Source/stk/Delay.h"/>
+        <FILE id="hxD4yY" name="DelayL.cpp" compile="1" resource="0" file="Source/stk/DelayL.cpp"/>
+        <FILE id="eMjVE8" name="DelayL.h" compile="0" resource="0" file="Source/stk/DelayL.h"/>
+        <FILE id="ZcOzp4" name="Effect.h" compile="0" resource="0" file="Source/stk/Effect.h"/>
+        <FILE id="eFg364" name="Filter.h" compile="0" resource="0" file="Source/stk/Filter.h"/>
+        <FILE id="lY4dhF" name="Generator.h" compile="0" resource="0" file="Source/stk/Generator.h"/>
+        <FILE id="wRnVHu" name="PitShift.cpp" compile="1" resource="0" file="Source/stk/PitShift.cpp"/>
+        <FILE id="LCSjVu" name="PitShift.h" compile="0" resource="0" file="Source/stk/PitShift.h"/>
+        <FILE id="J6dOyp" name="SineWave.cpp" compile="1" resource="0" file="Source/stk/SineWave.cpp"/>
+        <FILE id="fhP19W" name="SineWave.h" compile="0" resource="0" file="Source/stk/SineWave.h"/>
+        <FILE id="I1B8qj" name="Stk.cpp" compile="1" resource="0" file="Source/stk/Stk.cpp"/>
+        <FILE id="E984FS" name="Stk.h" compile="0" resource="0" file="Source/stk/Stk.h"/>
+      </GROUP>
+      <GROUP id="{61DDE7FB-AA73-9622-B16D-E0DF6E0661C3}" name="Dysomni">
+        <FILE id="ANoCcX" name="DysomniPitchShifter.cpp" compile="1" resource="0"
+              file="Source/Dysomni/DysomniPitchShifter.cpp"/>
+        <FILE id="ioyHvm" name="DysomniPitchShifter.h" compile="0" resource="0"
+              file="Source/Dysomni/DysomniPitchShifter.h"/>
+        <FILE id="tYUqx4" name="PitchDelay.cpp" compile="1" resource="0" file="Source/Dysomni/PitchDelay.cpp"/>
+        <FILE id="dbODLS" name="PitchDelay.h" compile="0" resource="0" file="Source/Dysomni/PitchDelay.h"/>
+        <FILE id="dGMWfu" name="PitchShifter.cpp" compile="1" resource="0"
+              file="Source/Dysomni/PitchShifter.cpp"/>
+        <FILE id="xo8IFU" name="PitchShifter.h" compile="0" resource="0" file="Source/Dysomni/PitchShifter.h"/>
+      </GROUP>
+      <GROUP id="{61405A4C-CF41-64AF-4714-A0635F8CF8B7}" name="McPherson">
+        <FILE id="siFXbh" name="McPhersonPitchShifter.cpp" compile="1" resource="0"
+              file="Source/McPherson/McPhersonPitchShifter.cpp"/>
+        <FILE id="ToadW2" name="McPhersonPitchShifter.h" compile="0" resource="0"
+              file="Source/McPherson/McPhersonPitchShifter.h"/>
+      </GROUP>
+      <GROUP id="{3F865442-94B3-5829-FC48-0083DD729DA2}" name="WangPhaseVocoder">
+        <GROUP id="{1119F2AC-A943-40F6-06EA-2D9B2763FF2A}" name="Vocoder">
+          <FILE id="vr5TVB" name="BlockCircularBuffer.h" compile="0" resource="0"
+                file="Source/WangPhaseVocoder/Vocoder/BlockCircularBuffer.h"/>
+          <FILE id="rYE5Zi" name="PhaseVocoder.h" compile="0" resource="0" file="Source/WangPhaseVocoder/Vocoder/PhaseVocoder.h"/>
+          <FILE id="bDs6dh" name="PitchShifter.h" compile="0" resource="0" file="Source/WangPhaseVocoder/Vocoder/PitchShifter.h"/>
+          <FILE id="PbeOSt" name="Resample.h" compile="0" resource="0" file="Source/WangPhaseVocoder/Vocoder/Resample.h"/>
+        </GROUP>
+        <FILE id="JGdu5Q" name="WangVocoderPitchShifter.cpp" compile="1" resource="0"
+              file="Source/WangPhaseVocoder/WangVocoderPitchShifter.cpp"/>
+        <FILE id="oYH3T7" name="WangVocoderPitchShifter.h" compile="0" resource="0"
+              file="Source/WangPhaseVocoder/WangVocoderPitchShifter.h"/>
+      </GROUP>
+      <GROUP id="{B5F266FF-6F8D-DB5E-E727-FD2A26E9801D}" name="WubVocoder">
+        <FILE id="P2ChiN" name="istft.cpp" compile="1" resource="0" file="Source/WubVocoder/istft.cpp"/>
+        <FILE id="glMbpV" name="istft.h" compile="0" resource="0" file="Source/WubVocoder/istft.h"/>
+        <FILE id="MTd2L4" name="PitchShifter.cpp" compile="1" resource="0"
+              file="Source/WubVocoder/PitchShifter.cpp"/>
+        <FILE id="fIjYIW" name="PitchShifter.h" compile="0" resource="0" file="Source/WubVocoder/PitchShifter.h"/>
+        <FILE id="EED4Y5" name="stft.cpp" compile="1" resource="0" file="Source/WubVocoder/stft.cpp"/>
+        <FILE id="ox11pi" name="stft.h" compile="0" resource="0" file="Source/WubVocoder/stft.h"/>
+        <FILE id="jp3dBc" name="WubPitchShifter.cpp" compile="1" resource="0"
+              file="Source/WubVocoder/WubPitchShifter.cpp"/>
+        <FILE id="IlEwrz" name="WubPitchShifter.h" compile="0" resource="0"
+              file="Source/WubVocoder/WubPitchShifter.h"/>
+      </GROUP>
+      <GROUP id="{26ECDC5D-CDA6-DF98-71ED-7D93318454F5}" name="WangSoundTouch">
+        <GROUP id="{7546A6A9-1150-CA8A-5F0C-43817BC41309}" name="SoundTouch">
+          <FILE id="jLjrBU" name="AAFilter.cpp" compile="1" resource="0" file="Source/WangSoundTouch/SoundTouch/AAFilter.cpp"/>
+          <FILE id="BrDz7A" name="AAFilter.h" compile="0" resource="0" file="Source/WangSoundTouch/SoundTouch/AAFilter.h"/>
+          <FILE id="qG7oJD" name="BPMDetect.cpp" compile="1" resource="0" file="Source/WangSoundTouch/SoundTouch/BPMDetect.cpp"/>
+          <FILE id="CQVffs" name="BPMDetect.h" compile="0" resource="0" file="Source/WangSoundTouch/SoundTouch/BPMDetect.h"/>
+          <FILE id="yipd6I" name="cpu_detect.h" compile="0" resource="0" file="Source/WangSoundTouch/SoundTouch/cpu_detect.h"/>
+          <FILE id="dYzufR" name="cpu_detect_x86.cpp" compile="1" resource="0"
+                file="Source/WangSoundTouch/SoundTouch/cpu_detect_x86.cpp"/>
+          <FILE id="RRH6iY" name="FIFOSampleBuffer.cpp" compile="1" resource="0"
+                file="Source/WangSoundTouch/SoundTouch/FIFOSampleBuffer.cpp"/>
+          <FILE id="oQf3Pv" name="FIFOSampleBuffer.h" compile="0" resource="0"
+                file="Source/WangSoundTouch/SoundTouch/FIFOSampleBuffer.h"/>
+          <FILE id="IpfzC8" name="FIFOSamplePipe.h" compile="0" resource="0"
+                file="Source/WangSoundTouch/SoundTouch/FIFOSamplePipe.h"/>
+          <FILE id="BfbNZP" name="FIRFilter.cpp" compile="1" resource="0" file="Source/WangSoundTouch/SoundTouch/FIRFilter.cpp"/>
+          <FILE id="au9gS5" name="FIRFilter.h" compile="0" resource="0" file="Source/WangSoundTouch/SoundTouch/FIRFilter.h"/>
+          <FILE id="o3MId9" name="InterpolateCubic.cpp" compile="1" resource="0"
+                file="Source/WangSoundTouch/SoundTouch/InterpolateCubic.cpp"/>
+          <FILE id="Rtq5CK" name="InterpolateCubic.h" compile="0" resource="0"
+                file="Source/WangSoundTouch/SoundTouch/InterpolateCubic.h"/>
+          <FILE id="l1ImRy" name="InterpolateLinear.cpp" compile="1" resource="0"
+                file="Source/WangSoundTouch/SoundTouch/InterpolateLinear.cpp"/>
+          <FILE id="UF2BVd" name="InterpolateLinear.h" compile="0" resource="0"
+                file="Source/WangSoundTouch/SoundTouch/InterpolateLinear.h"/>
+          <FILE id="E580pZ" name="InterpolateShannon.cpp" compile="1" resource="0"
+                file="Source/WangSoundTouch/SoundTouch/InterpolateShannon.cpp"/>
+          <FILE id="GSaems" name="InterpolateShannon.h" compile="0" resource="0"
+                file="Source/WangSoundTouch/SoundTouch/InterpolateShannon.h"/>
+          <FILE id="jU0wb5" name="Makefile.am" compile="0" resource="1" file="Source/WangSoundTouch/SoundTouch/Makefile.am"/>
+          <FILE id="t0MKhS" name="mmx_optimized.cpp" compile="1" resource="0"
+                file="Source/WangSoundTouch/SoundTouch/mmx_optimized.cpp"/>
+          <FILE id="XU8S0x" name="PeakFinder.cpp" compile="1" resource="0" file="Source/WangSoundTouch/SoundTouch/PeakFinder.cpp"/>
+          <FILE id="cuZfEs" name="PeakFinder.h" compile="0" resource="0" file="Source/WangSoundTouch/SoundTouch/PeakFinder.h"/>
+          <FILE id="bQZel9" name="RateTransposer.cpp" compile="1" resource="0"
+                file="Source/WangSoundTouch/SoundTouch/RateTransposer.cpp"/>
+          <FILE id="hAjB30" name="RateTransposer.h" compile="0" resource="0"
+                file="Source/WangSoundTouch/SoundTouch/RateTransposer.h"/>
+          <FILE id="XVfC5t" name="SoundTouch.cpp" compile="1" resource="0" file="Source/WangSoundTouch/SoundTouch/SoundTouch.cpp"/>
+          <FILE id="AlkDj6" name="SoundTouch.h" compile="0" resource="0" file="Source/WangSoundTouch/SoundTouch/SoundTouch.h"/>
+          <FILE id="ip6ATH" name="soundtouch_config.h" compile="0" resource="0"
+                file="Source/WangSoundTouch/SoundTouch/soundtouch_config.h"/>
+          <FILE id="fsHaUz" name="soundtouch_config.h.in" compile="0" resource="1"
+                file="Source/WangSoundTouch/SoundTouch/soundtouch_config.h.in"/>
+          <FILE id="jfgBCh" name="sse_optimized.cpp" compile="1" resource="0"
+                file="Source/WangSoundTouch/SoundTouch/sse_optimized.cpp"/>
+          <FILE id="hMdfGc" name="STTypes.h" compile="0" resource="0" file="Source/WangSoundTouch/SoundTouch/STTypes.h"/>
+          <FILE id="hAKkAx" name="TDStretch.cpp" compile="1" resource="0" file="Source/WangSoundTouch/SoundTouch/TDStretch.cpp"/>
+          <FILE id="GzyCQF" name="TDStretch.h" compile="0" resource="0" file="Source/WangSoundTouch/SoundTouch/TDStretch.h"/>
+        </GROUP>
+        <FILE id="qVrPHM" name="RingBufferForST.h" compile="0" resource="0"
+              file="Source/WangSoundTouch/RingBufferForST.h"/>
+        <FILE id="t2rcMK" name="WangSoundTouchPitchShifter.h" compile="0" resource="0"
+              file="Source/WangSoundTouch/WangSoundTouchPitchShifter.h"/>
+      </GROUP>
+      <FILE id="DzByEs" name="Voice.h" compile="0" resource="0" file="Source/Voice.h"/>
+      <FILE id="URqtyi" name="DownSampler.h" compile="0" resource="0" file="Source/DownSampler.h"/>
+      <FILE id="pglyxo" name="Saturator.h" compile="0" resource="0" file="Source/Saturator.h"/>
+      <FILE id="fYaVNs" name="signalsmith-stretch.h" compile="0" resource="0"
+            file="Source/signalsmith-stretch.h"/>
+      <FILE id="fLiY13" name="fft.h" compile="0" resource="0" file="Source/signalsmith-linear/fft.h"/>
+      <FILE id="v7oiMU" name="stft.h" compile="0" resource="0" file="Source/signalsmith-linear/stft.h"/>
+      <FILE id="QkrSyv" name="PluginProcessor.cpp" compile="1" resource="0"
+            file="Source/PluginProcessor.cpp"/>
+      <FILE id="V1l6dt" name="PluginProcessor.h" compile="0" resource="0"
+            file="Source/PluginProcessor.h"/>
+      <FILE id="yWUcYl" name="PluginEditor.cpp" compile="1" resource="0"
+            file="Source/PluginEditor.cpp"/>
+      <FILE id="mPPkGs" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
+    </GROUP>
+  </MAINGROUP>
+  <MODULES>
+    <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_devices" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_formats" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_plugin_client" showAllCode="1" useLocalCopy="0"
+            useGlobalPath="1"/>
+    <MODULE id="juce_audio_processors" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_processors_headless" showAllCode="1" useLocalCopy="0"
+            useGlobalPath="1"/>
+    <MODULE id="juce_audio_utils" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_core" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_data_structures" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_dsp" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_events" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_graphics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_gui_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_gui_extra" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+  </MODULES>
+  <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"/>
+  <EXPORTFORMATS>
+    <VS2019 targetFolder="Builds/VisualStudio2019">
+      <CONFIGURATIONS>
+        <CONFIGURATION isDebug="1" name="Debug" targetName="Project_Chromatic_Aberation"/>
+        <CONFIGURATION isDebug="0" name="Release" targetName="Project_Chromatic_Aberation"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_audio_basics" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_devices" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_formats" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_plugin_client" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_processors" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_processors_headless" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_utils" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_core" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_events" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_graphics" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_dsp" path="../../../JUCE/modules"/>
+      </MODULEPATHS>
+    </VS2019>
+    <VS2026 targetFolder="Builds/VisualStudio2026">
+      <CONFIGURATIONS>
+        <CONFIGURATION isDebug="1" name="Debug" targetName="Project_Chromatic_Aberation"/>
+        <CONFIGURATION isDebug="0" name="Release" targetName="Project_Chromatic_Aberation"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_audio_basics" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_devices" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_formats" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_plugin_client" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_processors" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_processors_headless" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_utils" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_core" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_events" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_graphics" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_dsp" path="../../../JUCE/modules"/>
+      </MODULEPATHS>
+    </VS2026>
+  </EXPORTFORMATS>
+</JUCERPROJECT>
