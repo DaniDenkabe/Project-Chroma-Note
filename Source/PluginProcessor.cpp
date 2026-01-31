@@ -103,6 +103,7 @@ void Project_Chromatic_AberationAudioProcessor::changeProgramName (int index, co
 
 
 void Project_Chromatic_AberationAudioProcessor::processGain(int index, juce::AudioBuffer<float>& buffer) {
+    int n = 0;
     juce::dsp::AudioBlock<float> block(buffer);
 
     auto leftBlock = block.getSingleChannelBlock(0);
