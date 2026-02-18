@@ -515,7 +515,7 @@ void Project_Chromatic_AberationAudioProcessor::processBlock (juce::AudioBuffer<
 
             processDelayLine(i, *copyBuffers[i]);
 
-            processLooper(i, *copyBuffers[i]);
+            //processLooper(i, *copyBuffers[i]);
 
         }
         else {
