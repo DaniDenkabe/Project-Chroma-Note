@@ -55,7 +55,7 @@ namespace juce::dsp {
         }
 
         bool isRunning() {
-            reeturn isLooping;
+            return isLooping;
         }
 
         void process(AudioBuffer<FloatType>& buffer) {
