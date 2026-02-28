@@ -1,0 +1,209 @@
+cmake_minimum_required(VERSION 4.3)
+project(Project_Chroma_Note)
+
+set(CMAKE_CXX_STANDARD 14)
+
+include_directories(JuceLibraryCode)
+include_directories(Source)
+include_directories(Source/Dysomni)
+include_directories(Source/JuriHock/Core)
+include_directories(Source/JuriHock/FFT)
+include_directories(Source/JuriHock/pocketfft)
+include_directories(Source/JuriHock/stftPitchShift)
+include_directories(Source/JuriHock/stftPitchShift/cxxopts)
+include_directories(Source/JuriHock/stftPitchShift/dr_libs)
+include_directories(Source/McPherson)
+include_directories(Source/signalsmith-linear)
+include_directories(Source/signalsmith-linear/include)
+include_directories(Source/signalsmith-linear/include/signalsmith-linear)
+include_directories(Source/signalsmith-linear/platform)
+include_directories(Source/signalsmith-linear/tests)
+include_directories(Source/signalsmith-linear/tests/others)
+include_directories(Source/stk)
+include_directories(Source/WangPhaseVocoder)
+include_directories(Source/WangPhaseVocoder/Vocoder)
+include_directories(Source/WangSoundTouch)
+include_directories(Source/WangSoundTouch/SoundTouch)
+include_directories(Source/WubVocoder)
+
+add_executable(Project_Chroma_Note
+    Builds/LinuxMakefile_1/make_helpers/arch_detection.cpp
+    Builds/LinuxMakefile_1/make_helpers/juce_LinuxSubprocessHelper.cpp
+    Builds/LinuxMakefile_1/make_helpers/juce_SimpleBinaryBuilder.cpp
+    JuceLibraryCode/BinaryData.cpp
+    JuceLibraryCode/BinaryData.h
+    JuceLibraryCode/include_juce_audio_basics.cpp
+    JuceLibraryCode/include_juce_audio_basics.mm
+    JuceLibraryCode/include_juce_audio_devices.cpp
+    JuceLibraryCode/include_juce_audio_devices.mm
+    JuceLibraryCode/include_juce_audio_formats.cpp
+    JuceLibraryCode/include_juce_audio_formats.mm
+    JuceLibraryCode/include_juce_audio_plugin_client_AAX.cpp
+    JuceLibraryCode/include_juce_audio_plugin_client_AAX.mm
+    JuceLibraryCode/include_juce_audio_plugin_client_AAX_utils.cpp
+    JuceLibraryCode/include_juce_audio_plugin_client_ARA.cpp
+    JuceLibraryCode/include_juce_audio_plugin_client_AU_1.mm
+    JuceLibraryCode/include_juce_audio_plugin_client_AU_2.mm
+    JuceLibraryCode/include_juce_audio_plugin_client_AUv3.mm
+    JuceLibraryCode/include_juce_audio_plugin_client_LV2.cpp
+    JuceLibraryCode/include_juce_audio_plugin_client_LV2.mm
+    JuceLibraryCode/include_juce_audio_plugin_client_Standalone.cpp
+    JuceLibraryCode/include_juce_audio_plugin_client_Unity.cpp
+    JuceLibraryCode/include_juce_audio_plugin_client_VST2.cpp
+    JuceLibraryCode/include_juce_audio_plugin_client_VST2.mm
+    JuceLibraryCode/include_juce_audio_plugin_client_VST3.cpp
+    JuceLibraryCode/include_juce_audio_plugin_client_VST3.mm
+    JuceLibraryCode/include_juce_audio_processors.cpp
+    JuceLibraryCode/include_juce_audio_processors.mm
+    JuceLibraryCode/include_juce_audio_processors_headless.cpp
+    JuceLibraryCode/include_juce_audio_processors_headless.mm
+    JuceLibraryCode/include_juce_audio_processors_headless_ara.cpp
+    JuceLibraryCode/include_juce_audio_processors_headless_lv2_libs.cpp
+    JuceLibraryCode/include_juce_audio_utils.cpp
+    JuceLibraryCode/include_juce_audio_utils.mm
+    JuceLibraryCode/include_juce_core.cpp
+    JuceLibraryCode/include_juce_core.mm
+    JuceLibraryCode/include_juce_core_CompilationTime.cpp
+    JuceLibraryCode/include_juce_data_structures.cpp
+    JuceLibraryCode/include_juce_data_structures.mm
+    JuceLibraryCode/include_juce_dsp.cpp
+    JuceLibraryCode/include_juce_dsp.mm
+    JuceLibraryCode/include_juce_events.cpp
+    JuceLibraryCode/include_juce_events.mm
+    JuceLibraryCode/include_juce_graphics.cpp
+    JuceLibraryCode/include_juce_graphics.mm
+    JuceLibraryCode/include_juce_graphics_Harfbuzz.cpp
+    JuceLibraryCode/include_juce_graphics_Sheenbidi.c
+    JuceLibraryCode/include_juce_gui_basics.cpp
+    JuceLibraryCode/include_juce_gui_basics.mm
+    JuceLibraryCode/include_juce_gui_extra.cpp
+    JuceLibraryCode/include_juce_gui_extra.mm
+    JuceLibraryCode/JuceHeader.h
+    JuceLibraryCode/JucePluginDefines.h
+    Source/Dysomni/DysomniPitchShifter.cpp
+    Source/Dysomni/DysomniPitchShifter.h
+    Source/Dysomni/PitchDelay.cpp
+    Source/Dysomni/PitchDelay.h
+    Source/Dysomni/PitchShifter.cpp
+    Source/Dysomni/PitchShifter.h
+    Source/JuriHock/Core/DelayedCore.cpp
+    Source/JuriHock/Core/DelayedCore.h
+    Source/JuriHock/Core/InstantCore.cpp
+    Source/JuriHock/Core/InstantCore.h
+    Source/JuriHock/FFT/PocketFFT.h
+    Source/JuriHock/FFT/RealFFT.h
+    Source/JuriHock/pocketfft/pocketfft.c
+    Source/JuriHock/pocketfft/pocketfft.h
+    Source/JuriHock/stftPitchShift/cxxopts/cxxopts.hpp
+    Source/JuriHock/stftPitchShift/dr_libs/dr_wav.h
+    Source/JuriHock/stftPitchShift/Arctangent.h
+    Source/JuriHock/stftPitchShift/Cepster.h
+    Source/JuriHock/stftPitchShift/CLI.h
+    Source/JuriHock/stftPitchShift/Dump.h
+    Source/JuriHock/stftPitchShift/ETC.h
+    Source/JuriHock/stftPitchShift/FFT.h
+    Source/JuriHock/stftPitchShift/IO.cpp
+    Source/JuriHock/stftPitchShift/IO.h
+    Source/JuriHock/stftPitchShift/main.cpp
+    Source/JuriHock/stftPitchShift/Normalizer.h
+    Source/JuriHock/stftPitchShift/Pitcher.h
+    Source/JuriHock/stftPitchShift/Resampler.h
+    Source/JuriHock/stftPitchShift/RFFT.h
+    Source/JuriHock/stftPitchShift/STFT.h
+    Source/JuriHock/stftPitchShift/StftPitchShift.cpp
+    Source/JuriHock/stftPitchShift/StftPitchShift.h
+    Source/JuriHock/stftPitchShift/StftPitchShiftCore.h
+    Source/JuriHock/stftPitchShift/Timer.h
+    Source/JuriHock/stftPitchShift/Version.h
+    Source/JuriHock/stftPitchShift/Vocoder.h
+    Source/JuriHock/stftPitchShift/wasm.cpp
+    Source/McPherson/McPhersonPitchShifter.cpp
+    Source/McPherson/McPhersonPitchShifter.h
+    Source/signalsmith-linear/include/signalsmith-linear/fft.h
+    Source/signalsmith-linear/include/signalsmith-linear/linear.h
+    Source/signalsmith-linear/include/signalsmith-linear/stft.h
+    Source/signalsmith-linear/platform/fft-accelerate.h
+    Source/signalsmith-linear/platform/fft-ipp.h
+    Source/signalsmith-linear/platform/fft-pffft-double.h
+    Source/signalsmith-linear/platform/fft-pffft.h
+    Source/signalsmith-linear/platform/linear-accelerate.h
+    Source/signalsmith-linear/tests/others/signalsmith-fft.h
+    Source/signalsmith-linear/tests/main.cpp
+    Source/signalsmith-linear/tests/stop-denormals.h
+    Source/signalsmith-linear/tests/stopwatch.h
+    Source/signalsmith-linear/tests/test-ffts.h
+    Source/signalsmith-linear/tests/test-linear.h
+    Source/signalsmith-linear/tests/test-runner.h
+    Source/signalsmith-linear/tests/test-stfts.h
+    Source/signalsmith-linear/fft.h
+    Source/signalsmith-linear/linear.h
+    Source/signalsmith-linear/stft.h
+    Source/stk/Chorus.cpp
+    Source/stk/Chorus.h
+    Source/stk/Delay.cpp
+    Source/stk/Delay.h
+    Source/stk/DelayL.cpp
+    Source/stk/DelayL.h
+    Source/stk/Effect.h
+    Source/stk/Filter.h
+    Source/stk/Generator.h
+    Source/stk/PitShift.cpp
+    Source/stk/PitShift.h
+    Source/stk/SineWave.cpp
+    Source/stk/SineWave.h
+    Source/stk/Stk.cpp
+    Source/stk/Stk.h
+    Source/WangPhaseVocoder/Vocoder/BlockCircularBuffer.h
+    Source/WangPhaseVocoder/Vocoder/PhaseVocoder.h
+    Source/WangPhaseVocoder/Vocoder/PitchShifter.h
+    Source/WangPhaseVocoder/Vocoder/Resample.h
+    Source/WangPhaseVocoder/WangVocoderPitchShifter.cpp
+    Source/WangPhaseVocoder/WangVocoderPitchShifter.h
+    Source/WangSoundTouch/SoundTouch/AAFilter.cpp
+    Source/WangSoundTouch/SoundTouch/AAFilter.h
+    Source/WangSoundTouch/SoundTouch/BPMDetect.cpp
+    Source/WangSoundTouch/SoundTouch/BPMDetect.h
+    Source/WangSoundTouch/SoundTouch/cpu_detect.h
+    Source/WangSoundTouch/SoundTouch/cpu_detect_x86.cpp
+    Source/WangSoundTouch/SoundTouch/FIFOSampleBuffer.cpp
+    Source/WangSoundTouch/SoundTouch/FIFOSampleBuffer.h
+    Source/WangSoundTouch/SoundTouch/FIFOSamplePipe.h
+    Source/WangSoundTouch/SoundTouch/FIRFilter.cpp
+    Source/WangSoundTouch/SoundTouch/FIRFilter.h
+    Source/WangSoundTouch/SoundTouch/InterpolateCubic.cpp
+    Source/WangSoundTouch/SoundTouch/InterpolateCubic.h
+    Source/WangSoundTouch/SoundTouch/InterpolateLinear.cpp
+    Source/WangSoundTouch/SoundTouch/InterpolateLinear.h
+    Source/WangSoundTouch/SoundTouch/InterpolateShannon.cpp
+    Source/WangSoundTouch/SoundTouch/InterpolateShannon.h
+    Source/WangSoundTouch/SoundTouch/mmx_optimized.cpp
+    Source/WangSoundTouch/SoundTouch/PeakFinder.cpp
+    Source/WangSoundTouch/SoundTouch/PeakFinder.h
+    Source/WangSoundTouch/SoundTouch/RateTransposer.cpp
+    Source/WangSoundTouch/SoundTouch/RateTransposer.h
+    Source/WangSoundTouch/SoundTouch/SoundTouch.cpp
+    Source/WangSoundTouch/SoundTouch/SoundTouch.h
+    Source/WangSoundTouch/SoundTouch/soundtouch_config.h
+    Source/WangSoundTouch/SoundTouch/sse_optimized.cpp
+    Source/WangSoundTouch/SoundTouch/STTypes.h
+    Source/WangSoundTouch/SoundTouch/TDStretch.cpp
+    Source/WangSoundTouch/SoundTouch/TDStretch.h
+    Source/WangSoundTouch/RingBufferForST.h
+    Source/WangSoundTouch/WangSoundTouchPitchShifter.h
+    Source/WubVocoder/istft.cpp
+    Source/WubVocoder/istft.h
+    Source/WubVocoder/PitchShifter.cpp
+    Source/WubVocoder/PitchShifter.h
+    Source/WubVocoder/stft.cpp
+    Source/WubVocoder/stft.h
+    Source/WubVocoder/WubPitchShifter.cpp
+    Source/WubVocoder/WubPitchShifter.h
+    Source/DownSampler.h
+    Source/Looper.h
+    Source/PluginEditor.cpp
+    Source/PluginEditor.h
+    Source/PluginProcessor.cpp
+    Source/PluginProcessor.h
+    Source/Saturator.h
+    Source/signalsmith-stretch.h
+    Source/Voice.h)

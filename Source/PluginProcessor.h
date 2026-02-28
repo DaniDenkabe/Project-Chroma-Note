@@ -23,7 +23,7 @@
 #include <vector>
 
 struct ChainSettings {
-    float pitchTransposition{ 0 };
+    float pitchTransposition{ 0 }; 
 };
 
 ChainSettings getChainSettings(juce::AudioProcessorValueTreeState& apvts);
@@ -110,8 +110,12 @@ private:
 
     std::vector <signalsmith::stretch::SignalsmithStretch<float>*> stretchList;
     std::vector <juce::AudioBuffer<float>*> stretchBuffers;
-    std::vector<std::vector<float*>> inBuffers;
-    std::vector<std::vector<float*>> outBuffers;
+    std::vector <std::vector<float*>> inBuffers;
+    std::vector <std::vector<float*>> outBuffers;
+
+    std::vector <DysomniPitchShifter*> dysmoniList;
+
+
 
     std::vector <juce::dsp::Looper<float>*> looperList;
 
