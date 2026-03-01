@@ -1,14 +1,14 @@
 /*
   ==============================================================================
 
-    Shifter.h
-    Created: 26 Feb 2026 11:18:07am
-    Author:  denkabe
+	Shifter.h
+	Created: 26 Feb 2026 11:18:07am
+	Author:  denkabe
 
   ==============================================================================
 */
 
-#include <bungee/Stream.h>
+#include "bungee-main/bungee/Stream.h"
 #include "WangSoundTouch/WangSoundTouchPitchShifter.h"
 #include "WubVocoder/WubPitchShifter.h"
 #include "McPherson/McPhersonPitchShifter.h"
@@ -25,9 +25,8 @@ namespace juce::dsp {
 		template <typename ProcessSpec>
 		void prepare(const ProcessSpec& spec) noexcept
 		{
-      shifter.prepare(spec);
+			shifter.prepare(spec);
 			sampleRate = spec.sampleRate;
-      
 			reset();
 		}
 
@@ -35,13 +34,13 @@ namespace juce::dsp {
 		{
 		}
 
-    void setPitch(int pitch) {
-      this->pitch = pitch;
-    }
+		void setPitch(int pitch) {
+			this->pitch = pitch;
+		}
 
 		template <typename ProcessContext>
 		void process(const juce::AudioBuffer<float>& buffer) {
-      auto&& inBlock = context.getInputBlock();
+			auto&& inBlock = context.getInputBlock();
 			auto&& outBlock = context.getOutputBlock();
 
 			jassert(inBlock.getNumChannels() == outBlock.getNumChannels());
@@ -50,13 +49,12 @@ namespace juce::dsp {
 			auto len = inBlock.getNumSamples();
 			auto numChannels = inBlock.getNumChannels();
 
-      const auto maxInputFrameCount = inBlock.getNumChannels(); 
-      Bungee::Stretcher<Bungee::Basic> stretch(sampleRate, numChannels);
-      stretcher.enableInstrumentation(true);
-      Bungee::Stream<Bungee::Basic> stream(stretcher, maxInputFrameCount, numChannels);
+			const auto maxInputFrameCount = inBlock.getNumChannels();
+			Bungee::Stretcher<Bungee::Basic> stretch(sampleRate, numChannels);
+			stretcher.enableInstrumentation(true);
+			Bungee::Stream<Bungee::Basic> stream(stretcher, maxInputFrameCount, numChannels);
 
-      if (context.isBypassed)
-			{
+			if (context.isBypassed) {
 
 				if (context.usesSeparateInputAndOutputBlocks())
 					outBlock.copyFrom(inBlock);
@@ -64,23 +62,21 @@ namespace juce::dsp {
 				return;
 			}
 
-      for (int chan = 0; i < numChannels; i++) {
-        auto* src = inBlock.getChannelPointer(chan);
+			for (int chan = 0; i < numChannels; i++) {
+				auto* src = inBlock.getChannelPointer(chan);
 				auto* dst = outBlock.getChannelPointer(chan);
-        const double outputFrameCountIdeal = (inputSampleCount * sampleRates.output) / (speed * sampleRates.input);
+				const double outputFrameCountIdeal = (inputSampleCount * sampleRates.output) / (speed * sampleRates.input);
 
-        const auto outputFrameCountActual = stream.process(src, dst, inBlock.getNumSamples(), outputFrameCountIdeal, pitch);
-      }
-      
-    
+				const auto outputFrameCountActual = stream.process(src, dst, inBlock.getNumSamples(), outputFrameCountIdeal, pitch);
+			}
 		}
 
 	private:
 		double sampleRate;
-    double rate;
-    double blend;
-    double reso;
-    double pitch;
-    double speed;
+		double rate;
+		double blend;
+		double reso;
+		double pitch;
+		double speed;
 	};
 }

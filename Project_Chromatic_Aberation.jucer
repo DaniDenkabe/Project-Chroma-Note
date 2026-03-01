@@ -4,6 +4,63 @@
               useAppConfig="0" addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1">
   <MAINGROUP id="PNlQAD" name="Project_Chromatic_Aberation">
     <GROUP id="{BA4A925D-0D27-D341-425B-2B0900B84085}" name="Source">
+      <GROUP id="{872E48D9-C3EE-00D5-14D6-307333289CFD}" name="bungee-main">
+        <GROUP id="{353C962C-C8F3-5863-402E-58975333BA63}" name="bungee">
+          <FILE id="pheWjw" name="Bungee.h" compile="0" resource="0" file="Source/bungee-main/bungee/Bungee.h"/>
+          <FILE id="tjXwpH" name="CommandLine.h" compile="0" resource="0" file="Source/bungee-main/bungee/CommandLine.h"/>
+          <FILE id="hBBYQG" name="Modes.h" compile="0" resource="0" file="Source/bungee-main/bungee/Modes.h"/>
+          <FILE id="UyCjiS" name="Push.h" compile="0" resource="0" file="Source/bungee-main/bungee/Push.h"/>
+          <FILE id="TATYvb" name="Stream.h" compile="0" resource="0" file="Source/bungee-main/bungee/Stream.h"/>
+        </GROUP>
+        <GROUP id="{DC6D0CF7-438A-C895-00F5-03757ABBB6BC}" name="cmd">
+          <FILE id="wnkCU4" name="main.cpp" compile="1" resource="0" file="Source/bungee-main/cmd/main.cpp"/>
+        </GROUP>
+        <GROUP id="{F434D619-62DC-7AD8-BD12-74FB72153BB1}" name="src">
+          <FILE id="RuJ0nl" name="Assert.cpp" compile="1" resource="0" file="Source/bungee-main/src/Assert.cpp"/>
+          <FILE id="pY5gIK" name="Assert.h" compile="0" resource="0" file="Source/bungee-main/src/Assert.h"/>
+          <FILE id="ELMRbO" name="Dispatch.h" compile="0" resource="0" file="Source/bungee-main/src/Dispatch.h"/>
+          <FILE id="YLenbc" name="Fourier.cpp" compile="1" resource="0" file="Source/bungee-main/src/Fourier.cpp"/>
+          <FILE id="gtmi0e" name="Fourier.h" compile="0" resource="0" file="Source/bungee-main/src/Fourier.h"/>
+          <FILE id="in76Z1" name="Grain.cpp" compile="1" resource="0" file="Source/bungee-main/src/Grain.cpp"/>
+          <FILE id="d2hz3v" name="Grain.h" compile="0" resource="0" file="Source/bungee-main/src/Grain.h"/>
+          <FILE id="J6gZje" name="Grains.cpp" compile="1" resource="0" file="Source/bungee-main/src/Grains.cpp"/>
+          <FILE id="GzqEHZ" name="Grains.h" compile="0" resource="0" file="Source/bungee-main/src/Grains.h"/>
+          <FILE id="mrXY5u" name="Input.cpp" compile="1" resource="0" file="Source/bungee-main/src/Input.cpp"/>
+          <FILE id="nlMzWL" name="Input.h" compile="0" resource="0" file="Source/bungee-main/src/Input.h"/>
+          <FILE id="JEtBor" name="Instrumentation.cpp" compile="1" resource="0"
+                file="Source/bungee-main/src/Instrumentation.cpp"/>
+          <FILE id="EqcK8P" name="Instrumentation.h" compile="0" resource="0"
+                file="Source/bungee-main/src/Instrumentation.h"/>
+          <FILE id="Ol5IGA" name="log2.h" compile="0" resource="0" file="Source/bungee-main/src/log2.h"/>
+          <FILE id="rVm2VC" name="Modes.h" compile="0" resource="0" file="Source/bungee-main/src/Modes.h"/>
+          <FILE id="kkuteO" name="Output.cpp" compile="1" resource="0" file="Source/bungee-main/src/Output.cpp"/>
+          <FILE id="vtmew5" name="Output.h" compile="0" resource="0" file="Source/bungee-main/src/Output.h"/>
+          <FILE id="Dh1owC" name="Partials.cpp" compile="1" resource="0" file="Source/bungee-main/src/Partials.cpp"/>
+          <FILE id="t9JM4Z" name="Partials.h" compile="0" resource="0" file="Source/bungee-main/src/Partials.h"/>
+          <FILE id="yv8EJK" name="Phase.h" compile="0" resource="0" file="Source/bungee-main/src/Phase.h"/>
+          <FILE id="UyVSCH" name="Resample.h" compile="0" resource="0" file="Source/bungee-main/src/Resample.h"/>
+          <FILE id="dGtjuU" name="Stretch.cpp" compile="1" resource="0" file="Source/bungee-main/src/Stretch.cpp"/>
+          <FILE id="vI6kPr" name="Stretch.h" compile="0" resource="0" file="Source/bungee-main/src/Stretch.h"/>
+          <FILE id="mHt7B8" name="Stretcher.cpp" compile="1" resource="0" file="Source/bungee-main/src/Stretcher.cpp"/>
+          <FILE id="vOekkN" name="Stretcher.h" compile="0" resource="0" file="Source/bungee-main/src/Stretcher.h"/>
+          <FILE id="ZfBZS3" name="Synthesis.cpp" compile="1" resource="0" file="Source/bungee-main/src/Synthesis.cpp"/>
+          <FILE id="z4x8qR" name="Synthesis.h" compile="0" resource="0" file="Source/bungee-main/src/Synthesis.h"/>
+          <FILE id="RbiTGb" name="Timing.cpp" compile="1" resource="0" file="Source/bungee-main/src/Timing.cpp"/>
+          <FILE id="uiV8AH" name="Timing.h" compile="0" resource="0" file="Source/bungee-main/src/Timing.h"/>
+          <FILE id="JJJL4Y" name="version.cpp" compile="1" resource="0" file="Source/bungee-main/src/version.cpp"/>
+          <FILE id="fCkFJ5" name="Window.cpp" compile="1" resource="0" file="Source/bungee-main/src/Window.cpp"/>
+          <FILE id="ygFmXh" name="Window.h" compile="0" resource="0" file="Source/bungee-main/src/Window.h"/>
+        </GROUP>
+        <FILE id="cK36H5" name="CMakeLists.txt" compile="0" resource="1" file="Source/bungee-main/CMakeLists.txt"/>
+        <FILE id="bLFJdZ" name="CMakePresets.json" compile="0" resource="1"
+              file="Source/bungee-main/CMakePresets.json"/>
+        <FILE id="XK0Afx" name="libbungee.pc.in" compile="0" resource="1" file="Source/bungee-main/libbungee.pc.in"/>
+        <FILE id="lSrR9l" name="LICENSE" compile="0" resource="1" file="Source/bungee-main/LICENSE"/>
+        <FILE id="p42DO8" name="README.md" compile="0" resource="1" file="Source/bungee-main/README.md"/>
+        <FILE id="ZqR3I3" name="README.md-waveform.png" compile="0" resource="1"
+              file="Source/bungee-main/README.md-waveform.png"/>
+      </GROUP>
+      <FILE id="LPGLj2" name="Shifter.h" compile="0" resource="0" file="Source/Shifter.h"/>
       <FILE id="Q7AQ30" name="Looper.h" compile="0" resource="0" file="Source/Looper.h"/>
       <GROUP id="{7AE63851-2A0F-B86E-0A67-0603C06DFCE4}" name="stk">
         <FILE id="HxN2gr" name="Chorus.cpp" compile="1" resource="0" file="Source/stk/Chorus.cpp"/>
