@@ -138,6 +138,7 @@ void Project_Chromatic_AberationAudioProcessor::processPitch(int index, juce::Au
 
     stretchList[index]->setTransposeSemitones(pitchSemis[index]);
 
+
     for (int ch = 0; ch < numChannels; ++ch)
     {
         inBuffers[index][ch] = const_cast<float*>(buffer.getReadPointer(ch));

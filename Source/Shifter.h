@@ -8,7 +8,6 @@
   ==============================================================================
 */
 
-#include "bungee-main/bungee/Stream.h"
 #include "WangSoundTouch/WangSoundTouchPitchShifter.h"
 #include "WubVocoder/WubPitchShifter.h"
 #include "McPherson/McPhersonPitchShifter.h"
@@ -25,7 +24,6 @@ namespace juce::dsp {
 		template <typename ProcessSpec>
 		void prepare(const ProcessSpec& spec) noexcept
 		{
-			shifter.prepare(spec);
 			sampleRate = spec.sampleRate;
 			reset();
 		}
@@ -49,10 +47,6 @@ namespace juce::dsp {
 			auto len = inBlock.getNumSamples();
 			auto numChannels = inBlock.getNumChannels();
 
-			const auto maxInputFrameCount = inBlock.getNumChannels();
-			Bungee::Stretcher<Bungee::Basic> stretch(sampleRate, numChannels);
-			stretcher.enableInstrumentation(true);
-			Bungee::Stream<Bungee::Basic> stream(stretcher, maxInputFrameCount, numChannels);
 
 			if (context.isBypassed) {
 

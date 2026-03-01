@@ -14,7 +14,7 @@ namespace juce::dsp {
 	template <typename FloatType>
 	class DownSampler {
 	public:
-		void setSampleRate(float sampleFactor) {
+		void setSampleRate(float sampleFactor) { 
 			this->sampleFactor.setTargetValue(sampleFactor);
 		}
 
