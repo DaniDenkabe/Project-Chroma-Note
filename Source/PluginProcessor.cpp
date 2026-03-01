@@ -141,8 +141,8 @@ void Project_Chromatic_AberationAudioProcessor::processPitch(int index, juce::Au
 
     for (int ch = 0; ch < numChannels; ++ch)
     {
-        inBuffers[index][ch] = const_cast<float*>(buffer.getReadPointer(ch));
-        outBuffers[index][ch] = stretchBuffers[index]->getWritePointer(ch);
+        inBuffers[ch][index] = const_cast<float*>(buffer.getReadPointer(ch));
+        outBuffers[ch][index] = stretchBuffers[index]->getWritePointer(ch);
     }
 
     int inputSamples = numSamples;  
@@ -468,7 +468,7 @@ void Project_Chromatic_AberationAudioProcessor::processBlock (juce::AudioBuffer<
     const int numChannels = buffer.getNumChannels();
     const int numSamples = buffer.getNumSamples();
 
-    float voiceGain = 0.000005;
+    float voiceGain = 0.0005;
 
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear(i, 0, buffer.getNumSamples());
@@ -486,12 +486,7 @@ void Project_Chromatic_AberationAudioProcessor::processBlock (juce::AudioBuffer<
         }
     }
 
-    // In case we have more outputs than inputs, this code clears any output
-    // channels that didn't contain input data, (because these aren't
-    // guaranteed to be empty - they may contain garbage).
-    // This is here to avoid people getting screaming feedback
-    // when they first compile a plugin, but obviously you don't need to keep
-    // this code if your algorithm always overwrites all the output channels.
+    
 
     for (int i = 0; i < copyBuffers.size() + 1; i++) {
 
@@ -502,7 +497,7 @@ void Project_Chromatic_AberationAudioProcessor::processBlock (juce::AudioBuffer<
             processGain(i, *copyBuffers[i]);
 
             //When I comment out this line everything works fine
-            //processPitch(i, *copyBuffers[i]);
+            processPitch(i, *copyBuffers[i]);
 
             processSaturator(i, *copyBuffers[i]);
 
@@ -522,7 +517,7 @@ void Project_Chromatic_AberationAudioProcessor::processBlock (juce::AudioBuffer<
         else {
             processGain(i, buffer);
 
-            //processPitch(i, buffer);
+            processPitch(i, buffer);
 
             processSaturator(i, buffer);
 
