@@ -1,0 +1,9 @@
+/home/denkabe/git_personal/Project-Chroma-Note/Source/bungee/build/CMakeFiles/bungee_library.dir
+/home/denkabe/git_personal/Project-Chroma-Note/Source/bungee/build/CMakeFiles/bungee_executable.dir
+/home/denkabe/git_personal/Project-Chroma-Note/Source/bungee/build/CMakeFiles/pffft.dir
+/home/denkabe/git_personal/Project-Chroma-Note/Source/bungee/build/CMakeFiles/edit_cache.dir
+/home/denkabe/git_personal/Project-Chroma-Note/Source/bungee/build/CMakeFiles/rebuild_cache.dir
+/home/denkabe/git_personal/Project-Chroma-Note/Source/bungee/build/CMakeFiles/list_install_components.dir
+/home/denkabe/git_personal/Project-Chroma-Note/Source/bungee/build/CMakeFiles/install.dir
+/home/denkabe/git_personal/Project-Chroma-Note/Source/bungee/build/CMakeFiles/install/local.dir
+/home/denkabe/git_personal/Project-Chroma-Note/Source/bungee/build/CMakeFiles/install/strip.dir
