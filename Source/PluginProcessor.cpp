@@ -138,18 +138,22 @@ void Project_Chromatic_AberationAudioProcessor::processPitch(int index, juce::Au
 
     stretchList[index]->setTransposeSemitones(pitchSemis[index]);
 
+    float** inBuffer = const_cast<float**>(buffer.getArrayOfReadPointers());
+    float** outBuffer = const_cast<float**>(stretchBuffers[index]->getArrayOfWritePointers());
 
-    for (int ch = 0; ch < numChannels; ++ch)
-    {
-        inBuffers[ch][index] = const_cast<float*>(buffer.getReadPointer(ch));
-        outBuffers[ch][index] = stretchBuffers[index]->getWritePointer(ch);
-    }
+    //for (int ch = 0; ch < numChannels; ++ch)
+    //{
+    //   /* inBuffers[index][ch] = const_cast<float*>(buffer.getReadPointer(ch));
+    //    outBuffers[index][ch] = stretchBuffers[index]->getWritePointer(ch);*/
+    //    inBuffer[ch] = const_cast<float*>(buffer.getReadPointer(ch));
+    //    outBuffer[ch] = stretchBuffers[index]->getWritePointer(ch);
+    //}
 
     int inputSamples = numSamples;  
     int outputSamples = numSamples;
 
     // Process with Signalsmith Stretch
-    stretchList[index]->process(inBuffers[index].data(), numSamples, outBuffers[index].data(), numSamples);
+    stretchList[index]->process(inBuffer, numSamples, outBuffer, numSamples);
 
     // Copy processed audio back into JUCE buffer
     const int copySamples = std::min(numSamples, outputSamples);
@@ -162,7 +166,8 @@ void Project_Chromatic_AberationAudioProcessor::processPitch(int index, juce::Au
 
 void Project_Chromatic_AberationAudioProcessor::processPitch(int index, juce::dsp::ProcessSpec spec) {
     stretchList.push_back(new signalsmith::stretch::SignalsmithStretch<float>);
-    stretchList[index]->presetDefault(spec.numChannels, spec.sampleRate, true);
+    //stretchList[index]->presetCheaper(spec.numChannels, spec.sampleRate, false);
+    stretchList[index]->configure(spec.numChannels, spec.sampleRate * 0.1, spec.sampleRate * 0.04, true);
     stretchList[index]->reset();
     stretchBuffers.push_back(new juce::AudioBuffer<float>);
     stretchBuffers[index]->setSize(getNumInputChannels(), spec.sampleRate, false, true, true);
@@ -468,7 +473,7 @@ void Project_Chromatic_AberationAudioProcessor::processBlock (juce::AudioBuffer<
     const int numChannels = buffer.getNumChannels();
     const int numSamples = buffer.getNumSamples();
 
-    float voiceGain = 0.0005;
+    float voiceGain = 0.05;
 
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear(i, 0, buffer.getNumSamples());
@@ -480,11 +485,11 @@ void Project_Chromatic_AberationAudioProcessor::processBlock (juce::AudioBuffer<
         }
     }
     buffer.clear();
-    for (int i = 0; i < copyBuffers.size(); i++) {
+    /*for (int i = 0; i < copyBuffers.size(); i++) {
         for (int chan = 0; chan < getTotalNumOutputChannels(); chan++) {
             buffer.addFrom(chan, 0, *copyBuffers.at(i), chan, 0, buffer.getNumSamples(), voiceGain);
         }
-    }
+    }*/
 
     
 
