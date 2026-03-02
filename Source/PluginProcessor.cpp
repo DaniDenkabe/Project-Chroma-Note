@@ -11,7 +11,7 @@
 
 #include <cmath>
 #include <cstdlib>
-#include <thread>
+#include <thread> 
 
 //==============================================================================
 Project_Chromatic_AberationAudioProcessor::Project_Chromatic_AberationAudioProcessor()
@@ -140,14 +140,6 @@ void Project_Chromatic_AberationAudioProcessor::processPitch(int index, juce::Au
 
     float** inBuffer = const_cast<float**>(buffer.getArrayOfReadPointers());
     float** outBuffer = const_cast<float**>(stretchBuffers[index]->getArrayOfWritePointers());
-
-    //for (int ch = 0; ch < numChannels; ++ch)
-    //{
-    //   /* inBuffers[index][ch] = const_cast<float*>(buffer.getReadPointer(ch));
-    //    outBuffers[index][ch] = stretchBuffers[index]->getWritePointer(ch);*/
-    //    inBuffer[ch] = const_cast<float*>(buffer.getReadPointer(ch));
-    //    outBuffer[ch] = stretchBuffers[index]->getWritePointer(ch);
-    //}
 
     int inputSamples = numSamples;  
     int outputSamples = numSamples;
@@ -603,25 +595,32 @@ void Project_Chromatic_AberationAudioProcessor::setVariables(int index, bool set
 
         pitchSemis[index] = apvts.getRawParameterValue("Pitch" + num)->load();
         freqs[index] = apvts.getRawParameterValue("Freq" + num)->load();
+        wows[index] = apvts.getRawParameterValue("WOW" + num)->load();
         amplitudes[index] = apvts.getRawParameterValue("Amplitude" + num)->load();
         lfos[index] = apvts.getRawParameterValue("LFO" + num)->load();
 
         counters[index] += freqs[index];
-        float shift = sin(counters[index]);
-        if (lfo < 1) {
-            shift *= amplitudes[index];
+        float shift = amplitude * sin(counters[index] * wows[index]) + sin(counters[index] * freqs[index]);
+        if (shift > 0) {
+            shift = (lfos[index] * shift + (100 - lfos[index]) * amplitude) / 100;
+        } else if (shift < 0) {
+            shift = (lfos[index] * shift + (100 - lfos[index]) * -amplitude) / 100;
         }
-        else if (lfo < 2) {
-            shift = (abs(1 / shift) * shift) * amplitudes[index];
-        }
-        else {
-            randCounts[index]++;
-            if (randCounts[index] == freqs[index] + 3) {
-                randCounts[index] = 0;
-                srand(time(0));
-                shift = (((rand() % 201) - 100) / 100) * amplitudes[index];
-            }
-        }
+
+        // if (lfo < 1) {
+        //     shift *= amplitudes[index];
+        // }
+        // else if (lfo < 2) {
+        //     shift = (abs(1 / shift) * shift) * amplitudes[index];
+        // }
+        // else {
+        //     randCounts[index]++;
+        //     if (randCounts[index] == freqs[index] + 3) {
+        //         randCounts[index] = 0;
+        //         srand(time(0));
+        //         shift = (((rand() % 201) - 100) / 100) * amplitudes[index];
+        //     }
+        // }
         pitchSemis[index] += shift;
 
         saturations[index] = apvts.getRawParameterValue("Saturation" + num)->load();
@@ -696,9 +695,10 @@ juce::AudioProcessorValueTreeState::ParameterLayout Project_Chromatic_AberationA
         std::string num = std::to_string(i);
         layout.add(std::make_unique<juce::AudioParameterFloat>("Gain" + num, "Gain" + num, juce::NormalisableRange<float>(-100.f, 100.f, 0.5, 1.f), 0));
         layout.add(std::make_unique<juce::AudioParameterFloat>("Pitch" + num, "Pitch" + num, juce::NormalisableRange<float>(-10.f, 10.f, 0.5, 1.f), 0));
-        layout.add(std::make_unique<juce::AudioParameterFloat>("Freq" + num, "Freq" + num, juce::NormalisableRange<float>(0.0001, 2.f, 0.0001, 1.f), 0));
+        layout.add(std::make_unique<juce::AudioParameterFloat>("Freq" + num, "Freq" + num, juce::NormalisableRange<float>(0.0001, 5.f, 0.0001, 1.f), 0));
+        layout.add(std::make_unique<juce::AudioParameterFloat>("WOW" + num, "WOW" + num, juce::NormalisableRange<float>(0.0001, 5.f, 0.0001, 1.f), 0));
         layout.add(std::make_unique<juce::AudioParameterFloat>("Amplitude" + num, "Amplitude" + num, juce::NormalisableRange<float>(0, 5.f, 0.005, 1.f), 0));
-        layout.add(std::make_unique<juce::AudioParameterFloat>("LFO" + num, "LFO" + num, juce::NormalisableRange<float>(0, 3.f, 0.05, 1.f), 0));
+        layout.add(std::make_unique<juce::AudioParameterFloat>("LFO" + num, "LFO" + num, juce::NormalisableRange<float>(0, 100.f, 0.05, 1.f), 0));
         layout.add(std::make_unique<juce::AudioParameterFloat>("High Pass" + num, "High Pass" + num, juce::NormalisableRange<float>(20.f, 20000.f, 1.f, 1.f), 20.f));
         layout.add(std::make_unique<juce::AudioParameterFloat>("Low Pass" + num, "Low Pass" + num, juce::NormalisableRange<float>(20.f, 20000.f, 1.f, 1.f), 20000.f));
         layout.add(std::make_unique<juce::AudioParameterFloat>("Mix" + num, "Mix" + num, juce::NormalisableRange<float>(0.f, 1.f, 0.1, 1.f), 0));

@@ -121,7 +121,7 @@ private:
 
     std::vector <float> pitchSemis, freqs, amplitudes, counters, lfos, randCounts, threshs, ratios, attacks, releases, highFreqs, lowFreqs,
         compMixes, gainAmounts, dampings, roomSizes, revMixes, widths, saturations, sampleFactors, rates, depths, centreDelays, feedbacks, 
-        chorusMixes, delayAmounts, loopLengths, loopIsOn, bitDepths;
+        chorusMixes, delayAmounts, loopLengths, loopIsOn, bitDepths, wows;
 
 
     using Filter = juce::dsp::IIR::Filter<float>;
