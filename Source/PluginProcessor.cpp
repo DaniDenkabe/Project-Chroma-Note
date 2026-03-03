@@ -549,6 +549,7 @@ void Project_Chromatic_AberationAudioProcessor::setVariables(int index, bool set
         freqs.push_back(apvts.getRawParameterValue("Freq" + num)->load());
         amplitudes.push_back(apvts.getRawParameterValue("Amplitude" + num)->load());
         lfos.push_back(apvts.getRawParameterValue("LFO" + num)->load());
+        wows.push_back(apvts.getRawParameterValue("WOW" + num)->load());
 
         std::vector<float*> inList;
         inList.resize(100);
@@ -600,11 +601,11 @@ void Project_Chromatic_AberationAudioProcessor::setVariables(int index, bool set
         lfos[index] = apvts.getRawParameterValue("LFO" + num)->load();
 
         counters[index] += freqs[index];
-        float shift = amplitude * sin(counters[index] * wows[index]) + sin(counters[index] * freqs[index]);
+        float shift = (amplitudes[index] / 10) * sin(counters[index] * (4 + (wows[index] / 5))) + amplitudes[index] * sin(counters[index] * freqs[index]);
         if (shift > 0) {
-            shift = (lfos[index] * shift + (100 - lfos[index]) * amplitude) / 100;
+            shift = ((100 - lfos[index]) * shift + lfos[index] * amplitudes[index]) / 100;
         } else if (shift < 0) {
-            shift = (lfos[index] * shift + (100 - lfos[index]) * -amplitude) / 100;
+            shift = ((100 - lfos[index]) * shift + lfos[index] * -amplitudes[index]) / 100;
         }
 
         // if (lfo < 1) {
