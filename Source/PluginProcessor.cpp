@@ -600,28 +600,22 @@ void Project_Chromatic_AberationAudioProcessor::setVariables(int index, bool set
         amplitudes[index] = apvts.getRawParameterValue("Amplitude" + num)->load();
         lfos[index] = apvts.getRawParameterValue("LFO" + num)->load();
 
+        
+        if ((sin(counters[index] * (4 + (wows[index] / 5))) <= 0 && sin((counters[index] + freqs[index]) * (4 + (wows[index] / 5))) > 0) 
+        || (sin(counters[index] * (4 + (wows[index] / 5))) > 0 && sin((counters[index] + freqs[index]) * (4 + (wows[index] / 5))) < 0)) {
+            wowAmps[index].setTargetValue(rand() % wows[index]);
+        }
+
         counters[index] += freqs[index];
-        float shift = (amplitudes[index] / 10) * sin(counters[index] * (4 + (wows[index] / 5))) + amplitudes[index] * sin(counters[index] * freqs[index]);
+
+        
+        float shift = (wowAmps[index].getNextValue()) * sin(counters[index] * (4 + (wows[index] / 5))) + amplitudes[index] * sin(counters[index] * freqs[index]);
         if (shift > 0) {
             shift = ((100 - lfos[index]) * shift + lfos[index] * amplitudes[index]) / 100;
         } else if (shift < 0) {
             shift = ((100 - lfos[index]) * shift + lfos[index] * -amplitudes[index]) / 100;
         }
 
-        // if (lfo < 1) {
-        //     shift *= amplitudes[index];
-        // }
-        // else if (lfo < 2) {
-        //     shift = (abs(1 / shift) * shift) * amplitudes[index];
-        // }
-        // else {
-        //     randCounts[index]++;
-        //     if (randCounts[index] == freqs[index] + 3) {
-        //         randCounts[index] = 0;
-        //         srand(time(0));
-        //         shift = (((rand() % 201) - 100) / 100) * amplitudes[index];
-        //     }
-        // }
         pitchSemis[index] += shift;
 
         saturations[index] = apvts.getRawParameterValue("Saturation" + num)->load();

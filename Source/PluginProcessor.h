@@ -123,7 +123,7 @@ private:
         compMixes, gainAmounts, dampings, roomSizes, revMixes, widths, saturations, sampleFactors, rates, depths, centreDelays, feedbacks, 
         chorusMixes, delayAmounts, loopLengths, loopIsOn, bitDepths, wows;
 
-
+    std::vector <SmoothedValue<float, ValueSmoothingTupes::Linear>> wowAmps;
     using Filter = juce::dsp::IIR::Filter<float>;
     signalsmith::stretch::SignalsmithStretch<float> stretch;
 
