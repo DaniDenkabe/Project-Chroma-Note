@@ -12,6 +12,7 @@
 #include <cmath>
 #include <cstdlib>
 #include <thread> 
+#include <ctime>
 
 //==============================================================================
 Project_Chromatic_AberationAudioProcessor::Project_Chromatic_AberationAudioProcessor()
