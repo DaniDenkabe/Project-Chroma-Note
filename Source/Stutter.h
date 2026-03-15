@@ -20,19 +20,52 @@ namespace juce::dsp {
 		template <typename ProcessSpec>
 		void prepare(const ProcessSpec& spec) noexcept
 		{
+			passThru = false;
+			isOn = true;
+			onSpace = 1;
+			offSpace = 0;
+			onOffset = 0;
+			offOffset = 0;
+			count = 0;
+			attack = 0;
+			release = 0;
+			currSpace = 0;
+		}
 
+		void setOnSpace(int onSpace) {
+			this->onSpace = onSpace;
+		}
+
+		void setOffSpace(int offSpace) {
+			this->offSpace = offSpace;
+		}
+
+		void setOnOffset(int onOffset) {
+			this->onOffset = onOffset;
+		}
+
+		void setOffOffset(int offOffset) {
+			this->offOffset = offOffset;
+		}
+
+		void setAttack(int attack) {
+			this->attack = attack;
+		}
+
+		void setRelease(int release) {
+			this->release = release;
 		}
 
 		void reset() noexcept
 		{
 		}
 
-    float volFunc(int count) {
+    float volFunc() {
       int funcValue = -pow((currSpace - count) - (currSpace / 2), 2) * (4 / pow(currSpace, 2));
       if (count >= currSpace / 2) {
         int finalVal = (funcValue * attack + (1 - attack));
       } else {
-        int finalVal = (funcValue * release + (1 - attack));
+        int finalVal = (funcValue * release + (1 - release));
       }
     }
 
@@ -59,6 +92,20 @@ namespace juce::dsp {
 			for (int chan = 0; chan < numChannels; chan++) {
 				auto* src = inBlock.getChannelPointer(chan);
 				auto* dst = outBlock.getChannelPointer(chan);
+
+				if (isOn) {
+					if (passThru) {
+						dst[i] = src[i] * volFunc();
+					} else {
+						dst[i] = 0;
+					}
+					count--;
+					if (count <= 0) {
+						if (passThru) {
+							count = offSpace + rand() % offOffset;
+						}
+					}
+				}
 			}
 		}
 
