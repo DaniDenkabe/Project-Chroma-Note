@@ -20,17 +20,22 @@ namespace juce::dsp {
 		void prepare(const ProcessSpec& spec) noexcept
 		{
 			sampleRate = spec.sampleRate;
-      waitCount = 0;
-      space = 0;
+      space = 1;
       spaceOffset = 0;
       feedback = 0;
       volOffset = 0;
       release = 0;
       releaseCount = 100000;
-      isOn = false;
+      isOn = true;
       for (int i = 0; i < 16; i++) {
-        waitCounts[j] = (space + rand() % spaceOffset) * (j + 1);
-        delayBuffers.push_back(new std::queue<float*>);
+        waitCounts[i] = (space + rand() % spaceOffset) * (i + 1);
+
+        delayBuffers.push_back(new juce::AudioBuffers<float>);
+
+        delayLines.push_back(new juce::dsp::DelayLine<float>);
+        delayLines[i]->prepare(spec);
+        delayLines[i]->setMaximumDelayInSamples(10000);
+        delayLines[i]->setDelay((space + rand() % spaceOffset) * (i + 1));
       }
 		}
 
@@ -44,7 +49,11 @@ namespace juce::dsp {
       }
     }
 
-    boolean isOn() {
+    void setOnOff(bool isOn) {
+      this->isOn = isOn;
+    }
+
+    bool isOn() {
       return isOn;
     }
 
@@ -77,48 +86,48 @@ namespace juce::dsp {
 		}
 
 		template <typename ProcessContext>
-		void process(const ProcessContext& context) {
-			auto&& inBlock = context.getInputBlock();
-			auto&& outBlock = context.getOutputBlock();
+		void process(const juce::AudioBuffer<FloatType>& buffer) {
 
-			jassert(inBlock.getNumChannels() == outBlock.getNumChannels());
-			jassert(inBlock.getNumSamples() == outBlock.getNumSamples());
+			auto len = buffer.getNumSamples();
+			auto numChannels = buffer.getNumChannels();
 
-			auto len = inBlock.getNumSamples();
-			auto numChannels = inBlock.getNumChannels();
+      for (int i = 0; i < delayBuffers.size(); i++) {
+        delayBuffers[i]->setSize(buffer.getNumChanels(), buffer.getNumSamples());
+        delayBuffers[i]->clear();
+        for (int chan = 0; chan < buffer.getNumChannels(); chan++) {
+          delayBuffers[i]->copyFrom(chan, 0, buffer, chan, 0, buffer.getNumSamples());
+        }
+        delayLines[i]->setDelay((space + rand() % spaceOffset) * (i + 1));
+        delayLines[i]->process(delayBuffers[index]);
+        float trackVolume = 0;
+        if (isOn) {
+          releaseCount = 0;
+          trackVolume = std::max(std::min(feedback * i, 1), 0);
+        }
+        buffer.addFrom(chan, 0, *delayBuffers[i], chan, 0, buffer.getNumSamples(), trackVolume);
+      }
 
-			if (context.isBypassed)
-			{
+			// for (int chan = 0; chan < numChannels; chan++) {
 
-				if (context.usesSeparateInputAndOutputBlocks())
-					outBlock.copyFrom(inBlock);
-
-				return;
-			}
-
-			for (int chan = 0; chan < numChannels; chan++) {
-				auto* src = inBlock.getChannelPointer(chan);
-				auto* dst = outBlock.getChannelPointer(chan);
-
-				for (int j = 0; j < delayBuffers.size(); j++ ) {
-          if (waitCount[j] <= 0) {
-            for (int i = 0; i < len; i++) {   
-              float trackVolume;
-              if (isOn) {
-                trackVolume = std::max(std::min(feedback * j, 1), 0);
-              } else {
-                trackVolume = std::max(1 - (releaseCount / release), 0);   
-                releaseCount++;
-              }
-              dst[i] = src[i] + (delayBuffers[j].front()[i] * trackVolume);
-            } 
-            delayBuffers[j].pop();
-          } else {
-            waitCounts[j]--;
-          } 
-          delayBuffers[j].push(src);
-				}
-			}
+			// 	for (int j = 0; j < delayBuffers.size(); j++ ) {
+      //     if (waitCount[j] <= 0) {
+      //       for (int i = 0; i < len; i++) {   
+      //         float trackVolume;
+      //         if (isOn) {
+      //           trackVolume = std::max(std::min(feedback * j, 1), 0);
+      //         } else {
+      //           trackVolume = std::max(1 - (releaseCount / release), 0);   
+      //           releaseCount++;
+      //         }
+      //         dst[i] = src[i] + (delayBuffers[j].front()[i] * trackVolume);
+      //       } 
+      //       delayBuffers[j].pop();
+      //     } else {
+      //       waitCounts[j]--;
+      //     } 
+      //     delayBuffers[j].push(src);
+			// 	}
+			// }
 		}
 
 	private:
@@ -128,10 +137,10 @@ namespace juce::dsp {
     float feedback;
     float volOffset;
     int releaseCount;
-    std::vector<int> waitCounts;
     float release;
-    boolean isOn;
-    std::vector<std::queue<float*>> delayBuffers;
+    bool isOn;
+    std::vector<juce::AudioBuffer<float>*> delayBuffers;
+    std::vector<juce::dsp::DelayLine<float>*> delayLines;
     
     SmoothedValue<FloatType> volume;
 	};
