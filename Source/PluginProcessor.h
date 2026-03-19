@@ -22,6 +22,8 @@
 #include "Voice.h"
 #include <vector>
 
+#include "DenkabeDelay.h"
+
 struct ChainSettings {
     float pitchTransposition{ 0 }; 
 };
@@ -90,6 +92,8 @@ public:
     void processDelayLine(int index, juce::dsp::ProcessSpec spec);
     void processLooper(int index, juce::AudioBuffer<float>& buffer);
     void processLooper(int index, juce::dsp::ProcessSpec spec);
+    void processDelay(int index, juce::AudioBuffer<float>& buffer);
+    void processDelay(int index, juce::dsp::ProcessSpec spec);
 
 
     static juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
@@ -107,6 +111,7 @@ private:
     std::vector <juce::Reverb::Reverb::Parameters*> paramList;
     std::vector <juce::dsp::DownSampler<float>*> downSamplerList;
     std::vector <juce::dsp::DelayLine<float>*> delayLineList;
+    std::vector <juce::dsp::DenkabeDelay<float>*> delayList;
 
     std::vector <signalsmith::stretch::SignalsmithStretch<float>*> stretchList;
     std::vector <juce::AudioBuffer<float>*> stretchBuffers;
@@ -121,9 +126,13 @@ private:
 
     std::vector <float> pitchSemis, freqs, amplitudes, counters, lfos, randCounts, threshs, ratios, attacks, releases, highFreqs, lowFreqs,
         compMixes, gainAmounts, dampings, roomSizes, revMixes, widths, saturations, sampleFactors, rates, depths, centreDelays, feedbacks, 
-        chorusMixes, delayAmounts, loopLengths, loopIsOn, bitDepths, wows;
+        chorusMixes, delayAmounts, loopLengths, loopIsOn, bitDepths, wows, delayFeedbacks, delayReleases;
 
-    std::vector <SmoothedValue<float, ValueSmoothingTupes::Linear>> wowAmps;
+    std::vector <int> delayVolOffsets, delaySpaceOffsets, delaySpaces;
+
+    std::vector <bool> delayIsOn;
+
+    std::vector <juce::SmoothedValue<float, juce::ValueSmoothingTypes::Linear>*> wowAmps;
     using Filter = juce::dsp::IIR::Filter<float>;
     signalsmith::stretch::SignalsmithStretch<float> stretch;
 
