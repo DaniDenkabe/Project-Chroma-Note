@@ -9,17 +9,12 @@
 #pragma once
 
 #include <JuceHeader.h>
-#include "WangSoundTouch/WangSoundTouchPitchShifter.h"
-#include "WubVocoder/WubPitchShifter.h"
-#include "McPherson/McPhersonPitchShifter.h"
-#include "Dysomni/DysomniPitchShifter.h"
-#include "stk/PitShift.h"
+
 
 #include "signalsmith-stretch.h"
 #include "Saturator.h"
 #include "DownSampler.h"
 #include "Looper.h"
-#include "Voice.h"
 #include <vector>
 
 #include "DenkabeDelay.h"
@@ -117,8 +112,6 @@ private:
     std::vector <juce::AudioBuffer<float>*> stretchBuffers;
     std::vector <std::vector<float*>> inBuffers;
     std::vector <std::vector<float*>> outBuffers;
-
-    std::vector <DysomniPitchShifter*> dysmoniList;
 
 
 

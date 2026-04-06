@@ -4,68 +4,7 @@
               useAppConfig="0" addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1">
   <MAINGROUP id="PNlQAD" name="Project_Chromatic_Aberation">
     <GROUP id="{BA4A925D-0D27-D341-425B-2B0900B84085}" name="Source">
-      <FILE id="LPGLj2" name="Shifter.h" compile="0" resource="0" file="Source/Shifter.h"/>
       <FILE id="Q7AQ30" name="Looper.h" compile="0" resource="0" file="Source/Looper.h"/>
-      <GROUP id="{7AE63851-2A0F-B86E-0A67-0603C06DFCE4}" name="stk">
-        <FILE id="HxN2gr" name="Chorus.cpp" compile="1" resource="0" file="Source/stk/Chorus.cpp"/>
-        <FILE id="ETb4bZ" name="Chorus.h" compile="0" resource="0" file="Source/stk/Chorus.h"/>
-        <FILE id="T7ntzs" name="Delay.cpp" compile="1" resource="0" file="Source/stk/Delay.cpp"/>
-        <FILE id="RKSeAn" name="Delay.h" compile="0" resource="0" file="Source/stk/Delay.h"/>
-        <FILE id="hxD4yY" name="DelayL.cpp" compile="1" resource="0" file="Source/stk/DelayL.cpp"/>
-        <FILE id="eMjVE8" name="DelayL.h" compile="0" resource="0" file="Source/stk/DelayL.h"/>
-        <FILE id="ZcOzp4" name="Effect.h" compile="0" resource="0" file="Source/stk/Effect.h"/>
-        <FILE id="eFg364" name="Filter.h" compile="0" resource="0" file="Source/stk/Filter.h"/>
-        <FILE id="lY4dhF" name="Generator.h" compile="0" resource="0" file="Source/stk/Generator.h"/>
-        <FILE id="wRnVHu" name="PitShift.cpp" compile="1" resource="0" file="Source/stk/PitShift.cpp"/>
-        <FILE id="LCSjVu" name="PitShift.h" compile="0" resource="0" file="Source/stk/PitShift.h"/>
-        <FILE id="J6dOyp" name="SineWave.cpp" compile="1" resource="0" file="Source/stk/SineWave.cpp"/>
-        <FILE id="fhP19W" name="SineWave.h" compile="0" resource="0" file="Source/stk/SineWave.h"/>
-        <FILE id="I1B8qj" name="Stk.cpp" compile="1" resource="0" file="Source/stk/Stk.cpp"/>
-        <FILE id="E984FS" name="Stk.h" compile="0" resource="0" file="Source/stk/Stk.h"/>
-      </GROUP>
-      <GROUP id="{61DDE7FB-AA73-9622-B16D-E0DF6E0661C3}" name="Dysomni">
-        <FILE id="ANoCcX" name="DysomniPitchShifter.cpp" compile="1" resource="0"
-              file="Source/Dysomni/DysomniPitchShifter.cpp"/>
-        <FILE id="ioyHvm" name="DysomniPitchShifter.h" compile="0" resource="0"
-              file="Source/Dysomni/DysomniPitchShifter.h"/>
-        <FILE id="tYUqx4" name="PitchDelay.cpp" compile="1" resource="0" file="Source/Dysomni/PitchDelay.cpp"/>
-        <FILE id="dbODLS" name="PitchDelay.h" compile="0" resource="0" file="Source/Dysomni/PitchDelay.h"/>
-        <FILE id="dGMWfu" name="PitchShifter.cpp" compile="1" resource="0"
-              file="Source/Dysomni/PitchShifter.cpp"/>
-        <FILE id="xo8IFU" name="PitchShifter.h" compile="0" resource="0" file="Source/Dysomni/PitchShifter.h"/>
-      </GROUP>
-      <GROUP id="{61405A4C-CF41-64AF-4714-A0635F8CF8B7}" name="McPherson">
-        <FILE id="siFXbh" name="McPhersonPitchShifter.cpp" compile="1" resource="0"
-              file="Source/McPherson/McPhersonPitchShifter.cpp"/>
-        <FILE id="ToadW2" name="McPhersonPitchShifter.h" compile="0" resource="0"
-              file="Source/McPherson/McPhersonPitchShifter.h"/>
-      </GROUP>
-      <GROUP id="{3F865442-94B3-5829-FC48-0083DD729DA2}" name="WangPhaseVocoder">
-        <GROUP id="{1119F2AC-A943-40F6-06EA-2D9B2763FF2A}" name="Vocoder">
-          <FILE id="vr5TVB" name="BlockCircularBuffer.h" compile="0" resource="0"
-                file="Source/WangPhaseVocoder/Vocoder/BlockCircularBuffer.h"/>
-          <FILE id="rYE5Zi" name="PhaseVocoder.h" compile="0" resource="0" file="Source/WangPhaseVocoder/Vocoder/PhaseVocoder.h"/>
-          <FILE id="bDs6dh" name="PitchShifter.h" compile="0" resource="0" file="Source/WangPhaseVocoder/Vocoder/PitchShifter.h"/>
-          <FILE id="PbeOSt" name="Resample.h" compile="0" resource="0" file="Source/WangPhaseVocoder/Vocoder/Resample.h"/>
-        </GROUP>
-        <FILE id="JGdu5Q" name="WangVocoderPitchShifter.cpp" compile="1" resource="0"
-              file="Source/WangPhaseVocoder/WangVocoderPitchShifter.cpp"/>
-        <FILE id="oYH3T7" name="WangVocoderPitchShifter.h" compile="0" resource="0"
-              file="Source/WangPhaseVocoder/WangVocoderPitchShifter.h"/>
-      </GROUP>
-      <GROUP id="{B5F266FF-6F8D-DB5E-E727-FD2A26E9801D}" name="WubVocoder">
-        <FILE id="P2ChiN" name="istft.cpp" compile="1" resource="0" file="Source/WubVocoder/istft.cpp"/>
-        <FILE id="glMbpV" name="istft.h" compile="0" resource="0" file="Source/WubVocoder/istft.h"/>
-        <FILE id="MTd2L4" name="PitchShifter.cpp" compile="1" resource="0"
-              file="Source/WubVocoder/PitchShifter.cpp"/>
-        <FILE id="fIjYIW" name="PitchShifter.h" compile="0" resource="0" file="Source/WubVocoder/PitchShifter.h"/>
-        <FILE id="EED4Y5" name="stft.cpp" compile="1" resource="0" file="Source/WubVocoder/stft.cpp"/>
-        <FILE id="ox11pi" name="stft.h" compile="0" resource="0" file="Source/WubVocoder/stft.h"/>
-        <FILE id="jp3dBc" name="WubPitchShifter.cpp" compile="1" resource="0"
-              file="Source/WubVocoder/WubPitchShifter.cpp"/>
-        <FILE id="IlEwrz" name="WubPitchShifter.h" compile="0" resource="0"
-              file="Source/WubVocoder/WubPitchShifter.h"/>
-      </GROUP>
       <GROUP id="{26ECDC5D-CDA6-DF98-71ED-7D93318454F5}" name="WangSoundTouch">
         <GROUP id="{7546A6A9-1150-CA8A-5F0C-43817BC41309}" name="SoundTouch">
           <FILE id="jLjrBU" name="AAFilter.cpp" compile="1" resource="0" file="Source/WangSoundTouch/SoundTouch/AAFilter.cpp"/>
@@ -121,7 +60,6 @@
         <FILE id="t2rcMK" name="WangSoundTouchPitchShifter.h" compile="0" resource="0"
               file="Source/WangSoundTouch/WangSoundTouchPitchShifter.h"/>
       </GROUP>
-      <FILE id="DzByEs" name="Voice.h" compile="0" resource="0" file="Source/Voice.h"/>
       <FILE id="URqtyi" name="DownSampler.h" compile="0" resource="0" file="Source/DownSampler.h"/>
       <FILE id="pglyxo" name="Saturator.h" compile="0" resource="0" file="Source/Saturator.h"/>
       <FILE id="fYaVNs" name="signalsmith-stretch.h" compile="0" resource="0"
@@ -202,6 +140,29 @@
       </MODULEPATHS>
     </VS2026>
     <LINUX_MAKE targetFolder="Builds/LinuxMakefile_1">
+      <CONFIGURATIONS>
+        <CONFIGURATION isDebug="1" name="Debug"/>
+        <CONFIGURATION isDebug="0" name="Release"/>
+        <CONFIGURATION isDebug="0"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_audio_basics" path="/home/denkabe/Documents/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_devices" path="/home/denkabe/Documents/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_formats" path="/home/denkabe/Documents/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_plugin_client" path="/home/denkabe/Documents/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_processors" path="/home/denkabe/Documents/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_processors_headless" path="/home/denkabe/Documents/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_utils" path="/home/denkabe/Documents/JUCE/modules"/>
+        <MODULEPATH id="juce_core" path="/home/denkabe/Documents/JUCE/modules"/>
+        <MODULEPATH id="juce_data_structures" path="/home/denkabe/Documents/JUCE/modules"/>
+        <MODULEPATH id="juce_dsp" path="/home/denkabe/Documents/JUCE/modules"/>
+        <MODULEPATH id="juce_events" path="/home/denkabe/Documents/JUCE/modules"/>
+        <MODULEPATH id="juce_graphics" path="/home/denkabe/Documents/JUCE/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="/home/denkabe/Documents/JUCE/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="/home/denkabe/Documents/JUCE/modules"/>
+      </MODULEPATHS>
+    </LINUX_MAKE>
+    <LINUX_MAKE targetFolder="Builds/LinuxMakefile">
       <CONFIGURATIONS>
         <CONFIGURATION isDebug="1" name="Debug"/>
         <CONFIGURATION isDebug="0" name="Release"/>
