@@ -385,26 +385,27 @@ void Project_Chromatic_AberationAudioProcessor::processLooper(int index, juce::d
 
 void Project_Chromatic_AberationAudioProcessor::processDelay(int index, juce::AudioBuffer<float>& buffer) {
 
-    delayList[index]->setSpace(delaySpaces[index]);
-    delayList[index]->setFeedback(delayFeedbacks[index]);
-    delayList[index]->setSpaceOffset(delaySpaceOffsets[index]);
-    delayList[index]->setVolOffset(delayVolOffsets[index]);
-    delayList[index]->setRelease(delayReleases[index]);
-    delayList[index]->setOnOff(delayIsOn[index]);
+    juce::dsp::AudioBlock<float> block(buffer);
 
-    delayList[index]->process(buffer);
+    auto leftBlock = block.getSingleChannelBlock(0);
+    auto rightBlock = block.getSingleChannelBlock(1);
+
+    juce::dsp::ProcessContextReplacing<float> leftContext(leftBlock);
+    juce::dsp::ProcessContextReplacing<float> rightContext(rightBlock);
+
+    delayList[index]->setMagnitude(delaySpaces[index]);
+    delayList[index]->setOnOff(true);
+    delayList[index]->process(leftContext);
+    delayList[index]->process(rightContext);
 }
 
 void Project_Chromatic_AberationAudioProcessor::processDelay(int index, juce::dsp::ProcessSpec spec) {
     delayList.push_back(new juce::dsp::DenkabeDelay<float>);
     delayList[index]->prepare(spec);
-    delayList[index]->setSpace(delaySpaces[index]);
-    delayList[index]->setFeedback(delayFeedbacks[index]);
-    delayList[index]->setSpaceOffset(delaySpaceOffsets[index]);
-    delayList[index]->setVolOffset(delayVolOffsets[index]);
-    delayList[index]->setRelease(delayReleases[index]);
+    delayList[index]->setMagnitude(delaySpaces[index]);
     delayList[index]->setOnOff(delayIsOn[index]);
 }
+
 
 
 
@@ -519,46 +520,45 @@ void Project_Chromatic_AberationAudioProcessor::processBlock (juce::AudioBuffer<
 
         if (i != copyBuffers.size()) {
 
-            processGain(i, *copyBuffers[i]);
+//            processGain(i, *copyBuffers[i]); 
 
-            //When I comment out this line everything works fine
-            processPitch(i, *copyBuffers[i]);
+//            processPitch(i, *copyBuffers[i]);
 
-            processSaturator(i, *copyBuffers[i]);
+//            processSaturator(i, *copyBuffers[i]);
 
-            processFreqCuts(i, *copyBuffers[i]);
+//            processFreqCuts(i, *copyBuffers[i]);
 
-            processReverb(i, *copyBuffers[i]);
+//            processReverb(i, *copyBuffers[i]);
 
-            processDownSampler(i, *copyBuffers[i]);
+//            processDownSampler(i, *copyBuffers[i]);
 
-            processCompressor(i, *copyBuffers[i]);
+//            processCompressor(i, *copyBuffers[i]);
 
-            processDelayLine(i, *copyBuffers[i]);
+//            processDelayLine(i, *copyBuffers[i]);
 
-            processLooper(i, *copyBuffers[i]);
+//            processLooper(i, *copyBuffers[i]);
 
-            processDelay(i, *copyBuffers[i]);
+//            processDelay(i, *copyBuffers[i]);
 
         }
         else {
-            processGain(i, buffer);
+ //           processGain(i, buffer);
 
-            processPitch(i, buffer);
+ //           processPitch(i, buffer);
 
-            processSaturator(i, buffer);
+ //           processSaturator(i, buffer);
 
-            processFreqCuts(i, buffer);
+ //           processFreqCuts(i, buffer);
 
-            processReverb(i, buffer);
+ //           processReverb(i, buffer);
 
-            processDownSampler(i, buffer);
+ //           processDownSampler(i, buffer);
 
-            processCompressor(i, buffer);
+ //           processCompressor(i, buffer);
 
-            processDelayLine(i, buffer);
+ //           processDelayLine(i, buffer);
 
-            processLooper(i, buffer);
+ //           processLooper(i, buffer);
 
             processDelay(i, buffer);
         }
@@ -765,8 +765,8 @@ juce::AudioProcessorValueTreeState::ParameterLayout Project_Chromatic_AberationA
         layout.add(std::make_unique<juce::AudioParameterFloat>("Delay Mag" + num, "Delay Mag" + num, juce::NormalisableRange<float>(0, 10000, 0.1f, 1.f), 0));
         layout.add(std::make_unique<juce::AudioParameterFloat>("Loop Length" + num, "Loop Length" + num, juce::NormalisableRange<float>(1, 20, 0.1f, 1.f), 1));
         layout.add(std::make_unique<juce::AudioParameterFloat>("Loop On/Off" + num, "Loop On/Off" + num, juce::NormalisableRange<float>(0, 1, 1.f, 1.f), 0));
-        layout.add(std::make_unique<juce::AudioParameterFloat>("Delay Space" + num, "Delay Space" + num, juce::NormalisableRange<float>(0, 10000, 1.f, 1.f), 0));
-        layout.add(std::make_unique<juce::AudioParameterFloat>("Delay Space Offset" + num, "Delay Space Offset" + num, juce::NormalisableRange<float>(0, 1000, 1.f, 1.f), 0));
+        layout.add(std::make_unique<juce::AudioParameterFloat>("Delay Space" + num, "Delay Space" + num, juce::NormalisableRange<float>(3, 200000, 1.f, 1.f), 12));
+        layout.add(std::make_unique<juce::AudioParameterFloat>("Delay Space Offset" + num, "Delay Space Offset" + num, juce::NormalisableRange<float>(0, 100000, 1.f, 1.f), 12));
         layout.add(std::make_unique<juce::AudioParameterFloat>("Delay Volume Offset" + num, "Delay Volume Offset" + num, juce::NormalisableRange<float>(0, 100, 1.f, 1.f), 0));
         layout.add(std::make_unique<juce::AudioParameterFloat>("Delay Feedback" + num, "Delay Feedback" + num, juce::NormalisableRange<float>(0.01, 0.8, 0.01, 1.f), 0));
         layout.add(std::make_unique<juce::AudioParameterFloat>("Delay Release" + num, "Delay Release" + num, juce::NormalisableRange<float>(1, 1000, 1.f, 1.f), 0));

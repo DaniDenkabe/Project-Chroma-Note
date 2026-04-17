@@ -16,117 +16,125 @@ namespace juce::dsp {
 	class DenkabeDelay {
 	public:
 
-		template <typename ProcessSpec>
-		void prepare(const ProcessSpec& spec) noexcept
-		{
-            space = 1;
-            spaceOffset = 0;
-            feedback = 0;
-            volOffset = 0;
-            release = 1;
-            releaseCount = 0;
-            isOn = false;
-            for (int i = 0; i < numOfVoices; i++) {
-                delayBuffers.push_back(new juce::AudioBuffer<float>);
+		  template <typename ProcessSpec>
+		  void prepare(const ProcessSpec& spec) noexcept
+		  {
+          feedback = 4;
+          damp = 1;
+          magnitude = 12;
+          for (int i = 0; i < feedback; i++) {
+              delayHeads.push_back(new Node(0));
+              delayLasts.push_back(new Node(0));
+              Node* currNode = delayHeads[i];
+              for (int j = 0; j < (magnitude - 1) * (i + 1); j++) {
+                  currNode->next = new Node(0, nullptr, currNode);
+                  currNode = currNode->next;
+                  delayLasts[i] = currNode;
+              }
+          }
+          isOn = false;
+		  }
 
-                delayLines.push_back(new juce::dsp::DelayLine<float>);
-                delayLines[i]->prepare(spec);
-                delayLines[i]->setMaximumDelayInSamples(40000);
-                if (spaceOffset == 0) {
-                    delayLines[i]->setDelay(space * (i + 1));
-                }
-                else {
-                    delayLines[i]->setDelay((space + rand() % spaceOffset) * (i + 1));
-                }
-            }
-		}
 
-        void switchOnOff() {
-            isOn = !isOn;
-            if (isOn) {
-                releaseCount = 0;
-            }
-        }
+      void setOnOff(bool isOn) {
+          this->isOn = isOn;
+      }
 
-        void setOnOff(bool isOn) {
-            this->isOn = isOn;
-        }
+      void setMagnitude(int newMagnitude) {
+          for (int i = 0; i < feedback; i++) {
+              int diff = newMagnitude * (i + 1) - magnitude * (i + 1);
+              Node* currNode = delayLasts[i];
+              if (diff > 0) {
+                  for (int j = 0; j < diff; j++) {
+                      currNode->next = new Node(delayLasts[i]->data, nullptr, currNode);
+                      currNode = currNode->next;
+                  }
+              } else if (diff < 0) {
+                  for (int j = 0; j < -1 * diff; j++) {
+                      currNode = currNode->prev;
+                      currNode->next = nullptr;
+                  }
+              }
+              delayLasts[i] = currNode;
+          }
+          this->magnitude = newMagnitude;
+      }
 
-        void setSpaceOffset(int spaceOffset) {
-            this->spaceOffset = spaceOffset;
-        } 
+		  void reset() noexcept
+		  {
+      }
 
-        void setVolOffset(int volOffset) {
-            this->volOffset = volOffset;
-        } 
+      template <typename ProcessContext>
+		  void process(const ProcessContext& context) {
+			    auto&& inBlock = context.getInputBlock();
+		    	auto&& outBlock = context.getOutputBlock();
 
-        void setWidth(float width) {
-            this->width = width;
-        }
+			    jassert(inBlock.getNumChannels() == outBlock.getNumChannels());
+			    jassert(inBlock.getNumSamples() == outBlock.getNumSamples());
 
-        void setSpace(int space) {
-            this->space = space;
-        }
+			    auto len = inBlock.getNumSamples();
+			    auto numChannels = inBlock.getNumChannels();
 
-        void setFeedback(float feedback) {
-            this->feedback = feedback;
-        }
+			    if (context.isBypassed)
+			    {
 
-        void setRelease(float release) {
-            this->release = release;
-        }
+				      if (context.usesSeparateInputAndOutputBlocks())
+					    outBlock.copyFrom(inBlock);
 
-		void reset() noexcept
-		{
-            for (int i = 0; i < numOfVoices; i++) {
-                delayBuffers.push_back(new juce::AudioBuffer<float>);
-            }
-		}
+				      return;
+			    }
 
-		void process(juce::AudioBuffer<FloatType>& buffer) {
+			    for (int chan = 0; chan < numChannels; chan++) {
+				      auto* src = inBlock.getChannelPointer(chan);
+				      auto* dst = outBlock.getChannelPointer(chan);
+              
+              for (int i = 0; i < len; i++) {
+                  
+                  for (int j = 0; j < feedback; j++) {
+                      // Add the sample to the delay list
+                      Node* pastHead = delayHeads[j];
+                      delayHeads[j] = new Node(src[i], pastHead);
+                      pastHead->prev = delayHeads[j];
 
-			auto len = buffer.getNumSamples();
-			auto numChannels = buffer.getNumChannels();
+                      // Add the last sample to the dst list
+                      if (isOn) {
+                          if (j == 0) {
+                              dst[i] = src[i];
+                          }
+                          dst[i] += delayLasts[j]->data * (1 - ((1/feedback) * damp) * (j + 1));
+                      }
 
-            for (int i = 0; i < delayBuffers.size(); i++) {
-                delayBuffers[i]->setSize(buffer.getNumChannels(), buffer.getNumSamples());
-                delayBuffers[i]->clear();
-                for (int chan = 0; chan < buffer.getNumChannels(); chan++) {
-                    delayBuffers[i]->copyFrom(chan, 0, buffer, chan, 0, buffer.getNumSamples());
-                }
-                if (spaceOffset == 0) {
-                    delayLines[i]->setDelay(space * (i + 1));
-                }
-                else {
-                    delayLines[i]->setDelay((space + rand() % spaceOffset) * (i + 1));
-                }
-                juce::dsp::AudioBlock<float> block(buffer);
-                juce::dsp::ProcessContextReplacing<float> ctx(block);
-                delayLines[i]->process(ctx);
-                float trackVolume = 0;
-                if (isOn) {
-                    releaseCount = 0;
-                    trackVolume = feedback / (i + 1);
-                    for (int chan = 0; chan < buffer.getNumChannels(); chan++) {
-                        buffer.addFrom(chan, 0, *delayBuffers.at(i), chan, 0, buffer.getNumSamples(), trackVolume);
-                    }
-                }
-            }
-		}
+                      // Remove the last sample from the delayBuffer
+                      delayLasts[j] = delayLasts[j]->prev;
+                      delayLasts[j]->next = nullptr;
+                  }
+              }
+			    }
+
+		  }
+
+	  
 
 	private:
-		int spaceOffset;
-        int space;
-        float width;
-        float feedback;
-        float volOffset;
-        int releaseCount;
-        float release;
-        bool isOn;
-        int numOfVoices = 4;
-        std::vector<juce::AudioBuffer<float>*> delayBuffers;
-        std::vector<juce::dsp::DelayLine<float>*> delayLines;
-    
-        SmoothedValue<FloatType> volume;
+      struct Node {
+          float data;
+          Node* next;
+          Node* prev;
+
+          Node(float val) : data(val), next(nullptr), prev(nullptr) {}
+          Node(float val, Node* nextNode) : data(val), next(nextNode), prev(nullptr){}
+          Node(float val, Node* nextNode, Node* prevNode) : data(val), next(nextNode), prev(prevNode){}
+
+      };
+
+      Node* delayHead;
+      Node* delayLast;
+
+      std::vector<Node*> delayHeads;
+      std::vector<Node*> delayLasts;
+      bool isOn;
+      int magnitude;
+      int feedback;
+      float damp;
 	};
 }
