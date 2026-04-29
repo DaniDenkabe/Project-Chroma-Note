@@ -15,9 +15,11 @@
 #include "Saturator.h"
 #include "DownSampler.h"
 #include "Looper.h"
+#include "Stutter.h"
 #include <vector>
 
 #include "DenkabeDelay.h"
+#include "NoiseGen.h"
 
 struct ChainSettings {
     float pitchTransposition{ 0 }; 
@@ -77,8 +79,6 @@ public:
     void processSaturator(int index, juce::dsp::ProcessSpec spec);
     void processFreqCuts(int index, juce::AudioBuffer<float>& buffer);
     void processFreqCuts(int index, juce::dsp::ProcessSpec spec);
-    void processReverb(int index, juce::AudioBuffer<float>& buffer);
-    void processReverb(int index, juce::dsp::ProcessSpec spec);
     void processDownSampler(int index, juce::AudioBuffer<float>& buffer);
     void processDownSampler(int index, juce::dsp::ProcessSpec spec);
     void processCompressor(int index, juce::AudioBuffer<float>& buffer);
@@ -89,7 +89,10 @@ public:
     void processLooper(int index, juce::dsp::ProcessSpec spec);
     void processDelay(int index, juce::AudioBuffer<float>& buffer);
     void processDelay(int index, juce::dsp::ProcessSpec spec);
-
+    void processStutter(int index, juce::AudioBuffer<float>& buffer);
+    void processStutter(int index, juce::dsp::ProcessSpec spec);
+    void processNoise(int index, juce::AudioBuffer<float>& buffer);
+    void processNoise(int index, juce::dsp::ProcessSpec spec);
 
     static juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
     
@@ -99,11 +102,8 @@ public:
 private:
     std::vector<juce::dsp::Saturator<float>*> saturatorList;
     std::vector <juce::dsp::IIR::Filter<float>*> leftHpFilterList, leftLpFilterList, rightHpFilterList, rightLpFilterList;
-    std::vector <juce::dsp::Compressor<float>*> leftCompressorList, rightCompressorList;
-    std::vector <juce::dsp::DryWetMixer<float>*> leftCompMixerList, rightCompMixerList;
+    std::vector <juce::dsp::Compressor<float>*> compressorList;
     std::vector <juce::dsp::Gain<float>*> gainList;
-    std::vector <juce::dsp::Reverb*> leftReverbList, rightReverbList;
-    std::vector <juce::Reverb::Reverb::Parameters*> paramList;
     std::vector <juce::dsp::DownSampler<float>*> downSamplerList;
     std::vector <juce::dsp::DelayLine<float>*> delayLineList;
     std::vector <juce::dsp::DenkabeDelay<float>*> delayList;
@@ -113,17 +113,19 @@ private:
     std::vector <std::vector<float*>> inBuffers;
     std::vector <std::vector<float*>> outBuffers;
 
+    std::vector <juce::dsp::NoiseGen<float>*> noiseList;
 
+    std::vector <juce::dsp::Stutter<float>*> stutterList;
 
     std::vector <juce::dsp::Looper<float>*> looperList;
 
     std::vector <float> pitchSemis, freqs, amplitudes, counters, lfos, randCounts, threshs, ratios, attacks, releases, highFreqs, lowFreqs,
         compMixes, gainAmounts, dampings, roomSizes, revMixes, widths, saturations, sampleFactors, rates, depths, centreDelays, feedbacks, 
-        chorusMixes, delayAmounts, loopLengths, loopIsOn, bitDepths, wows, delayFeedbacks, delayReleases;
+        chorusMixes, delayAmounts, loopLengths, loopIsOn, bitDepths, wows, delayFeedbacks, delayReleases, stutterAttacks, stutterReleases, noiseMags;
 
-    std::vector <int> delayVolOffsets, delaySpaceOffsets, delaySpaces;
+    std::vector <int> delayVolOffsets, delaySpaceOffsets, delaySpaces, onSpaces, offSpaces, onOffsets, offOffsets;
 
-    std::vector <bool> delayIsOn;
+    std::vector <bool> delayIsOn, stutterIsOn;
 
     std::vector <juce::SmoothedValue<float, juce::ValueSmoothingTypes::Linear>*> wowAmps;
     using Filter = juce::dsp::IIR::Filter<float>;
@@ -158,7 +160,7 @@ private:
 
     float pitchSemi, freq, amplitude, counter, lfo, randCount, thresh, ratio, attack, release, highFreq, lowFreq, 
         compMix, gainAmount, damping, roomSize, revMix, width, saturation, sampleFactor, rate, depth, centreDelay, feedback, chorusMix;
-    double currSampleRate;
+
 
     std::vector<juce::AudioBuffer<float>*> copyBuffers;
     int selected;

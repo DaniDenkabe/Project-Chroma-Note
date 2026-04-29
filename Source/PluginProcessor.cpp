@@ -233,50 +233,13 @@ void Project_Chromatic_AberationAudioProcessor::processFreqCuts(int index, juce:
 
 
 
-
-
-void Project_Chromatic_AberationAudioProcessor::processReverb(int index, juce::AudioBuffer<float>& buffer) {
-    juce::dsp::AudioBlock<float> block(buffer);
-
-    auto leftBlock = block.getSingleChannelBlock(0);
-    auto rightBlock = block.getSingleChannelBlock(1);
-
-    juce::dsp::ProcessContextReplacing<float> leftContext(leftBlock);
-    juce::dsp::ProcessContextReplacing<float> rightContext(rightBlock);
-
-    leftReverbList[index]->setParameters(*paramList[index]);
-    rightReverbList[index]->setParameters(*paramList[index]);
-    leftReverbList[index]->process(leftContext);
-    rightReverbList[index]->process(rightContext);
-}
-
-
-void Project_Chromatic_AberationAudioProcessor::processReverb(int index, juce::dsp::ProcessSpec spec) {
-    leftReverbList.push_back(new juce::dsp::Reverb);
-    rightReverbList.push_back(new juce::dsp::Reverb);
-    leftReverbList[index]->prepare(spec);
-    rightReverbList[index]->prepare(spec);
-    leftReverbList[index]->setParameters(*paramList[index]);
-    rightReverbList[index]->setParameters(*paramList[index]);
-}
-
-
-
-
-
 void Project_Chromatic_AberationAudioProcessor::processDownSampler(int index, juce::AudioBuffer<float>& buffer) {
     juce::dsp::AudioBlock<float> block(buffer);
-
-    auto leftBlock = block.getSingleChannelBlock(0);
-    auto rightBlock = block.getSingleChannelBlock(1);
-
-    juce::dsp::ProcessContextReplacing<float> leftContext(leftBlock);
-    juce::dsp::ProcessContextReplacing<float> rightContext(rightBlock);
+    juce::dsp::ProcessContextReplacing<float> ctx(block);
 
     downSamplerList[index]->setSampleRate(sampleFactors[index]);
     downSamplerList[index]->setBitDepth(bitDepths[index]);
-    downSamplerList[index]->process(leftContext);
-    downSamplerList[index]->process(rightContext);
+    downSamplerList[index]->process(ctx);
 }
 
 
@@ -293,58 +256,23 @@ void Project_Chromatic_AberationAudioProcessor::processDownSampler(int index, ju
 
 void Project_Chromatic_AberationAudioProcessor::processCompressor(int index, juce::AudioBuffer<float>& buffer) {
     juce::dsp::AudioBlock<float> block(buffer);
+    juce::dsp::ProcessContextReplacing<float> ctx(block);
 
-    auto leftBlock = block.getSingleChannelBlock(0);
-    auto rightBlock = block.getSingleChannelBlock(1);
-
-    juce::dsp::ProcessContextReplacing<float> leftContext(leftBlock);
-    juce::dsp::ProcessContextReplacing<float> rightContext(rightBlock);
-
-    leftCompMixerList[index]->pushDrySamples(block);
-    rightCompMixerList[index]->pushDrySamples(block);
-
-    leftCompressorList[index]->setThreshold(threshs[index]);
-    leftCompressorList[index]->setRatio(ratios[index]);
-    leftCompressorList[index]->setAttack(attacks[index]);
-    leftCompressorList[index]->setRelease(releases[index]);
-    leftCompressorList[index]->process(leftContext);
-
-    rightCompressorList[index]->setThreshold(threshs[index]);
-    rightCompressorList[index]->setRatio(ratios[index]);
-    rightCompressorList[index]->setAttack(attacks[index]);
-    rightCompressorList[index]->setRelease(releases[index]);
-    rightCompressorList[index]->process(rightContext);
-
-    leftCompMixerList[index]->setWetMixProportion(compMixes[index]);
-    rightCompMixerList[index]->setWetMixProportion(compMixes[index]);
-    leftCompMixerList[index]->mixWetSamples(block);
-    rightCompMixerList[index]->mixWetSamples(block);
+    compressorList[index]->setThreshold(threshs[index]);
+    compressorList[index]->setRatio(ratios[index]);
+    compressorList[index]->setAttack(attacks[index]);
+    compressorList[index]->setRelease(releases[index]);
+    compressorList[index]->process(ctx);
 }
 
 
 void Project_Chromatic_AberationAudioProcessor::processCompressor(int index, juce::dsp::ProcessSpec spec) {
-    leftCompressorList.push_back(new juce::dsp::Compressor<float>);
-    leftCompressorList[index]->reset();
-    leftCompressorList[index]->prepare(spec);
-    leftCompressorList[index]->setThreshold(threshs[index]);
-    leftCompressorList[index]->setRatio(ratios[index]);
-    leftCompressorList[index]->setAttack(attacks[index]);
-    leftCompressorList[index]->setRelease(releases[index]);
-
-    rightCompressorList.push_back(new juce::dsp::Compressor<float>);
-    rightCompressorList[index]->reset();
-    rightCompressorList[index]->prepare(spec);
-    rightCompressorList[index]->setThreshold(threshs[index]);
-    rightCompressorList[index]->setRatio(ratios[index]);
-    rightCompressorList[index]->setAttack(attacks[index]);
-    rightCompressorList[index]->setRelease(releases[index]);
-
-    leftCompMixerList.push_back(new juce::dsp::DryWetMixer<float>);
-    rightCompMixerList.push_back(new juce::dsp::DryWetMixer<float>);
-    leftCompMixerList[index]->prepare(spec);
-    leftCompMixerList[index]->setWetMixProportion(compMixes[index]);
-    rightCompMixerList[index]->prepare(spec);
-    rightCompMixerList[index]->setWetMixProportion(compMixes[index]);
+    compressorList.push_back(new juce::dsp::Compressor<float>);
+    compressorList[index]->prepare(spec);
+    compressorList[index]->setThreshold(threshs[index]);
+    compressorList[index]->setRatio(ratios[index]);
+    compressorList[index]->setAttack(attacks[index]);
+    compressorList[index]->setRelease(releases[index]);
 }
 
 
@@ -384,29 +312,57 @@ void Project_Chromatic_AberationAudioProcessor::processLooper(int index, juce::d
 
 
 void Project_Chromatic_AberationAudioProcessor::processDelay(int index, juce::AudioBuffer<float>& buffer) {
-
-    juce::dsp::AudioBlock<float> block(buffer);
-
-    auto leftBlock = block.getSingleChannelBlock(0);
-    auto rightBlock = block.getSingleChannelBlock(1);
-
-    juce::dsp::ProcessContextReplacing<float> leftContext(leftBlock);
-    juce::dsp::ProcessContextReplacing<float> rightContext(rightBlock);
-
+    delayList[index]->setDamp(delayFeedbacks[index]);
     delayList[index]->setMagnitude(delaySpaces[index]);
-    delayList[index]->setOnOff(true);
-    delayList[index]->process(leftContext);
-    delayList[index]->process(rightContext);
+    delayList[index]->setOnOff(delayIsOn[index]);
+    delayList[index]->process(buffer);
 }
 
 void Project_Chromatic_AberationAudioProcessor::processDelay(int index, juce::dsp::ProcessSpec spec) {
     delayList.push_back(new juce::dsp::DenkabeDelay<float>);
     delayList[index]->prepare(spec);
+    delayList[index]->setDamp(delayFeedbacks[index]);
     delayList[index]->setMagnitude(delaySpaces[index]);
     delayList[index]->setOnOff(delayIsOn[index]);
 }
 
 
+void Project_Chromatic_AberationAudioProcessor::processStutter(int index, juce::AudioBuffer<float>& buffer) {
+    juce::dsp::AudioBlock<float> block(buffer);
+    juce::dsp::ProcessContextReplacing<float> ctx(block);
+    stutterList[index]->setOnOff(stutterIsOn[index]);
+    stutterList[index]->setOnSpace(onSpaces[index]);
+    stutterList[index]->setOffSpace(offSpaces[index]);
+    stutterList[index]->setOnOffset(onOffsets[index]);
+    stutterList[index]->setOffOffset(offOffsets[index]);
+    stutterList[index]->setAttack(stutterAttacks[index]);
+    stutterList[index]->setRelease(stutterReleases[index]);   
+    stutterList[index]->process(ctx);
+}
+
+void Project_Chromatic_AberationAudioProcessor::processStutter(int index, juce::dsp::ProcessSpec spec) {
+    stutterList.push_back(new juce::dsp::Stutter<float>);
+    stutterList[index]->prepare(spec);
+    stutterList[index]->setOnOff(stutterIsOn[index]);
+    stutterList[index]->setOnSpace(onSpaces[index]);
+    stutterList[index]->setOffSpace(offSpaces[index]);
+    stutterList[index]->setOnOffset(onOffsets[index]);
+    stutterList[index]->setOffOffset(offOffsets[index]);
+    stutterList[index]->setAttack(stutterAttacks[index]);
+    stutterList[index]->setRelease(stutterReleases[index]);   
+}
+
+
+void Project_Chromatic_AberationAudioProcessor::processNoise(int index, juce::AudioBuffer<float>& buffer) {
+    noiseList[index]->setVolume(noiseMags[index]);
+    noiseList[index]->process(buffer);
+}
+
+void Project_Chromatic_AberationAudioProcessor::processNoise(int index, juce::dsp::ProcessSpec spec) {
+    noiseList.push_back(new juce::dsp::NoiseGen<float>);
+    noiseList[index]->prepare(spec);
+    noiseList[index]->setVolume(noiseMags[index]);
+}
 
 
 //==============================================================================
@@ -435,8 +391,6 @@ void Project_Chromatic_AberationAudioProcessor::prepareToPlay (double sampleRate
 
         processFreqCuts(i, spec);
 
-        processReverb(i, spec);
-
         processDownSampler(i, spec);
 
         processCompressor(i, spec);
@@ -446,6 +400,10 @@ void Project_Chromatic_AberationAudioProcessor::prepareToPlay (double sampleRate
         processLooper(i, spec);
 
         processDelay(i, spec);
+
+        processStutter(i, spec);
+
+        processNoise(i, spec);
 
         counters.push_back(0);
         randCounts.push_back(0);
@@ -528,8 +486,6 @@ void Project_Chromatic_AberationAudioProcessor::processBlock (juce::AudioBuffer<
 
 //            processFreqCuts(i, *copyBuffers[i]);
 
-//            processReverb(i, *copyBuffers[i]);
-
 //            processDownSampler(i, *copyBuffers[i]);
 
 //            processCompressor(i, *copyBuffers[i]);
@@ -540,27 +496,33 @@ void Project_Chromatic_AberationAudioProcessor::processBlock (juce::AudioBuffer<
 
 //            processDelay(i, *copyBuffers[i]);
 
+//            processStutter(i, *copyBuffers[i]);
+
         }
         else {
- //           processGain(i, buffer);
 
- //           processPitch(i, buffer);
+            processNoise(i, buffer);
+
+            processPitch(i, buffer);
 
  //           processSaturator(i, buffer);
 
- //           processFreqCuts(i, buffer);
+            processDownSampler(i, buffer);
 
- //           processReverb(i, buffer);
+            processFreqCuts(i, buffer);
 
- //           processDownSampler(i, buffer);
-
- //           processCompressor(i, buffer);
+            processCompressor(i, buffer);
 
  //           processDelayLine(i, buffer);
 
  //           processLooper(i, buffer);
 
             processDelay(i, buffer);
+            
+            processStutter(i, buffer);
+
+            processGain(i, buffer);
+
         }
 
         if (i != copyBuffers.size()) {
@@ -603,13 +565,6 @@ void Project_Chromatic_AberationAudioProcessor::setVariables(int index, bool set
         highFreqs.push_back(apvts.getRawParameterValue("High Pass" + num)->load());
         lowFreqs.push_back(apvts.getRawParameterValue("Low Pass" + num)->load());
 
-        paramList.push_back(new  juce::Reverb::Reverb::Parameters);
-        paramList[index]->wetLevel = apvts.getRawParameterValue("Reverb Mix" + num)->load();
-        paramList[index]->dryLevel = 1 - paramList[index]->wetLevel;
-        paramList[index]->damping = apvts.getRawParameterValue("Damping" + num)->load();
-        paramList[index]->width = apvts.getRawParameterValue("Width" + num)->load();
-        paramList[index]->roomSize = apvts.getRawParameterValue("Room Size" + num)->load();
-
         sampleFactors.push_back(apvts.getRawParameterValue("Sample Rate" + num)->load());
         bitDepths.push_back(apvts.getRawParameterValue("Bit Depth" + num)->load());
 
@@ -626,11 +581,18 @@ void Project_Chromatic_AberationAudioProcessor::setVariables(int index, bool set
 
         delaySpaces.push_back(apvts.getRawParameterValue("Delay Space" + num)->load());
         delayFeedbacks.push_back(apvts.getRawParameterValue("Delay Feedback" + num)->load());
-        delayReleases.push_back(apvts.getRawParameterValue("Delay Release" + num)->load());
-        delaySpaceOffsets.push_back(apvts.getRawParameterValue("Delay Space Offset" + num)->load());
-        delayVolOffsets.push_back(apvts.getRawParameterValue("Delay Volume Offset" + num)->load());
         delayIsOn.push_back(apvts.getRawParameterValue("Delay ON/OFF" + num)->load());
 
+        onSpaces.push_back(apvts.getRawParameterValue("Stutter On Space" + num)->load());
+        offSpaces.push_back(apvts.getRawParameterValue("Stutter Off Space" + num)->load());
+        onOffsets.push_back(apvts.getRawParameterValue("Stutter On Offset" + num)->load());
+        offOffsets.push_back(apvts.getRawParameterValue("Stutter Off Offset" + num)->load());
+        stutterAttacks.push_back(apvts.getRawParameterValue("Stutter Attack" + num)->load());
+        stutterReleases.push_back(apvts.getRawParameterValue("Stutter Release" + num)->load());
+        stutterIsOn.push_back(apvts.getRawParameterValue("Stutter ON/OFF" + num)->load());
+
+        noiseMags.push_back(apvts.getRawParameterValue("Noise" + num)->load());
+     
     }
     else {
         gainAmounts[index] = apvts.getRawParameterValue("Gain" + num)->load();
@@ -670,12 +632,6 @@ void Project_Chromatic_AberationAudioProcessor::setVariables(int index, bool set
         highFreqs[index] = apvts.getRawParameterValue("High Pass" + num)->load();
         lowFreqs[index] = apvts.getRawParameterValue("Low Pass" + num)->load();
 
-        paramList[index]->wetLevel = apvts.getRawParameterValue("Reverb Mix" + num)->load();
-        paramList[index]->dryLevel = 1 - paramList[index]->wetLevel;
-        paramList[index]->damping = apvts.getRawParameterValue("Damping" + num)->load();
-        paramList[index]->width = apvts.getRawParameterValue("Width" + num)->load();
-        paramList[index]->roomSize = apvts.getRawParameterValue("Room Size" + num)->load();
-
         sampleFactors[index] = apvts.getRawParameterValue("Sample Rate" + num)->load();
         bitDepths[index] = apvts.getRawParameterValue("Bit Depth" + num)->load();
 
@@ -692,10 +648,18 @@ void Project_Chromatic_AberationAudioProcessor::setVariables(int index, bool set
 
         delaySpaces[index] = apvts.getRawParameterValue("Delay Space" + num)->load();
         delayFeedbacks[index] = apvts.getRawParameterValue("Delay Feedback" + num)->load();
-        delayReleases[index] = apvts.getRawParameterValue("Delay Release" + num)->load();
-        delaySpaceOffsets[index] = apvts.getRawParameterValue("Delay Space Offset" + num)->load();
-        delayVolOffsets[index] = apvts.getRawParameterValue("Delay Volume Offset" + num)->load();
         delayIsOn[index] = apvts.getRawParameterValue("Delay ON/OFF" + num)->load();
+        
+        onSpaces[index] = apvts.getRawParameterValue("Stutter On Space" + num)->load();
+        offSpaces[index] = apvts.getRawParameterValue("Stutter Off Space" + num)->load();
+        onOffsets[index] = apvts.getRawParameterValue("Stutter On Offset" + num)->load();
+        offOffsets[index] = apvts.getRawParameterValue("Stutter Off Offset" + num)->load();
+        stutterAttacks[index] = apvts.getRawParameterValue("Stutter Attack" + num)->load();
+        stutterReleases[index] = apvts.getRawParameterValue("Stutter Release" + num)->load();
+        stutterIsOn[index] = apvts.getRawParameterValue("Stutter ON/OFF" + num)->load();
+
+        noiseMags[index] = apvts.getRawParameterValue("Noise" + num)->load();
+
     }
 }
 
@@ -745,17 +709,17 @@ juce::AudioProcessorValueTreeState::ParameterLayout Project_Chromatic_AberationA
         layout.add(std::make_unique<juce::AudioParameterFloat>("High Pass" + num, "High Pass" + num, juce::NormalisableRange<float>(20.f, 20000.f, 1.f, 1.f), 20.f));
         layout.add(std::make_unique<juce::AudioParameterFloat>("Low Pass" + num, "Low Pass" + num, juce::NormalisableRange<float>(20.f, 20000.f, 1.f, 1.f), 20000.f));
         layout.add(std::make_unique<juce::AudioParameterFloat>("Mix" + num, "Mix" + num, juce::NormalisableRange<float>(0.f, 1.f, 0.1, 1.f), 0));
-        layout.add(std::make_unique<juce::AudioParameterFloat>("Threshold" + num, "Threshold" + num, juce::NormalisableRange<float>(-24.f, 0.f, 0.5, 1.f), 0));
-        layout.add(std::make_unique<juce::AudioParameterFloat>("Ratio" + num, "Ratio" + num, juce::NormalisableRange<float>(1, 20.f, 0.5, 1.f), 0));
-        layout.add(std::make_unique<juce::AudioParameterFloat>("Attack" + num, "Attack" + num, juce::NormalisableRange<float>(0, 100.f, 1.f, 1.f), 12.f));
-        layout.add(std::make_unique<juce::AudioParameterFloat>("Release" + num, "Release" + num, juce::NormalisableRange<float>(0, 100.f, 1.f, 1.f), 0));
+        layout.add(std::make_unique<juce::AudioParameterFloat>("Threshold" + num, "Threshold" + num, juce::NormalisableRange<float>(-44.f, 0.f, 0.5, 1.f), 0));
+        layout.add(std::make_unique<juce::AudioParameterFloat>("Ratio" + num, "Ratio" + num, juce::NormalisableRange<float>(1, 100.f, 0.5, 1.f), 0));
+        layout.add(std::make_unique<juce::AudioParameterFloat>("Attack" + num, "Attack" + num, juce::NormalisableRange<float>(0, 200.f, 1.f, 1.f), 12.f));
+        layout.add(std::make_unique<juce::AudioParameterFloat>("Release" + num, "Release" + num, juce::NormalisableRange<float>(0, 200.f, 1.f, 1.f), 0));
         layout.add(std::make_unique<juce::AudioParameterFloat>("Reverb Mix" + num, "Reverb Mix" + num, juce::NormalisableRange<float>(0, 1.f, 0.1f, 1.f), 0));
         layout.add(std::make_unique<juce::AudioParameterFloat>("Damping" + num, "Damping" + num, juce::NormalisableRange<float>(0, 1.f, 0.1f, 1.f), 0));
         layout.add(std::make_unique<juce::AudioParameterFloat>("Width" + num, "Width" + num, juce::NormalisableRange<float>(0, 1.f, 0.1f, 1.f), 0));
         layout.add(std::make_unique<juce::AudioParameterFloat>("Room Size" + num, "Room Size" + num, juce::NormalisableRange<float>(0, 1.f, 0.1f, 1.f), 0));
         layout.add(std::make_unique<juce::AudioParameterFloat>("Saturation" + num, "Saturation" + num, juce::NormalisableRange<float>(0, 10.f, 0.1f, 1.f), 0));
         layout.add(std::make_unique<juce::AudioParameterFloat>("Sample Mix" + num, "Sample Mix" + num, juce::NormalisableRange<float>(0, 1.f, 0.1f, 1.f), 0));
-        layout.add(std::make_unique<juce::AudioParameterFloat>("Sample Rate" + num, "Sample Rate" + num, juce::NormalisableRange<float>(0, 100.f, 1.f, 1.f), 0)); 
+        layout.add(std::make_unique<juce::AudioParameterFloat>("Sample Rate" + num, "Sample Rate" + num, juce::NormalisableRange<float>(0, 12.f, 1.f, 1.f), 0)); 
         layout.add(std::make_unique<juce::AudioParameterFloat>("Bit Depth" + num, "Bit Depth" + num, juce::NormalisableRange<float>(6, 16, 1.f, 1.f), 16));
         //layout.add(std::make_unique<juce::AudioParameterFloat>("Chorus Mix" + num, "Chorus Mix" + num, juce::NormalisableRange<float>(0, 1.f, 0.1f, 1.f), 0));
         //layout.add(std::make_unique<juce::AudioParameterFloat>("Depth" + num, "Depth" + num, juce::NormalisableRange<float>(0, 1.f, 0.1f, 1.f), 0));
@@ -765,13 +729,20 @@ juce::AudioProcessorValueTreeState::ParameterLayout Project_Chromatic_AberationA
         layout.add(std::make_unique<juce::AudioParameterFloat>("Delay Mag" + num, "Delay Mag" + num, juce::NormalisableRange<float>(0, 10000, 0.1f, 1.f), 0));
         layout.add(std::make_unique<juce::AudioParameterFloat>("Loop Length" + num, "Loop Length" + num, juce::NormalisableRange<float>(1, 20, 0.1f, 1.f), 1));
         layout.add(std::make_unique<juce::AudioParameterFloat>("Loop On/Off" + num, "Loop On/Off" + num, juce::NormalisableRange<float>(0, 1, 1.f, 1.f), 0));
-        layout.add(std::make_unique<juce::AudioParameterFloat>("Delay Space" + num, "Delay Space" + num, juce::NormalisableRange<float>(3, 200000, 1.f, 1.f), 12));
-        layout.add(std::make_unique<juce::AudioParameterFloat>("Delay Space Offset" + num, "Delay Space Offset" + num, juce::NormalisableRange<float>(0, 100000, 1.f, 1.f), 12));
-        layout.add(std::make_unique<juce::AudioParameterFloat>("Delay Volume Offset" + num, "Delay Volume Offset" + num, juce::NormalisableRange<float>(0, 100, 1.f, 1.f), 0));
-        layout.add(std::make_unique<juce::AudioParameterFloat>("Delay Feedback" + num, "Delay Feedback" + num, juce::NormalisableRange<float>(0.01, 0.8, 0.01, 1.f), 0));
-        layout.add(std::make_unique<juce::AudioParameterFloat>("Delay Release" + num, "Delay Release" + num, juce::NormalisableRange<float>(1, 1000, 1.f, 1.f), 0));
+        layout.add(std::make_unique<juce::AudioParameterFloat>("Delay Space" + num, "Delay Space" + num, juce::NormalisableRange<float>(3, 10000, 1.f, 1.f), 3000));
+        layout.add(std::make_unique<juce::AudioParameterFloat>("Delay Feedback" + num, "Delay Feedback" + num, juce::NormalisableRange<float>(0.1, 1.f, 0.000001f, 1.f), 1));
         layout.add(std::make_unique<juce::AudioParameterBool>("Delay ON/OFF" + num, "Delay ON/OFF" + num, false, juce::AudioParameterBoolAttributes()));
 
+
+        layout.add(std::make_unique<juce::AudioParameterFloat>("Stutter On Space" + num, "Stutter On Space" + num, juce::NormalisableRange<float>(1, 50000, 1.f, 1.f), 20));
+        layout.add(std::make_unique<juce::AudioParameterFloat>("Stutter Off Space" + num, "Stutter Off Space" + num, juce::NormalisableRange<float>(1, 50000, 1.f, 1.f), 20));
+        layout.add(std::make_unique<juce::AudioParameterFloat>("Stutter On Offset" + num, "Stutter On Offset" + num, juce::NormalisableRange<float>(1, 50000, 1.f, 1.f), 20));
+        layout.add(std::make_unique<juce::AudioParameterFloat>("Stutter Off Offset" + num, "Stutter Off Offset" + num, juce::NormalisableRange<float>(1, 50000, 1.f, 1.f), 20));
+        layout.add(std::make_unique<juce::AudioParameterFloat>("Stutter Attack" + num, "Stutter Attack" + num, juce::NormalisableRange<float>(0.f, 1.f, 0.01f, 1.f), 0.f));
+        layout.add(std::make_unique<juce::AudioParameterFloat>("Stutter Release" + num, "Stutter Release" + num, juce::NormalisableRange<float>(0.f, 1.f, 0.01f, 1.f), 0.f));
+         layout.add(std::make_unique<juce::AudioParameterBool>("Stutter ON/OFF" + num, "Stutter ON/OFF" + num, false, juce::AudioParameterBoolAttributes()));       
+
+        layout.add(std::make_unique<juce::AudioParameterFloat>("Noise" + num, "Noise" + num, juce::NormalisableRange<float>(0.f, 0.2f, 0.01f, 1.f), 0.f));
 
     }
 
