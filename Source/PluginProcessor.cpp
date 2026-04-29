@@ -742,7 +742,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout Project_Chromatic_AberationA
         layout.add(std::make_unique<juce::AudioParameterFloat>("Stutter Release" + num, "Stutter Release" + num, juce::NormalisableRange<float>(0.f, 1.f, 0.01f, 1.f), 0.f));
          layout.add(std::make_unique<juce::AudioParameterBool>("Stutter ON/OFF" + num, "Stutter ON/OFF" + num, false, juce::AudioParameterBoolAttributes()));       
 
-        layout.add(std::make_unique<juce::AudioParameterFloat>("Noise" + num, "Noise" + num, juce::NormalisableRange<float>(0.f, 0.2f, 0.01f, 1.f), 0.f));
+        layout.add(std::make_unique<juce::AudioParameterFloat>("Noise" + num, "Noise" + num, juce::NormalisableRange<float>(0.f, 0.0001f, 0.00001f, 1.f), 0.f));
 
     }
 

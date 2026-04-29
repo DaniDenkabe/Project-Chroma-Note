@@ -36,7 +36,7 @@ namespace juce::dsp {
 			    auto numChannels = buffer.getNumChannels();
           for (int ch = 0; ch < numChannels; ch++) {
               for (int i = 0; i < len; i++) {
-                  buffer.setSample(ch, i, buffer.getSample(ch, i) + rand() * volume * 0.00001);
+                  buffer.setSample(ch, i, buffer.getSample(ch, i) + rand() * volume * 0.0000001);
               }
           }
       } 
