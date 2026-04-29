@@ -20,6 +20,7 @@
 
 #include "DenkabeDelay.h"
 #include "NoiseGen.h"
+#include "PitchBend.h"
 
 struct ChainSettings {
     float pitchTransposition{ 0 }; 
@@ -93,6 +94,10 @@ public:
     void processStutter(int index, juce::dsp::ProcessSpec spec);
     void processNoise(int index, juce::AudioBuffer<float>& buffer);
     void processNoise(int index, juce::dsp::ProcessSpec spec);
+    void processBend(int index, juce::AudioBuffer<float>& buffer);
+    void processBend(int index, juce::dsp::ProcessSpec spec);
+    void processPan(int index, juce::AudioBuffer<float>& buffer);
+    void processPan(int index, juce::dsp::ProcessSpec spec);
 
     static juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
     
@@ -113,15 +118,23 @@ private:
     std::vector <std::vector<float*>> inBuffers;
     std::vector <std::vector<float*>> outBuffers;
 
+    std::vector <std::vector<juce::LagrangeInterpolator*>*> interpolatorList;
+
+    std::vector <juce::AudioBuffer<float>*> tempBuffers;
+
     std::vector <juce::dsp::NoiseGen<float>*> noiseList;
 
     std::vector <juce::dsp::Stutter<float>*> stutterList;
 
     std::vector <juce::dsp::Looper<float>*> looperList;
 
+    std::vector <juce::dsp::PitchBend<float>*> bendsList;
+
+    std::vector <juce::dsp::Panner<float>*> panList;
+
     std::vector <float> pitchSemis, freqs, amplitudes, counters, lfos, randCounts, threshs, ratios, attacks, releases, highFreqs, lowFreqs,
         compMixes, gainAmounts, dampings, roomSizes, revMixes, widths, saturations, sampleFactors, rates, depths, centreDelays, feedbacks, 
-        chorusMixes, delayAmounts, loopLengths, loopIsOn, bitDepths, wows, delayFeedbacks, delayReleases, stutterAttacks, stutterReleases, noiseMags;
+        chorusMixes, delayAmounts, loopLengths, loopIsOn, bitDepths, wows, delayFeedbacks, delayReleases, stutterAttacks, stutterReleases, noiseMags, bends, pans;
 
     std::vector <int> delayVolOffsets, delaySpaceOffsets, delaySpaces, onSpaces, offSpaces, onOffsets, offOffsets;
 

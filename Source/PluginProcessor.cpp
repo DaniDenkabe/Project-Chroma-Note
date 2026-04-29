@@ -365,6 +365,34 @@ void Project_Chromatic_AberationAudioProcessor::processNoise(int index, juce::ds
 }
 
 
+void Project_Chromatic_AberationAudioProcessor::processBend(int index, juce::AudioBuffer<float>& buffer) {
+
+     bendsList[index]->setRate(bends[index]);
+     bendsList[index]->process(buffer);
+}
+
+void Project_Chromatic_AberationAudioProcessor::processBend(int index, juce::dsp::ProcessSpec spec) {
+
+    bendsList.push_back(new juce::dsp::PitchBend<float>); 
+    bendsList[index]->prepare(spec);
+    bendsList[index]->setRate(bends[index]);
+}
+
+
+void Project_Chromatic_AberationAudioProcessor::processPan(int index, juce::AudioBuffer<float>& buffer) {
+    juce::dsp::AudioBlock<float> block(buffer);
+    juce::dsp::ProcessContextReplacing<float> ctx(block);
+
+    panList[index]->setPan(pans[index]);
+    panList[index]->process(ctx);
+}
+
+void Project_Chromatic_AberationAudioProcessor::processPan(int index, juce::dsp::ProcessSpec spec) {
+    panList.push_back(new juce::dsp::Panner<float>);
+    panList[index]->setPan(pans[index]);
+    panList[index]->prepare(spec);
+}
+
 //==============================================================================
 void Project_Chromatic_AberationAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
@@ -404,6 +432,10 @@ void Project_Chromatic_AberationAudioProcessor::prepareToPlay (double sampleRate
         processStutter(i, spec);
 
         processNoise(i, spec);
+
+        processBend(i, spec);
+        
+        processPan(i, spec);
 
         counters.push_back(0);
         randCounts.push_back(0);
@@ -521,7 +553,11 @@ void Project_Chromatic_AberationAudioProcessor::processBlock (juce::AudioBuffer<
             
             processStutter(i, buffer);
 
+            processBend(i, buffer);
+
             processGain(i, buffer);
+
+            processPan(i, buffer);
 
         }
 
@@ -592,7 +628,11 @@ void Project_Chromatic_AberationAudioProcessor::setVariables(int index, bool set
         stutterIsOn.push_back(apvts.getRawParameterValue("Stutter ON/OFF" + num)->load());
 
         noiseMags.push_back(apvts.getRawParameterValue("Noise" + num)->load());
-     
+
+        bends.push_back(apvts.getRawParameterValue("Bend" + num)->load());
+
+        pans.push_back(apvts.getRawParameterValue("Pan" + num)->load());
+
     }
     else {
         gainAmounts[index] = apvts.getRawParameterValue("Gain" + num)->load();
@@ -659,6 +699,11 @@ void Project_Chromatic_AberationAudioProcessor::setVariables(int index, bool set
         stutterIsOn[index] = apvts.getRawParameterValue("Stutter ON/OFF" + num)->load();
 
         noiseMags[index] = apvts.getRawParameterValue("Noise" + num)->load();
+
+        bends[index] = apvts.getRawParameterValue("Bend" + num)->load();
+
+        pans[index] = apvts.getRawParameterValue("Pan" + num)->load();
+
 
     }
 }
@@ -743,6 +788,10 @@ juce::AudioProcessorValueTreeState::ParameterLayout Project_Chromatic_AberationA
          layout.add(std::make_unique<juce::AudioParameterBool>("Stutter ON/OFF" + num, "Stutter ON/OFF" + num, false, juce::AudioParameterBoolAttributes()));       
 
         layout.add(std::make_unique<juce::AudioParameterFloat>("Noise" + num, "Noise" + num, juce::NormalisableRange<float>(0.f, 0.0001f, 0.00001f, 1.f), 0.f));
+
+        layout.add(std::make_unique<juce::AudioParameterFloat>("Bend" + num, "Bend" + num, juce::NormalisableRange<float>(0.f, 1.f, 0.01f, 1.f), 1.f));
+
+        layout.add(std::make_unique<juce::AudioParameterFloat>("Pan" + num, "Pan" + num, juce::NormalisableRange<float>(-1.f, 1.f, 0.01f, 1.f), 0.f));
 
     }
 

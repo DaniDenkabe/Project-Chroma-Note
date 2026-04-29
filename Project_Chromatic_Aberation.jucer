@@ -4,6 +4,8 @@
               useAppConfig="0" addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1">
   <MAINGROUP id="PNlQAD" name="Project_Chromatic_Aberation">
     <GROUP id="{BA4A925D-0D27-D341-425B-2B0900B84085}" name="Source">
+      <FILE id="KPo3VO" name="DenkabeDelay.h" compile="0" resource="0" file="Source/DenkabeDelay.h"/>
+      <FILE id="Dh8Yg7" name="Stutter.h" compile="0" resource="0" file="Source/Stutter.h"/>
       <FILE id="Q7AQ30" name="Looper.h" compile="0" resource="0" file="Source/Looper.h"/>
       <GROUP id="{26ECDC5D-CDA6-DF98-71ED-7D93318454F5}" name="WangSoundTouch">
         <GROUP id="{7546A6A9-1150-CA8A-5F0C-43817BC41309}" name="SoundTouch">
