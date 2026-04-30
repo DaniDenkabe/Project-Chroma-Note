@@ -22,11 +22,6 @@
 #include "NoiseGen.h"
 #include "PitchBend.h"
 
-struct ChainSettings {
-    float pitchTransposition{ 0 }; 
-};
-
-ChainSettings getChainSettings(juce::AudioProcessorValueTreeState& apvts);
 
 //==============================================================================
 /**
@@ -106,7 +101,8 @@ public:
 
 private:
     std::vector<juce::dsp::Saturator<float>*> saturatorList;
-    std::vector <juce::dsp::IIR::Filter<float>*> leftHpFilterList, leftLpFilterList, rightHpFilterList, rightLpFilterList;
+    std::vector <juce::dsp::IIR::Filter<float>*> leftHpFilterList, leftLpFilterList,
+      rightHpFilterList, rightLpFilterList;
     std::vector <juce::dsp::Compressor<float>*> compressorList;
     std::vector <juce::dsp::Gain<float>*> gainList;
     std::vector <juce::dsp::DownSampler<float>*> downSamplerList;
@@ -132,52 +128,24 @@ private:
 
     std::vector <juce::dsp::Panner<float>*> panList;
 
-    std::vector <float> pitchSemis, freqs, amplitudes, counters, lfos, randCounts, threshs, ratios, attacks, releases, highFreqs, lowFreqs,
-        compMixes, gainAmounts, dampings, roomSizes, revMixes, widths, saturations, sampleFactors, rates, depths, centreDelays, feedbacks, 
-        chorusMixes, delayAmounts, loopLengths, loopIsOn, bitDepths, wows, delayFeedbacks, delayReleases, stutterAttacks, stutterReleases, noiseMags, bends, pans;
+    std::vector <float> pitchSemis, freqs, amplitudes, counters, lfos, randCounts,
+      threshs, ratios, attacks, releases, highFreqs, lowFreqs, compMixes,
+      gainAmounts, dampings, roomSizes, revMixes, widths, saturations, sampleFactors,
+      rates, depths, centreDelays, feedbacks, chorusMixes, delayAmounts, loopLengths,
+      loopIsOn, bitDepths, wows, delayFeedbacks, delayReleases, stutterAttacks,
+      stutterReleases, noiseMags, bends, pans;
 
-    std::vector <int> delayVolOffsets, delaySpaceOffsets, delaySpaces, onSpaces, offSpaces, onOffsets, offOffsets;
+    std::vector <int> delayVolOffsets, delaySpaceOffsets, delaySpaces, onSpaces,
+      offSpaces, onOffsets, offOffsets;
 
     std::vector <bool> delayIsOn, stutterIsOn;
 
     std::vector <juce::SmoothedValue<float, juce::ValueSmoothingTypes::Linear>*> wowAmps;
     using Filter = juce::dsp::IIR::Filter<float>;
-    signalsmith::stretch::SignalsmithStretch<float> stretch;
-
-
-    juce::AudioBuffer<float> stretchBuffer;
-
-
-    juce::dsp::Saturator<float> saturator;
-
-    juce::dsp::IIR::Filter<float> leftHpFilter;
-    juce::dsp::IIR::Filter<float> leftLpFilter;
-    juce::dsp::IIR::Filter<float> rightHpFilter;
-    juce::dsp::IIR::Filter<float> rightLpFilter;
-
-    juce::dsp::Compressor<float> leftCompressor;
-    juce::dsp::Compressor<float> rightCompressor;
-
-    juce::dsp::DryWetMixer<float> leftCompMixer;
-    juce::dsp::DryWetMixer<float> rightCompMixer;
-
-    juce::dsp::Gain<float> gain;
-
-    juce::dsp::Reverb leftReverb;
-    juce::dsp::Reverb rightReverb;
-    juce::dsp::Chorus<float> chorus;
-    juce::Reverb::Reverb::Parameters params;
-
-
-    juce::dsp::DownSampler<float> downSampler;
-
-    float pitchSemi, freq, amplitude, counter, lfo, randCount, thresh, ratio, attack, release, highFreq, lowFreq, 
-        compMix, gainAmount, damping, roomSize, revMix, width, saturation, sampleFactor, rate, depth, centreDelay, feedback, chorusMix;
-
-
-    std::vector<juce::AudioBuffer<float>*> copyBuffers;
     int selected;
     int numOfVoices;
+
+    std::vector <juce::AudioBuffer<float>*> copyBuffers;
 
     //std::vector<float*> inBuffers, outBuffers;
     //==============================================================================
