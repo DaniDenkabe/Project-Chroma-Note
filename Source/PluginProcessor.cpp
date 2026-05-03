@@ -129,42 +129,17 @@ void Project_Chromatic_AberationAudioProcessor::processGain(int index, juce::dsp
 
 
 void Project_Chromatic_AberationAudioProcessor::processPitch(int index, juce::AudioBuffer<float>& buffer) {
-    const int numChannels = buffer.getNumChannels();
-    const int numSamples = buffer.getNumSamples();
-    
+    juce::dsp::AudioBlock<float> block(buffer);
 
-    stretchBuffers[index]->setSize(numChannels, numSamples, false, false, true);
+    pitchShifters[index]->setPitchShiftSemitones(pitchSemis[index]);
+    pitchShifters[index]->process(block);
 
-    if (numChannels == 0 || numSamples == 0)
-        return;
-
-    stretchList[index]->setTransposeSemitones(pitchSemis[index]);
-
-    float** inBuffer = const_cast<float**>(buffer.getArrayOfReadPointers());
-    float** outBuffer = const_cast<float**>(stretchBuffers[index]->getArrayOfWritePointers());
-
-    int inputSamples = numSamples;  
-    int outputSamples = numSamples;
-
-    // Process with Signalsmith Stretch
-    stretchList[index]->process(inBuffer, numSamples, outBuffer, numSamples);
-
-    // Copy processed audio back into JUCE buffer
-    const int copySamples = std::min(numSamples, outputSamples);
-
-    for (int ch = 0; ch < numChannels; ++ch)
-    {
-        buffer.copyFrom(ch, 0, *stretchBuffers[index], ch, 0, copySamples);
-    }
 }
 
 void Project_Chromatic_AberationAudioProcessor::processPitch(int index, juce::dsp::ProcessSpec spec) {
-    stretchList.push_back(new signalsmith::stretch::SignalsmithStretch<float>);
-    //stretchList[index]->presetCheaper(spec.numChannels, spec.sampleRate, false);
-    stretchList[index]->configure(spec.numChannels, spec.sampleRate * 0.1, spec.sampleRate * 0.04, true);
-    stretchList[index]->reset();
-    stretchBuffers.push_back(new juce::AudioBuffer<float>);
-    stretchBuffers[index]->setSize(getNumInputChannels(), spec.sampleRate, false, true, true);
+   
+    pitchShifters.push_back(new juce::dsp::DelayLinePitchShifter<float>);
+    pitchShifters[index]->prepare(spec);
 }
 
 
@@ -513,7 +488,7 @@ void Project_Chromatic_AberationAudioProcessor::processBlock (juce::AudioBuffer<
 
             processNoise(i, *copyBuffers[i]);
 
-//            processPitch(i, *copyBuffers[i]);
+            processPitch(i, *copyBuffers[i]);
 
             processSaturator(i, *copyBuffers[i]);
 
@@ -543,7 +518,7 @@ void Project_Chromatic_AberationAudioProcessor::processBlock (juce::AudioBuffer<
 
             processNoise(i, buffer);
 
-//            processPitch(i, buffer);
+            processPitch(i, buffer);
 
             processSaturator(i, buffer);
 
@@ -589,14 +564,6 @@ void Project_Chromatic_AberationAudioProcessor::setVariables(int index, bool set
         lfos.push_back(apvts.getRawParameterValue("LFO" + num)->load());
         wows.push_back(apvts.getRawParameterValue("WOW" + num)->load());
         wowAmps.push_back(new juce::SmoothedValue<float, juce::ValueSmoothingTypes::Linear>);
-
-        std::vector<float*> inList;
-        inList.resize(100);
-        inBuffers.push_back(inList);
-
-        std::vector<float*> outList;
-        outList.resize(100);
-        outBuffers.push_back(outList);
 
         saturations.push_back(apvts.getRawParameterValue("Saturation" + num)->load());
 
@@ -737,7 +704,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout Project_Chromatic_AberationA
         std::string num = std::to_string(i);
         layout.add(std::make_unique<juce::AudioParameterFloat>("Gain" + num, "Gain" + num, juce::NormalisableRange<float>(-20.f, 20.f, 0.5, 1.f), 0));
 
-        layout.add(std::make_unique<juce::AudioParameterFloat>("Pitch" + num, "Pitch" + num, juce::NormalisableRange<float>(-10.f, 10.f, 0.5, 1.f), 0));
+        layout.add(std::make_unique<juce::AudioParameterFloat>("Pitch" + num, "Pitch" + num, juce::NormalisableRange<float>(-10.f, 10.f, 0.1f, 1.f), 1));
         layout.add(std::make_unique<juce::AudioParameterFloat>("Freq" + num, "Freq" + num, juce::NormalisableRange<float>(0.0001, 5.f, 0.0001, 1.f), 0));
         layout.add(std::make_unique<juce::AudioParameterFloat>("WOW" + num, "WOW" + num, juce::NormalisableRange<float>(1, 50000.f, 1.f, 1.f), 0));
         layout.add(std::make_unique<juce::AudioParameterFloat>("Amplitude" + num, "Amplitude" + num, juce::NormalisableRange<float>(0, 5.f, 0.005, 1.f), 0));

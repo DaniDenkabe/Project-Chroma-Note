@@ -21,6 +21,7 @@
 #include "DenkabeDelay.h"
 #include "NoiseGen.h"
 #include "PitchBend.h"
+#include "DelayLinePitchShifter.h"
 
 
 //==============================================================================
@@ -109,14 +110,8 @@ private:
     std::vector <juce::dsp::DelayLine<float>*> delayLineList;
     std::vector <juce::dsp::DenkabeDelay<float>*> delayList;
 
-    std::vector <signalsmith::stretch::SignalsmithStretch<float>*> stretchList;
-    std::vector <juce::AudioBuffer<float>*> stretchBuffers;
-    std::vector <std::vector<float*>> inBuffers;
-    std::vector <std::vector<float*>> outBuffers;
 
-    std::vector <std::vector<juce::LagrangeInterpolator*>*> interpolatorList;
-
-    std::vector <juce::AudioBuffer<float>*> tempBuffers;
+    std::vector <juce::dsp::DelayLinePitchShifter<float>*> pitchShifters;
 
     std::vector <juce::dsp::NoiseGen<float>*> noiseList;
 
