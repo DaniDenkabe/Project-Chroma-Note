@@ -608,7 +608,9 @@ void Project_Chromatic_AberationAudioProcessor::setVariables(int index, bool set
     else {
         gainAmounts[index] = apvts.getRawParameterValue("Gain" + num)->load();
 
-        std::ifstream file("data.txt");
+        const char* home = std::getenv("HOME");
+
+        std::ifstream file(std::string(home) + "/data.txt");
         std::string voice;
         std::string param;
         std::string data;
@@ -621,14 +623,12 @@ void Project_Chromatic_AberationAudioProcessor::setVariables(int index, bool set
                 std::getline(file, param);
                 std::getline(file, data);
 
-                try {
+                try { 
                     float f = std::stof(data);
                     pitchSemis[index] = (12 / 30) * f;
                 } catch (const std::invalid_argument& e) {
                     
-                } catch (const std::invalid_argument& e) {
-
-                }
+                } 
             } 
         }
 
