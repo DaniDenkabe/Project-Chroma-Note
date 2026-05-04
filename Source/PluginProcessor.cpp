@@ -11,9 +11,12 @@
 
 #include <cmath>
 #include <cstdlib>
+#include <stdexcept>
 #include <thread> 
 #include <ctime>
 #include <fstream>
+#include <string>
+#include <iostream>
 
 //==============================================================================
 Project_Chromatic_AberationAudioProcessor::Project_Chromatic_AberationAudioProcessor()
@@ -605,7 +608,30 @@ void Project_Chromatic_AberationAudioProcessor::setVariables(int index, bool set
     else {
         gainAmounts[index] = apvts.getRawParameterValue("Gain" + num)->load();
 
-        pitchSemis[index] = apvts.getRawParameterValue("Pitch" + num)->load();
+        std::ifstream file("data.txt");
+        std::string voice;
+        std::string param;
+        std::string data;
+        if (index != 4) {
+            pitchSemis[index] = apvts.getRawParameterValue("Pitch" + num)->load(); 
+        } else {
+            if (file.is_open()) {
+
+                std::getline(file, voice);
+                std::getline(file, param);
+                std::getline(file, data);
+
+                try {
+                    float f = std::stof(data);
+                    pitchSemis[index] = (12 / 30) * f;
+                } catch (const std::invalid_argument& e) {
+                    
+                } catch (const std::invalid_argument& e) {
+
+                }
+            } 
+        }
+
         freqs[index] = apvts.getRawParameterValue("Freq" + num)->load();
         wows[index] = apvts.getRawParameterValue("WOW" + num)->load();
         amplitudes[index] = apvts.getRawParameterValue("Amplitude" + num)->load();
@@ -668,6 +694,7 @@ void Project_Chromatic_AberationAudioProcessor::setVariables(int index, bool set
 
     }
 }
+
 
 //==============================================================================
 bool Project_Chromatic_AberationAudioProcessor::hasEditor() const
