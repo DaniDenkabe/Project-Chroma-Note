@@ -606,7 +606,7 @@ void Project_Chromatic_AberationAudioProcessor::setVariables(int index, bool set
 
     }
     else {
-        gainAmounts[index] = apvts.getRawParameterValue("Gain" + num)->load();
+
 
         const char* home = std::getenv("HOME");
 
@@ -614,29 +614,146 @@ void Project_Chromatic_AberationAudioProcessor::setVariables(int index, bool set
         std::string voice;
         std::string param;
         std::string data;
-        if (index != 4) {
-            pitchSemis[index] = apvts.getRawParameterValue("Pitch" + num)->load(); 
-        } else {
-            if (file.is_open()) {
 
-                std::getline(file, voice);
-                std::getline(file, param);
-                std::getline(file, data);
+        if (file.is_open()) {
 
-                try { 
-                    float f = std::stof(data);
-                    pitchSemis[index] = (12 / 30) * f;
-                } catch (const std::invalid_argument& e) {
-                    
-                } 
+            std::getline(file, voice);
+            std::getline(file, param);
+            std::getline(file, data);
+
+            try { 
+                float input = std::stof(data);
+
+                switch (param) {
+                    case 0:
+                        gainAmounts[voice] = std::clamp((12.f/30.f) * input, -12.f, 12.f); 
+                        break;
+                       
+                    case 1:
+                        pitchSemis[voice] = std::clamp((12.f/30.f) * input, -12.f, 12.f);         
+                        break;
+
+                    case 2:
+                        freqs[voice] = std::clamp((1.f/100.f) * input, 0.01, 1.f);         
+                        break;
+
+                    case 3:
+                        wows[voice] = std::clamp((1.f/1.f) * input, 1.f, 100.f);;         
+                        break;
+
+                    case 4:
+                        amplitudes[voice] = std::clamp((1.f/100.f) * input, 0.f, 1.f);                
+                        break;
+
+                    case 5:
+                        lfos[voice] = std::clamp((100.f/1000.f) * input, 0.f, 100.f); 
+                        break;
+
+                    case 6:
+                        saturations[voice] = std::clamp((10.f/100.f) * input, 0.f, 10.f); 
+                        break;
+
+                    case 7:
+                        highFreqs[voice] = std::clamp((100.f/1.f) * input, 20.f, 20000.f);        
+                        break;
+
+                    case 8:
+                        lowFreqs[voice] =  std::clamp((100.f/1.f) * input, 20.f, 20000.f);    
+                        break;
+
+                    case 9:
+                        sampleFactors[voice] =  std::clamp((12.f/12.f) * input, 0.f, 12.f);
+                        break;
+
+                    case 10:
+                        bitDepths[voice] =  std::clamp((1.f/1.f) * input, 6.f, 16.f);         
+                        break;
+
+                    case 11:
+                        threshs[voice] = std::clamp((1.f/2.f) * input, -50.f, 0.f);          
+                        break;
+
+                    case 12:
+                        ratios[voice] =  std::clamp((1.f/1.f) * input, 1.f, 100.f);  
+                        break;
+
+                    case 13:
+                        attacks[voice] =  std::clamp((2.f/1.f) * input, 0.f, 200.f);       
+                        break;
+
+                    case 14:
+                        releases[voice] = std::clamp((2.f/1.f) * input, 0.f, 200.f);              
+                        break;
+
+                    case 15:
+                        delayAmounts[voice] = std::clamp((100.f/1.f) * input, 0.f, 100000.f);        
+                        break;
+
+                    case 16:
+                        loopLengths[voice] = std::clamp((1.f/10.f) * input, 1.f, 20.f);          
+                        break;
+
+                    case 17:
+                        loopIsOn[voice] = std::clamp((1.f/1.f) * input, 0.f, 1.f); 
+                        break;
+
+                    case 18:
+                        delaySpaces[voice] = std::clamp((100.f/1.f) * input, 3.f, 10000.f);             
+                        break;
+
+                    case 19:
+                        delayFeedacks[voice] = std::clamp((0.1f/1.f) * input, 0.f, 1.f);    
+                        break;
+
+                    case 20:
+                        delayIsOn[voice] = std::clamp((1.f/1.f) * input, 0.f, 1.f);             
+                        break;
+
+                    case 21:
+                        onSpaces[voice] = std::clamp((1000.f/1.f) * input, 1.f, 50000.f);            
+                        break;
+
+                    case 22:
+                        offSpaces[voice] = std::clamp((1000.f/1.f) * input, 1.f, 50000.f);             
+                        break;
+
+                    case 23:
+                        onOffsets[voice] = std::clamp((1000.f/1.f) * input, 1.f, 50000.f); 
+                        break;
+
+                    case 24:
+                        offOffsets[voice] = std::clamp((1000.f/1.f) * input, 1.f, 50000.f);
+                        break;
+
+                    case 25:
+                        stutterAttacks[voice] = std::clamp((1.f/50.f) * input, 0.f, 1.f);  
+                        break;
+
+                    case 26:
+                        stutterReleases[voice] = std::clamp((1.f/50.f) * input, 0.f, 1.f);
+                        break;
+
+                    case 27:
+                        stutterIsOn[voice] = std::clamp((1.f/1.f) * input, 0.f, 1.f);
+                        break;
+
+                    case 28:
+                        noiseMags[voice] = std::clamp((1.f/10000.f) * input, 0.f, 0.0001f);     
+                        break;
+
+                    case 29:
+                        bends[voice] = std::clamp((1.f/15.f) * input, 0.f, 1.f);  
+                        break;
+
+                    case 30:
+                        pans[voice] = std::clamp((1.f/10.f) * input, -1.f, 1.f);             
+                        break;
+                }
+                
+            } catch (const std::invalid_argument& e) {
+                
             } 
-        }
-
-        freqs[index] = apvts.getRawParameterValue("Freq" + num)->load();
-        wows[index] = apvts.getRawParameterValue("WOW" + num)->load();
-        amplitudes[index] = apvts.getRawParameterValue("Amplitude" + num)->load();
-        lfos[index] = apvts.getRawParameterValue("LFO" + num)->load();
-
+        } 
         
         if ((sin(counters[index] * (4 + (wows[index] / 5))) <= 0 && sin((counters[index] + freqs[index]) * (4 + (wows[index] / 5))) > 0) 
         || (sin(counters[index] * (4 + (wows[index] / 5))) > 0 && sin((counters[index] + freqs[index]) * (4 + (wows[index] / 5))) < 0)) {
@@ -654,44 +771,6 @@ void Project_Chromatic_AberationAudioProcessor::setVariables(int index, bool set
         }
 
         pitchSemis[index] += shift;
-
-        saturations[index] = apvts.getRawParameterValue("Saturation" + num)->load();
-
-        highFreqs[index] = apvts.getRawParameterValue("High Pass" + num)->load();
-        lowFreqs[index] = apvts.getRawParameterValue("Low Pass" + num)->load();
-
-        sampleFactors[index] = apvts.getRawParameterValue("Sample Rate" + num)->load();
-        bitDepths[index] = apvts.getRawParameterValue("Bit Depth" + num)->load();
-
-        threshs[index] = apvts.getRawParameterValue("Threshold" + num)->load();
-        ratios[index] = apvts.getRawParameterValue("Ratio" + num)->load();
-        attacks[index] = apvts.getRawParameterValue("Attack" + num)->load();
-        releases[index] = apvts.getRawParameterValue("Release" + num)->load();
-
-        delayAmounts[index] = apvts.getRawParameterValue("Delay Mag" + num)->load();
-
-        loopLengths[index] = apvts.getRawParameterValue("Loop Length" + num)->load();
-        loopIsOn[index] = apvts.getRawParameterValue("Loop On/Off" + num)->load();
-
-        delaySpaces[index] = apvts.getRawParameterValue("Delay Space" + num)->load();
-        delayFeedbacks[index] = apvts.getRawParameterValue("Delay Feedback" + num)->load();
-        delayIsOn[index] = apvts.getRawParameterValue("Delay ON/OFF" + num)->load();
-        
-        onSpaces[index] = apvts.getRawParameterValue("Stutter On Space" + num)->load();
-        offSpaces[index] = apvts.getRawParameterValue("Stutter Off Space" + num)->load();
-        onOffsets[index] = apvts.getRawParameterValue("Stutter On Offset" + num)->load();
-        offOffsets[index] = apvts.getRawParameterValue("Stutter Off Offset" + num)->load();
-        stutterAttacks[index] = apvts.getRawParameterValue("Stutter Attack" + num)->load();
-        stutterReleases[index] = apvts.getRawParameterValue("Stutter Release" + num)->load();
-        stutterIsOn[index] = apvts.getRawParameterValue("Stutter ON/OFF" + num)->load();
-
-        noiseMags[index] = apvts.getRawParameterValue("Noise" + num)->load();
-
-        bends[index] = apvts.getRawParameterValue("Bend" + num)->load();
-
-        pans[index] = apvts.getRawParameterValue("Pan" + num)->load();
-
-
     }
 }
 

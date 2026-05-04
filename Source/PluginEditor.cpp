@@ -15,7 +15,7 @@ Project_Chromatic_AberationAudioProcessorEditor::Project_Chromatic_AberationAudi
 {
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
-    setSize (1000, 300);
+    setSize (1000, 1000);
 }
 
 Project_Chromatic_AberationAudioProcessorEditor::~Project_Chromatic_AberationAudioProcessorEditor()
