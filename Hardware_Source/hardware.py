@@ -2,6 +2,9 @@
 import RPi.GPIO as GPIO
 import time
 import smbus2 as smbus
+from pathlib import Path
+
+home = path.home()
 
 DIRECTION_CW = 0
 DIRECTION_CCW = 1
@@ -22,31 +25,95 @@ class Encoder:
     
     
     
-INTA_PIN = 17
-INTB_PIN = 27
+INTA_PIN0 = 17
+INTB_PIN0 = 27
+INTA_PIN1 = 10
+INTB_PIN1 = 9
+INTA_PIN2 = 5
+INTB_PIN2 = 6
+INTA_PIN3 = 19
+INTB_PIN3 = 26
+INTA_PIN4 = 23
+INTB_PIN4 = 24
+INTA_PIN5 = 25
+INTB_PIN5 = 8 
+
 
 MCP_ADDR0 = 0x20
+MCP_ADDR1 = 0x21
+MCP_ADDR2 = 0x22
+MCP_ADDR3 = 0x23
+MCP_ADDR4 = 0x24
+MCP_ADDR5 = 0x25
 
-encoderList = [Encoder(4, 0), Encoder(4, 1)]
-dataList = [0] * 154
+encoderList = [Encoder(4, 0), Encoder(4, 1), Encoder(4, 29), Encoder(4, 4), Encoder(4, 2),
+               Encoder(4, 5), Encoder(4, 3), Encoder(4, 28), Encoder(4, 18), Encoder(4, 19),
+               Encoder(4, 11), Encoder(4, 12), Encoder(4, 7), Encoder(4, 8), Encoder(4, 16), 
+               Encoder(4, 30), Encoder(0, 29), Encoder(1, 29), Encoder(2, 29), Encoder(3, 29),
+               Encoder(0, 1), Encoder(1, 1), Encoder(2, 1), Encoder(3, 1)]
+dataList = [0] * 155
 start = time.time()
-
+ctrl = 0
+selectedVoice = 4
 
 GPIO.setmode(GPIO.BCM)
-GPIO.setup(INTA_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-GPIO.setup(INTB_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(INTA_PIN0, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(INTB_PIN0, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(INTA_PIN1, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(INTB_PIN1, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(INTA_PIN2, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(INTB_PIN2, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(INTA_PIN3, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(INTB_PIN3, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(INTA_PIN4, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(INTB_PIN4, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(INTA_PIN5, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(INTB_PIN5, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
+
+
 
 bus.write_byte_data(MCP_ADDR0, 0x0C, 0b11111111)
+bus.write_byte_data(MCP_ADDR1, 0x0C, 0b11111111)
+bus.write_byte_data(MCP_ADDR2, 0x0C, 0b11111111)
+bus.write_byte_data(MCP_ADDR3, 0x0C, 0b11111111)
+bus.write_byte_data(MCP_ADDR4, 0x0C, 0b11111111)
+bus.write_byte_data(MCP_ADDR5, 0x0C, 0b11111111)
+
 
 bus.write_byte_data(MCP_ADDR0, 0x00, 0xFF)  # IODIRA = inputs
+bus.write_byte_data(MCP_ADDR1, 0x00, 0xFF)  # IODIRA = inputs
+bus.write_byte_data(MCP_ADDR2, 0x00, 0xFF)  # IODIRA = inputs
+bus.write_byte_data(MCP_ADDR3, 0x00, 0xFF)  # IODIRA = inputs
+bus.write_byte_data(MCP_ADDR4, 0x00, 0xFF)  # IODIRA = inputs
+bus.write_byte_data(MCP_ADDR5, 0x00, 0xFF)  # IODIRA = inputs
+
+
 
 
 bus.write_byte_data(MCP_ADDR0, 0x04, 0xFF)  # GPINTENA (enable interrupts)
 bus.write_byte_data(MCP_ADDR0, 0x08, 0x00)  # INTCONA (interrupt on change)
 bus.read_byte_data(MCP_ADDR0, 0x10)  # INTCAP
 
+bus.write_byte_data(MCP_ADDR1, 0x04, 0xFF)  # GPINTENA (enable interrupts)
+bus.write_byte_data(MCP_ADDR1, 0x08, 0x00)  # INTCONA (interrupt on change)
+bus.read_byte_data(MCP_ADDR1, 0x10)  # INTCAP
 
+bus.write_byte_data(MCP_ADDR2, 0x04, 0xFF)  # GPINTENA (enable interrupts)
+bus.write_byte_data(MCP_ADDR2, 0x08, 0x00)  # INTCONA (interrupt on change)
+bus.read_byte_data(MCP_ADDR2, 0x10)  # INTCAP
 
+bus.write_byte_data(MCP_ADDR3, 0x04, 0xFF)  # GPINTENA (enable interrupts)
+bus.write_byte_data(MCP_ADDR3, 0x08, 0x00)  # INTCONA (interrupt on change)
+bus.read_byte_data(MCP_ADDR3, 0x10)  # INTCAP
+
+bus.write_byte_data(MCP_ADDR4, 0x04, 0xFF)  # GPINTENA (enable interrupts)
+bus.write_byte_data(MCP_ADDR4, 0x08, 0x00)  # INTCONA (interrupt on change)
+bus.read_byte_data(MCP_ADDR4, 0x10)  # INTCAP
+
+bus.write_byte_data(MCP_ADDR5, 0x04, 0xFF)  # GPINTENA (enable interrupts)
+bus.write_byte_data(MCP_ADDR5, 0x08, 0x00)  # INTCONA (interrupt on change)
+bus.read_byte_data(MCP_ADDR5, 0x10)  # INTCAP
     
 
 def interrupt0A(channel):
@@ -77,7 +144,364 @@ def interrupt0A(channel):
         encoderList[1].CLK_state = pin0_state
         encoderList[1].DT_state = pin1_state
         rotary_turned(encoderList[1])
-        
+    if pin0 == 4:
+        encoderList[2].prev_CLK_state = encoderList[2].CLK_state
+        encoderList[2].CLK_state = pin0_state
+        encoderList[2].DT_state = pin1_state
+        rotary_turned(encoderList[2])       
+    if pin0 == 6:
+        ctrl = (ctrl + 1) % 3
+    if pin0 == 7:
+        selectedVoice = 4
+
+def interrupt0B(channel):
+ #   print("!!!")
+    intf = bus.read_byte_data(MCP_ADDR0,0x0E)
+    values = bus.read_byte_data(MCP_ADDR0, 0x10)
+    pin0 = 0
+    pin1 = 0
+    pin0_state = 0
+    pin1_state = 0
+    
+    for pin in range(8):
+        if intf & (1 << pin):
+            pin0 = pin
+            if pin0 % 2 != 0:
+                return
+    pin1 = pin0 + 1
+    pin0_state = (values >> pin0) & 1
+    pin1_state = (values >> pin1) & 1
+
+
+
+def interrupt1A(channel):
+ #   print("!!!")
+    intf = bus.read_byte_data(MCP_ADDR1,0x0E)
+    values = bus.read_byte_data(MCP_ADDR1, 0x10)
+    pin0 = 0
+    pin1 = 0
+    pin0_state = 0
+    pin1_state = 0
+    
+    for pin in range(8):
+        if intf & (1 << pin):
+            pin0 = pin
+            if pin0 % 2 != 0:
+                return
+    pin1 = pin0 + 1
+    pin0_state = (values >> pin0) & 1
+    pin1_state = (values >> pin1) & 1
+    
+    if pin0 == 0:
+        encoderList[3].voice = selectedVoice
+        encoderList[3].prev_CLK_state = encoderList[3].CLK_state
+        encoderList[3].CLK_state = pin0_state
+        encoderList[3].DT_state = pin1_state
+        rotary_turned(encoderList[3])
+    if pin0 == 2:
+        encoderList[4].voice = selectedVoice
+        encoderList[4].prev_CLK_state = encoderList[4].CLK_state
+        encoderList[4].CLK_state = pin0_state
+        encoderList[4].DT_state = pin1_state
+        rotary_turned(encoderList[4])
+    if pin0 == 4:
+        encoderList[5].voice = selectedVoice
+        encoderList[5].prev_CLK_state = encoderList[5].CLK_state
+        encoderList[5].CLK_state = pin0_state
+        encoderList[5].DT_state = pin1_state
+        rotary_turned(encoderList[5])       
+    if pin0 == 6:
+        encoderList[6].voice = selectedVoice
+        encoderList[6].prev_CLK_state = encoderList[6].CLK_state
+        encoderList[6].CLK_state = pin0_state
+        encoderList[6].DT_state = pin1_state
+        rotary_turned(encoderList[6])    
+
+
+
+
+def interrupt1B(channel):
+ #   print("!!!")
+    intf = bus.read_byte_data(MCP_ADDR1,0x0E)
+    values = bus.read_byte_data(MCP_ADDR1, 0x10)
+    pin0 = 0
+    pin1 = 0
+    pin0_state = 0
+    pin1_state = 0
+    
+    for pin in range(8):
+        if intf & (1 << pin):
+            pin0 = pin
+            if pin0 % 2 != 0:
+                return
+    pin1 = pin0 + 1
+    pin0_state = (values >> pin0) & 1
+    pin1_state = (values >> pin1) & 1
+    
+    if pin0 == 0:
+        encoderList[7].voice = selectedVoice
+        encoderList[7].prev_CLK_state = encoderList[7].CLK_state
+        encoderList[7].CLK_state = pin0_state
+        encoderList[7].DT_state = pin1_state
+        rotary_turned(encoderList[7])
+    if pin0 == 2:
+        button_pressed(selectedVoice, 6, 1)
+    if pin0 == 3:
+        button_pressed(selectedVoice, 6, -1)
+    if pin0 >= 4:
+        selectedVoice = pin0 - 4
+
+
+
+def interrupt2A(channel):
+ #   print("!!!")
+    intf = bus.read_byte_data(MCP_ADDR2,0x0E)
+    values = bus.read_byte_data(MCP_ADDR2, 0x10)
+    pin0 = 0
+    pin1 = 0
+    pin0_state = 0
+    pin1_state = 0
+    
+    for pin in range(8):
+        if intf & (1 << pin):
+            pin0 = pin
+            if pin0 % 2 != 0:
+                return
+    pin1 = pin0 + 1
+    pin0_state = (values >> pin0) & 1
+    pin1_state = (values >> pin1) & 1
+    
+    if pin0 == 0:
+        encoderList[8].voice = selectedVoice
+        encoderList[8].prev_CLK_state = encoderList[8].CLK_state
+        encoderList[8].CLK_state = pin0_state
+        encoderList[8].DT_state = pin1_state
+        rotary_turned(encoderList[8])
+
+    if pin0 == 2:
+        encoderList[9].voice = selectedVoice
+        encoderList[9].prev_CLK_state = encoderList[9].CLK_state
+        encoderList[9].CLK_state = pin0_state
+        encoderList[9].DT_state = pin1_state
+        rotary_turned(encoderList[9])
+
+    if pin0 == 4:
+        encoderList[10].voice = selectedVoice
+        encoderList[10].prev_CLK_state = encoderList[10].CLK_state
+        encoderList[10].CLK_state = pin0_state
+        encoderList[10].DT_state = pin1_state
+        rotary_turned(encoderList[10])
+
+    if pin0 == 6:
+        encoderList[11].voice = selectedVoice
+        encoderList[11].prev_CLK_state = encoderList[11].CLK_state
+        encoderList[11].CLK_state = pin0_state
+        encoderList[11].DT_state = pin1_state
+        rotary_turned(encoderList[11])
+
+
+def interrupt2B(channel):
+ #   print("!!!")
+    intf = bus.read_byte_data(MCP_ADDR2,0x0E)
+    values = bus.read_byte_data(MCP_ADDR2, 0x10)
+    pin0 = 0
+    pin1 = 0
+    pin0_state = 0
+    pin1_state = 0
+    
+    for pin in range(8):
+        if intf & (1 << pin):
+            pin0 = pin
+            if pin0 % 2 != 0:
+                return
+    pin1 = pin0 + 1
+    pin0_state = (values >> pin0) & 1
+    pin1_state = (values >> pin1) & 1
+ 
+    if pin0 == 0:
+        encoderList[12].voice = selectedVoice
+        encoderList[12].prev_CLK_state = encoderList[12].CLK_state
+        encoderList[12].CLK_state = pin0_state
+        encoderList[12].DT_state = pin1_state
+        rotary_turned(encoderList[12])
+    if pin0 == 2:
+        encoderList[13].voice = selectedVoice
+        encoderList[13].prev_CLK_state = encoderList[13].CLK_state
+        encoderList[13].CLK_state = pin0_state
+        encoderList[13].DT_state = pin1_state
+        rotary_turned(encoderList[13])
+    if pin0 == 4:
+        encoderList[14].voice = selectedVoice
+        encoderList[14].prev_CLK_state = encoderList[14].CLK_state
+        encoderList[14].CLK_state = pin0_state
+        encoderList[14].DT_state = pin1_state
+        rotary_turned(encoderList[14])
+    if pin0 == 6:
+        encoderList[15].voice = selectedVoice
+        encoderList[15].prev_CLK_state = encoderList[15].CLK_state
+        encoderList[15].CLK_state = pin0_state
+        encoderList[15].DT_state = pin1_state
+        rotary_turned(encoderList[15])
+
+
+
+def interrupt3A(channel):
+ #   print("!!!")
+    intf = bus.read_byte_data(MCP_ADDR3,0x0E)
+    values = bus.read_byte_data(MCP_ADDR3, 0x10)
+    pin0 = 0
+    pin1 = 0
+    pin0_state = 0
+    pin1_state = 0
+    
+    for pin in range(8):
+        if intf & (1 << pin):
+            pin0 = pin
+            if pin0 % 2 != 0:
+                return
+    pin1 = pin0 + 1
+    pin0_state = (values >> pin0) & 1
+    pin1_state = (values >> pin1) & 1
+ 
+    if pin0 == 0:
+        button_pressed(selectedVoice, 21, 1)
+    if pin0 == 1:
+        button_pressed(selectedVoice, 21, -1)
+    if pin0 == 2:
+        button_pressed(selectedVoice, 22, 1)
+    if pin0 == 3:
+        button_pressed(selectedVoice, 22, -1)
+    if pin0 == 4:
+        button_pressed(selectedVoice, 23, 1)
+    if pin0 == 5:
+        button_pressed(selectedVoice, 23, -1)
+    if pin0 == 6:
+        button_pressed(selectedVoice, 24, 1)
+    if pin0 == 7:
+        button_pressed(selectedVoice, 24, -1)
+
+
+def interrupt3B(channel):
+ #   print("!!!")
+    intf = bus.read_byte_data(MCP_ADDR3,0x0E)
+    values = bus.read_byte_data(MCP_ADDR3, 0x10)
+    pin0 = 0
+    pin1 = 0
+    pin0_state = 0
+    pin1_state = 0
+    
+    for pin in range(8):
+        if intf & (1 << pin):
+            pin0 = pin
+            if pin0 % 2 != 0:
+                return
+    pin1 = pin0 + 1
+    pin0_state = (values >> pin0) & 1
+    pin1_state = (values >> pin1) & 1
+ 
+    if pin0 == 0:
+        button_pressed(selectedVoice, 25, 1)
+    if pin0 == 1:
+        button_pressed(selectedVoice, 25, -1)
+    if pin0 == 2:
+        button_pressed(selectedVoice, 26, 1)
+    if pin0 == 3:
+        button_pressed(selectedVoice, 26, -1)
+    if pin0 == 4:
+        button_pressed(selectedVoice, 17, 1)
+    if pin0 == 5:
+        button_pressed(selectedVoice, 20, 1)
+    if pin0 == 6:
+        button_pressed(selectedVoice, 27, 1)
+
+
+def interrupt4A(channel):
+ #   print("!!!")
+    intf = bus.read_byte_data(MCP_ADDR4,0x0E)
+    values = bus.read_byte_data(MCP_ADDR4, 0x10)
+    pin0 = 0
+    pin1 = 0
+    pin0_state = 0
+    pin1_state = 0
+    
+    for pin in range(8):
+        if intf & (1 << pin):
+            pin0 = pin
+            if pin0 % 2 != 0:
+                return
+    pin1 = pin0 + 1
+    pin0_state = (values >> pin0) & 1
+    pin1_state = (values >> pin1) & 1
+
+    if pin0 == 0:
+        encoderList[16].prev_CLK_state = encoderList[16].CLK_state
+        encoderList[16].CLK_state = pin0_state
+        encoderList[16].DT_state = pin1_state
+        rotary_turned(encoderList[16])
+    if pin0 == 2:
+        encoderList[17].prev_CLK_state = encoderList[17].CLK_state
+        encoderList[17].CLK_state = pin0_state
+        encoderList[17].DT_state = pin1_state
+        rotary_turned(encoderList[17])
+    if pin0 == 4:
+        encoderList[18].prev_CLK_state = encoderList[18].CLK_state
+        encoderList[18].CLK_state = pin0_state
+        encoderList[18].DT_state = pin1_state
+        rotary_turned(encoderList[18])
+    if pin0 == 6:
+        encoderList[19].prev_CLK_state = encoderList[19].CLK_state
+        encoderList[19].CLK_state = pin0_state
+        encoderList[19].DT_state = pin1_state
+        rotary_turned(encoderList[19])
+
+
+
+def interrupt4B(channel):
+ #   print("!!!")
+    intf = bus.read_byte_data(MCP_ADDR4,0x0E)
+    values = bus.read_byte_data(MCP_ADDR4, 0x10)
+    pin0 = 0
+    pin1 = 0
+    pin0_state = 0
+    pin1_state = 0
+    
+    for pin in range(8):
+        if intf & (1 << pin):
+            pin0 = pin
+            if pin0 % 2 != 0:
+                return
+    pin1 = pin0 + 1
+    pin0_state = (values >> pin0) & 1
+    pin1_state = (values >> pin1) & 1
+
+    if pin0 == 0:
+        encoderList[16].param
+        encoderList[16].prev_CLK_state = encoderList[16].CLK_state
+        encoderList[16].CLK_state = pin0_state
+        encoderList[16].DT_state = pin1_state
+        rotary_turned(encoderList[16])
+    if pin0 == 2:
+        encoderList[17].prev_CLK_state = encoderList[17].CLK_state
+        encoderList[17].CLK_state = pin0_state
+        encoderList[17].DT_state = pin1_state
+        rotary_turned(encoderList[17])
+    if pin0 == 4:
+        encoderList[18].prev_CLK_state = encoderList[18].CLK_state
+        encoderList[18].CLK_state = pin0_state
+        encoderList[18].DT_state = pin1_state
+        rotary_turned(encoderList[18])
+    if pin0 == 6:
+        encoderList[19].prev_CLK_state = encoderList[19].CLK_state
+        encoderList[19].CLK_state = pin0_state
+        encoderList[19].DT_state = pin1_state
+        rotary_turned(encoderList[19])
+
+
+
+
+
+
+
 def rotary_turned(e):
         # Read the current state of the rotary encoder's CLK pin
         CLK_state = e.CLK_state
@@ -87,6 +511,7 @@ def rotary_turned(e):
         voice = e.voice
         param = e.param
         global start
+        global home
         index = voice * 31 + param
 
 
@@ -114,7 +539,7 @@ def rotary_turned(e):
             check = time.time()
             print("Rotary Encoder:: direction:", "CLOCKWISE" if direction == DIRECTION_CW else "ANTICLOCKWISE",
                   "- count:", dataList[index], "Time since last: ", check - start)
-            file_path = "data.txt"
+            file_path = home / "data.txt"
             with open(file_path, 'r') as file:
                 lines = file.readlines()
             lines[0:3] = [str(voice) + "\n", str(param) + "\n", str(dataList[index])]
@@ -123,13 +548,37 @@ def rotary_turned(e):
                 file.writelines(lines)
             time.sleep(0.05)
     
+def button_pressed(voice, param, positive):
+    global dataList
+    global ctrl
+
+    index = 31 * voice + param
+    if param == 17 || param == 20 || param == 27:
+        dataList[index] = (dataList[index] + 1) % 2
+    else:
+        dataList[index] += 1 * positive
+    file_path = home / "data.txt"
+    with open(file_path, 'r') as file:
+        lines = file.readlines()
+    lines[0:3] = [str(voice) + "\n", str(param) + "\n", str(dataList[index])]
     
+    with open(file_path, 'w') as file:
+        file.writelines(lines)
+
     
 
-GPIO.add_event_detect(INTA_PIN, GPIO.FALLING, callback=interrupt0A, bouncetime=1)
-
-#GPIO.add_event_detect(INTB_PIN, GPIO.FALLING, callback=interrupt0B, bouncetime=5)
-
+GPIO.add_event_detect(INTA_PIN0, GPIO.FALLING, callback=interrupt0A, bouncetime=1)
+GPIO.add_event_detect(INTB_PIN0, GPIO.FALLING, callback=interrupt0B, bouncetime=1)
+GPIO.add_event_detect(INTB_PIN1, GPIO.FALLING, callback=interrupt1A, bouncetime=1)
+GPIO.add_event_detect(INTB_PIN1, GPIO.FALLING, callback=interrupt1B, bouncetime=1)
+GPIO.add_event_detect(INTB_PIN2, GPIO.FALLING, callback=interrupt2A, bouncetime=1)
+GPIO.add_event_detect(INTB_PIN2, GPIO.FALLING, callback=interrupt2B, bouncetime=1)
+GPIO.add_event_detect(INTB_PIN3, GPIO.FALLING, callback=interrupt3A, bouncetime=1)
+GPIO.add_event_detect(INTB_PIN3, GPIO.FALLING, callback=interrupt3B, bouncetime=1)
+GPIO.add_event_detect(INTB_PIN4, GPIO.FALLING, callback=interrupt4A, bouncetime=1)
+GPIO.add_event_detect(INTB_PIN4, GPIO.FALLING, callback=interrupt4B, bouncetime=1)
+GPIO.add_event_detect(INTB_PIN5, GPIO.FALLING, callback=interrupt5A, bouncetime=1)
+GPIO.add_event_detect(INTB_PIN5, GPIO.FALLING, callback=interrupt5B, bouncetime=1)
 #while True:
 #    print(GPIO.input(INTA_PIN))
 #    time.sleep(0.1)
