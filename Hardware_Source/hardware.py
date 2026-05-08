@@ -80,6 +80,12 @@ bus.write_byte_data(MCP_ADDR3, 0x0C, 0b11111111)
 bus.write_byte_data(MCP_ADDR4, 0x0C, 0b11111111)
 bus.write_byte_data(MCP_ADDR5, 0x0C, 0b11111111)
 
+bus.write_byte_data(MCP_ADDR0, 0x0D, 0b11111111)
+bus.write_byte_data(MCP_ADDR1, 0x0D, 0b11111111)
+bus.write_byte_data(MCP_ADDR2, 0x0D, 0b11111111)
+bus.write_byte_data(MCP_ADDR3, 0x0D, 0b11111111)
+bus.write_byte_data(MCP_ADDR4, 0x0D, 0b11111111)
+bus.write_byte_data(MCP_ADDR5, 0x0D, 0b11111111)
 
 bus.write_byte_data(MCP_ADDR0, 0x00, 0xFF)  # IODIRA = inputs
 bus.write_byte_data(MCP_ADDR1, 0x00, 0xFF)  # IODIRA = inputs
@@ -87,6 +93,13 @@ bus.write_byte_data(MCP_ADDR2, 0x00, 0xFF)  # IODIRA = inputs
 bus.write_byte_data(MCP_ADDR3, 0x00, 0xFF)  # IODIRA = inputs
 bus.write_byte_data(MCP_ADDR4, 0x00, 0xFF)  # IODIRA = inputs
 bus.write_byte_data(MCP_ADDR5, 0x00, 0xFF)  # IODIRA = inputs
+
+bus.write_byte_data(MCP_ADDR0, 0x01, 0xFF)  # IODIRB = inputs
+bus.write_byte_data(MCP_ADDR1, 0x01, 0xFF)  # IODIRB = inputs
+bus.write_byte_data(MCP_ADDR2, 0x01, 0xFF)  # IODIRB = inputs
+bus.write_byte_data(MCP_ADDR3, 0x01, 0xFF)  # IODIRB = inputs
+bus.write_byte_data(MCP_ADDR4, 0x01, 0xFF)  # IODIRB = inputs
+bus.write_byte_data(MCP_ADDR5, 0x01, 0xFF)  # IODIRB = inputs
 
 
 
@@ -115,6 +128,33 @@ bus.write_byte_data(MCP_ADDR5, 0x04, 0xFF)  # GPINTENA (enable interrupts)
 bus.write_byte_data(MCP_ADDR5, 0x08, 0x00)  # INTCONA (interrupt on change)
 bus.read_byte_data(MCP_ADDR5, 0x10)  # INTCAP
     
+
+
+bus.write_byte_data(MCP_ADDR0, 0x05, 0xFF)  # GPINTENA (enable interrupts)
+bus.write_byte_data(MCP_ADDR0, 0x09, 0x00)  # INTCONA (interrupt on change)
+bus.read_byte_data(MCP_ADDR0, 0x11)  # INTCAP
+
+bus.write_byte_data(MCP_ADDR1, 0x05, 0xFF)  # GPINTENA (enable interrupts)
+bus.write_byte_data(MCP_ADDR1, 0x09, 0x00)  # INTCONA (interrupt on change)
+bus.read_byte_data(MCP_ADDR1, 0x11)  # INTCAP
+
+bus.write_byte_data(MCP_ADDR2, 0x05, 0xFF)  # GPINTENA (enable interrupts)
+bus.write_byte_data(MCP_ADDR2, 0x09, 0x00)  # INTCONA (interrupt on change)
+bus.read_byte_data(MCP_ADDR2, 0x11)  # INTCAP
+
+bus.write_byte_data(MCP_ADDR3, 0x05, 0xFF)  # GPINTENA (enable interrupts)
+bus.write_byte_data(MCP_ADDR3, 0x09, 0x00)  # INTCONA (interrupt on change)
+bus.read_byte_data(MCP_ADDR3, 0x11)  # INTCAP
+
+bus.write_byte_data(MCP_ADDR4, 0x05, 0xFF)  # GPINTENA (enable interrupts)
+bus.write_byte_data(MCP_ADDR4, 0x09, 0x00)  # INTCONA (interrupt on change)
+bus.read_byte_data(MCP_ADDR4, 0x11)  # INTCAP
+
+bus.write_byte_data(MCP_ADDR5, 0x05, 0xFF)  # GPINTENA (enable interrupts)
+bus.write_byte_data(MCP_ADDR5, 0x09, 0x00)  # INTCONA (interrupt on change)
+bus.read_byte_data(MCP_ADDR5, 0x11)  # INTCAP
+
+
 
 def interrupt0A(channel):
  #   print("!!!")
@@ -156,8 +196,8 @@ def interrupt0A(channel):
 
 def interrupt0B(channel):
  #   print("!!!")
-    intf = bus.read_byte_data(MCP_ADDR0,0x0E)
-    values = bus.read_byte_data(MCP_ADDR0, 0x10)
+    intf = bus.read_byte_data(MCP_ADDR0,0x0F)
+    values = bus.read_byte_data(MCP_ADDR0, 0x11)
     pin0 = 0
     pin1 = 0
     pin0_state = 0
@@ -222,8 +262,8 @@ def interrupt1A(channel):
 
 def interrupt1B(channel):
  #   print("!!!")
-    intf = bus.read_byte_data(MCP_ADDR1,0x0E)
-    values = bus.read_byte_data(MCP_ADDR1, 0x10)
+    intf = bus.read_byte_data(MCP_ADDR1,0x0F)
+    values = bus.read_byte_data(MCP_ADDR1, 0x11)
     pin0 = 0
     pin1 = 0
     pin0_state = 0
@@ -302,8 +342,8 @@ def interrupt2A(channel):
 
 def interrupt2B(channel):
  #   print("!!!")
-    intf = bus.read_byte_data(MCP_ADDR2,0x0E)
-    values = bus.read_byte_data(MCP_ADDR2, 0x10)
+    intf = bus.read_byte_data(MCP_ADDR2,0x0F)
+    values = bus.read_byte_data(MCP_ADDR2, 0x11)
     pin0 = 0
     pin1 = 0
     pin0_state = 0
@@ -383,8 +423,8 @@ def interrupt3A(channel):
 
 def interrupt3B(channel):
  #   print("!!!")
-    intf = bus.read_byte_data(MCP_ADDR3,0x0E)
-    values = bus.read_byte_data(MCP_ADDR3, 0x10)
+    intf = bus.read_byte_data(MCP_ADDR3,0x0F)
+    values = bus.read_byte_data(MCP_ADDR3, 0x11)
     pin0 = 0
     pin1 = 0
     pin0_state = 0
@@ -458,8 +498,8 @@ def interrupt4A(channel):
 
 def interrupt4B(channel):
  #   print("!!!")
-    intf = bus.read_byte_data(MCP_ADDR4,0x0E)
-    values = bus.read_byte_data(MCP_ADDR4, 0x10)
+    intf = bus.read_byte_data(MCP_ADDR4,0x0F)
+    values = bus.read_byte_data(MCP_ADDR4, 0x11)
     pin0 = 0
     pin1 = 0
     pin0_state = 0
@@ -475,26 +515,49 @@ def interrupt4B(channel):
     pin1_state = (values >> pin1) & 1
 
     if pin0 == 0:
-        encoderList[16].param
-        encoderList[16].prev_CLK_state = encoderList[16].CLK_state
-        encoderList[16].CLK_state = pin0_state
-        encoderList[16].DT_state = pin1_state
-        rotary_turned(encoderList[16])
+        if ctrl == 0:
+            encoderList[20].param = 0
+        elif ctrl == 1:
+            encoderList[20].param = 1
+        elif ctrl == 2:
+            encoderList[20].param = 28
+        encoderList[20].prev_CLK_state = encoderList[20].CLK_state
+        encoderList[20].CLK_state = pin0_state
+        encoderList[20].DT_state = pin1_state
+        rotary_turned(encoderList[20])
     if pin0 == 2:
-        encoderList[17].prev_CLK_state = encoderList[17].CLK_state
-        encoderList[17].CLK_state = pin0_state
-        encoderList[17].DT_state = pin1_state
-        rotary_turned(encoderList[17])
+        if ctrl == 0:
+            encoderList[21].param = 0
+        elif ctrl == 1:
+            encoderList[21].param = 1
+        elif ctrl == 2:
+            encoderList[21].param = 28
+        encoderList[21].prev_CLK_state = encoderList[21].CLK_state
+        encoderList[21].CLK_state = pin0_state
+        encoderList[21].DT_state = pin1_state
+        rotary_turned(encoderList[21])
     if pin0 == 4:
-        encoderList[18].prev_CLK_state = encoderList[18].CLK_state
-        encoderList[18].CLK_state = pin0_state
-        encoderList[18].DT_state = pin1_state
-        rotary_turned(encoderList[18])
+        if ctrl == 0:
+            encoderList[22].param = 0
+        elif ctrl == 1:
+            encoderList[22].param = 1
+        elif ctrl == 2:
+            encoderList[22].param = 28
+        encoderList[22].prev_CLK_state = encoderList[22].CLK_state
+        encoderList[22].CLK_state = pin0_state
+        encoderList[22].DT_state = pin1_state
+        rotary_turned(encoderList[22])
     if pin0 == 6:
-        encoderList[19].prev_CLK_state = encoderList[19].CLK_state
-        encoderList[19].CLK_state = pin0_state
-        encoderList[19].DT_state = pin1_state
-        rotary_turned(encoderList[19])
+        if ctrl == 0:
+            encoderList[23].param = 0
+        elif ctrl == 1:
+            encoderList[23].param = 1
+        elif ctrl == 2:
+            encoderList[23].param = 28
+        encoderList[23].prev_CLK_state = encoderList[23].CLK_state
+        encoderList[23].CLK_state = pin0_state
+        encoderList[23].DT_state = pin1_state
+        rotary_turned(encoderList[23])
 
 
 
