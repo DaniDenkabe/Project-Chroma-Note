@@ -50,7 +50,8 @@ encoderList = [Encoder(4, 0), Encoder(4, 1), Encoder(4, 29), Encoder(4, 4), Enco
                Encoder(4, 5), Encoder(4, 3), Encoder(4, 28), Encoder(4, 18), Encoder(4, 19),
                Encoder(4, 11), Encoder(4, 12), Encoder(4, 7), Encoder(4, 8), Encoder(4, 16), 
                Encoder(4, 30), Encoder(0, 29), Encoder(1, 29), Encoder(2, 29), Encoder(3, 29),
-               Encoder(0, 1), Encoder(1, 1), Encoder(2, 1), Encoder(3, 1)]
+               Encoder(0, 1), Encoder(1, 1), Encoder(2, 1), Encoder(3, 1), Encoder(4, 10),
+               Encoder(4, 9)]
 dataList = [0] * 155
 start = time.time()
 ctrl = 0
@@ -211,7 +212,18 @@ def interrupt0B(channel):
     pin1 = pin0 + 1
     pin0_state = (values >> pin0) & 1
     pin1_state = (values >> pin1) & 1
-
+    if pin0 == 0:
+        encoderList[24].voice = selectedVoice
+        encoderList[24].prev_CLK_state = encoderList[24].CLK_state
+        encoderList[24].CLK_state = pin0_state
+        encoderList[24].DT_state = pin1_state
+        rotary_turned(encoderList[24])
+    if pin0 == 2:
+        encoderList[25].voice = selectedVoice
+        encoderList[25].prev_CLK_state = encoderList[25].CLK_state
+        encoderList[25].CLK_state = pin0_state
+        encoderList[25].DT_state = pin1_state
+        rotary_turned(encoderList[25])
 
 
 def interrupt1A(channel):
