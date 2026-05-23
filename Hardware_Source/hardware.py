@@ -416,21 +416,19 @@ def interrupt3A(channel):
     pin1_state = (values >> pin1) & 1
  
     if pin0 == 0:
-        button_pressed(selectedVoice, 21, 1)
+        button_pressed(selectedVoice, 25, 1)
     if pin0 == 1:
-        button_pressed(selectedVoice, 21, -1)
+        button_pressed(selectedVoice, 25, -1)
     if pin0 == 2:
-        button_pressed(selectedVoice, 22, 1)
+        button_pressed(selectedVoice, 26, 1)
     if pin0 == 3:
-        button_pressed(selectedVoice, 22, -1)
+        button_pressed(selectedVoice, 26, -1)
     if pin0 == 4:
-        button_pressed(selectedVoice, 23, 1)
+        button_pressed(selectedVoice, 17, 1)
     if pin0 == 5:
-        button_pressed(selectedVoice, 23, -1)
+        button_pressed(selectedVoice, 20, 1)
     if pin0 == 6:
-        button_pressed(selectedVoice, 24, 1)
-    if pin0 == 7:
-        button_pressed(selectedVoice, 24, -1)
+        button_pressed(selectedVoice, 27, 1)
 
 
 def interrupt3B(channel):
@@ -450,21 +448,24 @@ def interrupt3B(channel):
     pin1 = pin0 + 1
     pin0_state = (values >> pin0) & 1
     pin1_state = (values >> pin1) & 1
- 
+
+
     if pin0 == 0:
-        button_pressed(selectedVoice, 25, 1)
+        button_pressed(selectedVoice, 21, 1)
     if pin0 == 1:
-        button_pressed(selectedVoice, 25, -1)
+        button_pressed(selectedVoice, 21, -1)
     if pin0 == 2:
-        button_pressed(selectedVoice, 26, 1)
+        button_pressed(selectedVoice, 22, 1)
     if pin0 == 3:
-        button_pressed(selectedVoice, 26, -1)
+        button_pressed(selectedVoice, 22, -1)
     if pin0 == 4:
-        button_pressed(selectedVoice, 17, 1)
+        button_pressed(selectedVoice, 23, 1)
     if pin0 == 5:
-        button_pressed(selectedVoice, 20, 1)
+        button_pressed(selectedVoice, 23, -1)
     if pin0 == 6:
-        button_pressed(selectedVoice, 27, 1)
+        button_pressed(selectedVoice, 24, 1)
+    if pin0 == 7:
+        button_pressed(selectedVoice, 24, -1)
 
 
 def interrupt4A(channel):
@@ -628,7 +629,7 @@ def button_pressed(voice, param, positive):
     global ctrl
 
     index = 31 * voice + param
-    if param == 17 || param == 20 || param == 27:
+    if param == 17 or param == 20 or param == 27:
         dataList[index] = (dataList[index] + 1) % 2
     else:
         dataList[index] += 1 * positive
