@@ -4,7 +4,7 @@ import time
 import smbus2 as smbus
 from pathlib import Path
 
-home = path.home()
+home = Path.home()
 
 DIRECTION_CW = 0
 DIRECTION_CCW = 1
@@ -27,8 +27,8 @@ class Encoder:
     
 INTA_PIN0 = 17
 INTB_PIN0 = 27
-INTA_PIN1 = 10
-INTB_PIN1 = 9
+INTA_PIN1 = 9
+INTB_PIN1 = 10
 INTA_PIN2 = 5
 INTB_PIN2 = 6
 INTA_PIN3 = 19
@@ -44,7 +44,7 @@ MCP_ADDR1 = 0x21
 MCP_ADDR2 = 0x22
 MCP_ADDR3 = 0x23
 MCP_ADDR4 = 0x24
-MCP_ADDR5 = 0x25
+MCP_ADDR5 = 0x27
 
 encoderList = [Encoder(4, 0), Encoder(4, 1), Encoder(4, 29), Encoder(4, 4), Encoder(4, 2),
                Encoder(4, 5), Encoder(4, 3), Encoder(4, 28), Encoder(4, 18), Encoder(4, 19),
@@ -159,6 +159,9 @@ bus.read_byte_data(MCP_ADDR5, 0x11)  # INTCAP
 
 def interrupt0A(channel):
  #   print("!!!")
+
+    global selectedVoice
+
     intf = bus.read_byte_data(MCP_ADDR0,0x0E)
     values = bus.read_byte_data(MCP_ADDR0, 0x10)
     pin0 = 0
@@ -193,6 +196,7 @@ def interrupt0A(channel):
     if pin0 == 6:
         ctrl = (ctrl + 1) % 3
     if pin0 == 7:
+        print("!!!")
         selectedVoice = 4
 
 def interrupt0B(channel):
@@ -203,15 +207,19 @@ def interrupt0B(channel):
     pin1 = 0
     pin0_state = 0
     pin1_state = 0
+
+    global selectedVoice
     
     for pin in range(8):
         if intf & (1 << pin):
             pin0 = pin
-            if pin0 % 2 != 0:
-                return
+
     pin1 = pin0 + 1
     pin0_state = (values >> pin0) & 1
     pin1_state = (values >> pin1) & 1
+    
+
+    
     if pin0 == 0:
         encoderList[24].voice = selectedVoice
         encoderList[24].prev_CLK_state = encoderList[24].CLK_state
@@ -224,10 +232,22 @@ def interrupt0B(channel):
         encoderList[25].CLK_state = pin0_state
         encoderList[25].DT_state = pin1_state
         rotary_turned(encoderList[25])
+    if pin0 == 5:
+        print("Selected Voice is now 4")
+        selectedVoice = 4
+    if pin0 == 6:
+        print("!!!")
+
+ 
+
+
 
 
 def interrupt1A(channel):
  #   print("!!!")
+
+    global selectedVoice
+
     intf = bus.read_byte_data(MCP_ADDR1,0x0E)
     values = bus.read_byte_data(MCP_ADDR1, 0x10)
     pin0 = 0
@@ -238,8 +258,6 @@ def interrupt1A(channel):
     for pin in range(8):
         if intf & (1 << pin):
             pin0 = pin
-            if pin0 % 2 != 0:
-                return
     pin1 = pin0 + 1
     pin0_state = (values >> pin0) & 1
     pin1_state = (values >> pin1) & 1
@@ -273,7 +291,10 @@ def interrupt1A(channel):
 
 
 def interrupt1B(channel):
- #   print("!!!")
+    print("interupt on 0x21 B side")
+ 
+    global selectedVoice
+
     intf = bus.read_byte_data(MCP_ADDR1,0x0F)
     values = bus.read_byte_data(MCP_ADDR1, 0x11)
     pin0 = 0
@@ -284,11 +305,10 @@ def interrupt1B(channel):
     for pin in range(8):
         if intf & (1 << pin):
             pin0 = pin
-            if pin0 % 2 != 0:
-                return
     pin1 = pin0 + 1
     pin0_state = (values >> pin0) & 1
     pin1_state = (values >> pin1) & 1
+    print("Pin0 Set")
     
     if pin0 == 0:
         encoderList[7].voice = selectedVoice
@@ -302,11 +322,15 @@ def interrupt1B(channel):
         button_pressed(selectedVoice, 6, -1)
     if pin0 >= 4:
         selectedVoice = pin0 - 4
+        print("selectedVoice: " + str(selectedVoice))
 
 
 
 def interrupt2A(channel):
  #   print("!!!")
+
+    global selectedVoice
+
     intf = bus.read_byte_data(MCP_ADDR2,0x0E)
     values = bus.read_byte_data(MCP_ADDR2, 0x10)
     pin0 = 0
@@ -317,8 +341,6 @@ def interrupt2A(channel):
     for pin in range(8):
         if intf & (1 << pin):
             pin0 = pin
-            if pin0 % 2 != 0:
-                return
     pin1 = pin0 + 1
     pin0_state = (values >> pin0) & 1
     pin1_state = (values >> pin1) & 1
@@ -354,6 +376,11 @@ def interrupt2A(channel):
 
 def interrupt2B(channel):
  #   print("!!!")
+
+    global selectedVoice
+
+
+
     intf = bus.read_byte_data(MCP_ADDR2,0x0F)
     values = bus.read_byte_data(MCP_ADDR2, 0x11)
     pin0 = 0
@@ -364,8 +391,6 @@ def interrupt2B(channel):
     for pin in range(8):
         if intf & (1 << pin):
             pin0 = pin
-            if pin0 % 2 != 0:
-                return
     pin1 = pin0 + 1
     pin0_state = (values >> pin0) & 1
     pin1_state = (values >> pin1) & 1
@@ -398,7 +423,10 @@ def interrupt2B(channel):
 
 
 def interrupt3A(channel):
- #   print("!!!")
+    print("!!!")
+
+    global selectedVoice
+
     intf = bus.read_byte_data(MCP_ADDR3,0x0E)
     values = bus.read_byte_data(MCP_ADDR3, 0x10)
     pin0 = 0
@@ -409,8 +437,6 @@ def interrupt3A(channel):
     for pin in range(8):
         if intf & (1 << pin):
             pin0 = pin
-            if pin0 % 2 != 0:
-                return
     pin1 = pin0 + 1
     pin0_state = (values >> pin0) & 1
     pin1_state = (values >> pin1) & 1
@@ -432,7 +458,10 @@ def interrupt3A(channel):
 
 
 def interrupt3B(channel):
- #   print("!!!")
+    print("!!!")
+
+    global selectedVoice
+
     intf = bus.read_byte_data(MCP_ADDR3,0x0F)
     values = bus.read_byte_data(MCP_ADDR3, 0x11)
     pin0 = 0
@@ -443,14 +472,13 @@ def interrupt3B(channel):
     for pin in range(8):
         if intf & (1 << pin):
             pin0 = pin
-            if pin0 % 2 != 0:
-                return
     pin1 = pin0 + 1
     pin0_state = (values >> pin0) & 1
     pin1_state = (values >> pin1) & 1
 
 
     if pin0 == 0:
+
         button_pressed(selectedVoice, 21, 1)
     if pin0 == 1:
         button_pressed(selectedVoice, 21, -1)
@@ -470,6 +498,9 @@ def interrupt3B(channel):
 
 def interrupt4A(channel):
  #   print("!!!")
+
+    global selectedVoice
+
     intf = bus.read_byte_data(MCP_ADDR4,0x0E)
     values = bus.read_byte_data(MCP_ADDR4, 0x10)
     pin0 = 0
@@ -480,8 +511,6 @@ def interrupt4A(channel):
     for pin in range(8):
         if intf & (1 << pin):
             pin0 = pin
-            if pin0 % 2 != 0:
-                return
     pin1 = pin0 + 1
     pin0_state = (values >> pin0) & 1
     pin1_state = (values >> pin1) & 1
@@ -511,6 +540,9 @@ def interrupt4A(channel):
 
 def interrupt4B(channel):
  #   print("!!!")
+
+    global selectedVoice
+
     intf = bus.read_byte_data(MCP_ADDR4,0x0F)
     values = bus.read_byte_data(MCP_ADDR4, 0x11)
     pin0 = 0
@@ -521,8 +553,7 @@ def interrupt4B(channel):
     for pin in range(8):
         if intf & (1 << pin):
             pin0 = pin
-            if pin0 % 2 != 0:
-                return
+
     pin1 = pin0 + 1
     pin0_state = (values >> pin0) & 1
     pin1_state = (values >> pin1) & 1
@@ -625,6 +656,7 @@ def rotary_turned(e):
             time.sleep(0.05)
     
 def button_pressed(voice, param, positive):
+    print("button pressed")
     global dataList
     global ctrl
 
@@ -641,20 +673,21 @@ def button_pressed(voice, param, positive):
     with open(file_path, 'w') as file:
         file.writelines(lines)
 
+    print(str(voice) + " " + str(param) + " " + str(dataList[index]))
     
 
 GPIO.add_event_detect(INTA_PIN0, GPIO.FALLING, callback=interrupt0A, bouncetime=1)
 GPIO.add_event_detect(INTB_PIN0, GPIO.FALLING, callback=interrupt0B, bouncetime=1)
-GPIO.add_event_detect(INTB_PIN1, GPIO.FALLING, callback=interrupt1A, bouncetime=1)
+GPIO.add_event_detect(INTA_PIN1, GPIO.FALLING, callback=interrupt1A, bouncetime=1)
 GPIO.add_event_detect(INTB_PIN1, GPIO.FALLING, callback=interrupt1B, bouncetime=1)
-GPIO.add_event_detect(INTB_PIN2, GPIO.FALLING, callback=interrupt2A, bouncetime=1)
+GPIO.add_event_detect(INTA_PIN2, GPIO.FALLING, callback=interrupt2A, bouncetime=1)
 GPIO.add_event_detect(INTB_PIN2, GPIO.FALLING, callback=interrupt2B, bouncetime=1)
-GPIO.add_event_detect(INTB_PIN3, GPIO.FALLING, callback=interrupt3A, bouncetime=1)
+GPIO.add_event_detect(INTA_PIN3, GPIO.FALLING, callback=interrupt3A, bouncetime=1)
 GPIO.add_event_detect(INTB_PIN3, GPIO.FALLING, callback=interrupt3B, bouncetime=1)
-GPIO.add_event_detect(INTB_PIN4, GPIO.FALLING, callback=interrupt4A, bouncetime=1)
+GPIO.add_event_detect(INTA_PIN4, GPIO.FALLING, callback=interrupt4A, bouncetime=1)
 GPIO.add_event_detect(INTB_PIN4, GPIO.FALLING, callback=interrupt4B, bouncetime=1)
-GPIO.add_event_detect(INTB_PIN5, GPIO.FALLING, callback=interrupt5A, bouncetime=1)
-GPIO.add_event_detect(INTB_PIN5, GPIO.FALLING, callback=interrupt5B, bouncetime=1)
+#GPIO.add_event_detect(INTA_PIN5, GPIO.FALLING, callback=interrupt5A, bouncetime=1)
+#GPIO.add_event_detect(INTB_PIN5, GPIO.FALLING, callback=interrupt5B, bouncetime=1)
 #while True:
 #    print(GPIO.input(INTA_PIN))
 #    time.sleep(0.1)
@@ -664,9 +697,7 @@ GPIO.add_event_detect(INTB_PIN5, GPIO.FALLING, callback=interrupt5B, bouncetime=
 try:
     while True:
         time.sleep(0.01)
+
 except KeyboardInterrupt:
     GPIO.cleanup()
-
-
-
 
