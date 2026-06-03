@@ -68,8 +68,7 @@ GPIO.setup(INTA_PIN3, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(INTB_PIN3, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(INTA_PIN4, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(INTB_PIN4, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-GPIO.setup(INTA_PIN5, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-GPIO.setup(INTB_PIN5, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
 
 
 
@@ -79,28 +78,24 @@ bus.write_byte_data(MCP_ADDR1, 0x0C, 0b11111111)
 bus.write_byte_data(MCP_ADDR2, 0x0C, 0b11111111)
 bus.write_byte_data(MCP_ADDR3, 0x0C, 0b11111111)
 bus.write_byte_data(MCP_ADDR4, 0x0C, 0b11111111)
-bus.write_byte_data(MCP_ADDR5, 0x0C, 0b11111111)
 
 bus.write_byte_data(MCP_ADDR0, 0x0D, 0b11111111)
 bus.write_byte_data(MCP_ADDR1, 0x0D, 0b11111111)
 bus.write_byte_data(MCP_ADDR2, 0x0D, 0b11111111)
 bus.write_byte_data(MCP_ADDR3, 0x0D, 0b11111111)
 bus.write_byte_data(MCP_ADDR4, 0x0D, 0b11111111)
-bus.write_byte_data(MCP_ADDR5, 0x0D, 0b11111111)
 
 bus.write_byte_data(MCP_ADDR0, 0x00, 0xFF)  # IODIRA = inputs
 bus.write_byte_data(MCP_ADDR1, 0x00, 0xFF)  # IODIRA = inputs
 bus.write_byte_data(MCP_ADDR2, 0x00, 0xFF)  # IODIRA = inputs
 bus.write_byte_data(MCP_ADDR3, 0x00, 0xFF)  # IODIRA = inputs
 bus.write_byte_data(MCP_ADDR4, 0x00, 0xFF)  # IODIRA = inputs
-bus.write_byte_data(MCP_ADDR5, 0x00, 0xFF)  # IODIRA = inputs
 
 bus.write_byte_data(MCP_ADDR0, 0x01, 0xFF)  # IODIRB = inputs
 bus.write_byte_data(MCP_ADDR1, 0x01, 0xFF)  # IODIRB = inputs
 bus.write_byte_data(MCP_ADDR2, 0x01, 0xFF)  # IODIRB = inputs
 bus.write_byte_data(MCP_ADDR3, 0x01, 0xFF)  # IODIRB = inputs
 bus.write_byte_data(MCP_ADDR4, 0x01, 0xFF)  # IODIRB = inputs
-bus.write_byte_data(MCP_ADDR5, 0x01, 0xFF)  # IODIRB = inputs
 
 
 
@@ -123,12 +118,7 @@ bus.read_byte_data(MCP_ADDR3, 0x10)  # INTCAP
 
 bus.write_byte_data(MCP_ADDR4, 0x04, 0xFF)  # GPINTENA (enable interrupts)
 bus.write_byte_data(MCP_ADDR4, 0x08, 0x00)  # INTCONA (interrupt on change)
-bus.read_byte_data(MCP_ADDR4, 0x10)  # INTCAP
-
-bus.write_byte_data(MCP_ADDR5, 0x04, 0xFF)  # GPINTENA (enable interrupts)
-bus.write_byte_data(MCP_ADDR5, 0x08, 0x00)  # INTCONA (interrupt on change)
-bus.read_byte_data(MCP_ADDR5, 0x10)  # INTCAP
-    
+bus.read_byte_data(MCP_ADDR4, 0x10)  # INTCAP 
 
 
 bus.write_byte_data(MCP_ADDR0, 0x05, 0xFF)  # GPINTENA (enable interrupts)
@@ -150,10 +140,6 @@ bus.read_byte_data(MCP_ADDR3, 0x11)  # INTCAP
 bus.write_byte_data(MCP_ADDR4, 0x05, 0xFF)  # GPINTENA (enable interrupts)
 bus.write_byte_data(MCP_ADDR4, 0x09, 0x00)  # INTCONA (interrupt on change)
 bus.read_byte_data(MCP_ADDR4, 0x11)  # INTCAP
-
-bus.write_byte_data(MCP_ADDR5, 0x05, 0xFF)  # GPINTENA (enable interrupts)
-bus.write_byte_data(MCP_ADDR5, 0x09, 0x00)  # INTCONA (interrupt on change)
-bus.read_byte_data(MCP_ADDR5, 0x11)  # INTCAP
 
 
 
@@ -686,8 +672,7 @@ GPIO.add_event_detect(INTA_PIN3, GPIO.FALLING, callback=interrupt3A, bouncetime=
 GPIO.add_event_detect(INTB_PIN3, GPIO.FALLING, callback=interrupt3B, bouncetime=1)
 GPIO.add_event_detect(INTA_PIN4, GPIO.FALLING, callback=interrupt4A, bouncetime=1)
 GPIO.add_event_detect(INTB_PIN4, GPIO.FALLING, callback=interrupt4B, bouncetime=1)
-#GPIO.add_event_detect(INTA_PIN5, GPIO.FALLING, callback=interrupt5A, bouncetime=1)
-#GPIO.add_event_detect(INTB_PIN5, GPIO.FALLING, callback=interrupt5B, bouncetime=1)
+
 #while True:
 #    print(GPIO.input(INTA_PIN))
 #    time.sleep(0.1)
