@@ -611,18 +611,20 @@ void Project_Chromatic_AberationAudioProcessor::setVariables(int index, bool set
         const char* home = std::getenv("HOME");
 
         std::ifstream file(std::string(home) + "/data.txt");
-        std::string voice;
-        std::string param;
+        std::string strVoice;
+        std::string strParam;
         std::string data;
 
         if (file.is_open()) {
 
-            std::getline(file, voice);
-            std::getline(file, param);
+            std::getline(file, strVoice);
+            std::getline(file, strParam);
             std::getline(file, data);
 
             try { 
+                int voice = std::stof(strVoice);
                 float input = std::stof(data);
+                float param = std::stof(strParam);
 
                 switch (param) {
                     case 0:
@@ -634,7 +636,7 @@ void Project_Chromatic_AberationAudioProcessor::setVariables(int index, bool set
                         break;
 
                     case 2:
-                        freqs[voice] = std::clamp((1.f/100.f) * input, 0.01, 1.f);         
+                        freqs[voice] = std::clamp((1.f/100.f) * input, 0.01f, 1.f);         
                         break;
 
                     case 3:
@@ -702,7 +704,7 @@ void Project_Chromatic_AberationAudioProcessor::setVariables(int index, bool set
                         break;
 
                     case 19:
-                        delayFeedacks[voice] = std::clamp((0.1f/1.f) * input, 0.f, 1.f);    
+                        delayFeedbacks[voice] = std::clamp((0.1f/1.f) * input, 0.f, 1.f);    
                         break;
 
                     case 20:
