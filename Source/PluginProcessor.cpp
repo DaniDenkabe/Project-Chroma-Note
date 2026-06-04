@@ -624,7 +624,7 @@ void Project_Chromatic_AberationAudioProcessor::setVariables(int index, bool set
             try { 
                 int voice = std::stof(strVoice);
                 float input = std::stof(data);
-                float param = std::stof(strParam);
+                int param = std::stof(strParam);
 
                 switch (param) {
                     case 0:
