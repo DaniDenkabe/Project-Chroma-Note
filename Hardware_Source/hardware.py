@@ -182,7 +182,6 @@ def interrupt0A(channel):
     if pin0 == 6:
         ctrl = (ctrl + 1) % 3
     if pin0 == 7:
-        print("!!!")
         selectedVoice = 4
 
 def interrupt0B(channel):
@@ -277,7 +276,7 @@ def interrupt1A(channel):
 
 
 def interrupt1B(channel):
-    print("interupt on 0x21 B side")
+#    print("!!!")
  
     global selectedVoice
 
@@ -294,7 +293,7 @@ def interrupt1B(channel):
     pin1 = pin0 + 1
     pin0_state = (values >> pin0) & 1
     pin1_state = (values >> pin1) & 1
-    print("Pin0 Set")
+
     
     if pin0 == 0:
         encoderList[7].voice = selectedVoice
@@ -409,7 +408,7 @@ def interrupt2B(channel):
 
 
 def interrupt3A(channel):
-    print("!!!")
+#    print("!!!")
 
     global selectedVoice
 
@@ -426,25 +425,28 @@ def interrupt3A(channel):
     pin1 = pin0 + 1
     pin0_state = (values >> pin0) & 1
     pin1_state = (values >> pin1) & 1
- 
-    if pin0 == 0:
-        button_pressed(selectedVoice, 25, 1)
-    if pin0 == 1:
-        button_pressed(selectedVoice, 25, -1)
-    if pin0 == 2:
-        button_pressed(selectedVoice, 26, 1)
-    if pin0 == 3:
-        button_pressed(selectedVoice, 26, -1)
-    if pin0 == 4:
-        button_pressed(selectedVoice, 17, 1)
-    if pin0 == 5:
-        button_pressed(selectedVoice, 20, 1)
-    if pin0 == 6:
-        button_pressed(selectedVoice, 27, 1)
 
+    if pin0 == 0:
+        button_pressed(selectedVoice, 21, 1)
+    if pin0 == 1:
+        button_pressed(selectedVoice, 21, -1)
+    if pin0 == 2:
+        button_pressed(selectedVoice, 22, 1)
+    if pin0 == 3:
+        button_pressed(selectedVoice, 22, -1)
+    if pin0 == 4:
+        button_pressed(selectedVoice, 23, 1)
+    if pin0 == 5:
+        button_pressed(selectedVoice, 23, -1)
+    if pin0 == 6:
+        button_pressed(selectedVoice, 24, 1)
+    if pin0 == 7:
+        button_pressed(selectedVoice, 24, -1)
+
+ 
 
 def interrupt3B(channel):
-    print("!!!")
+#    print("!!!")
 
     global selectedVoice
 
@@ -464,22 +466,19 @@ def interrupt3B(channel):
 
 
     if pin0 == 0:
-
-        button_pressed(selectedVoice, 21, 1)
+        button_pressed(selectedVoice, 25, 1)
     if pin0 == 1:
-        button_pressed(selectedVoice, 21, -1)
+        button_pressed(selectedVoice, 25, -1)
     if pin0 == 2:
-        button_pressed(selectedVoice, 22, 1)
+        button_pressed(selectedVoice, 26, 1)
     if pin0 == 3:
-        button_pressed(selectedVoice, 22, -1)
+        button_pressed(selectedVoice, 26, -1)
     if pin0 == 4:
-        button_pressed(selectedVoice, 23, 1)
+        button_pressed(selectedVoice, 17, 1)
     if pin0 == 5:
-        button_pressed(selectedVoice, 23, -1)
+        button_pressed(selectedVoice, 20, 1)
     if pin0 == 6:
-        button_pressed(selectedVoice, 24, 1)
-    if pin0 == 7:
-        button_pressed(selectedVoice, 24, -1)
+        button_pressed(selectedVoice, 27, 1)
 
 
 def interrupt4A(channel):
