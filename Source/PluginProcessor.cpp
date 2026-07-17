@@ -625,30 +625,37 @@ void Project_Chromatic_AberationAudioProcessor::setVariables(int index, bool set
                 int voice = std::stof(strVoice);
                 float input = std::stof(data);
                 int param = std::stof(strParam);
+                bool negative = input < 0;
 
                 switch (param) {
                     case 0:
-                        gainAmounts[voice] = std::clamp((12.f/30.f) * input, -12.f, 12.f); 
+                        gainAmounts[voice] = input; 
                         break;
                        
                     case 1:
-                        pitchSemis[voice] = std::clamp((12.f/30.f) * input, -12.f, 12.f);         
+                        pitchSemis[voice] = input / 2;         
                         break;
 
                     case 2:
-                        freqs[voice] = std::clamp((1.f/100.f) * input, 0.01f, 1.f);         
+                        if (negative) {
+                            freqs[voice] = input / 100;
+                        }
                         break;
 
                     case 3:
-                        wows[voice] = std::clamp((1.f/1.f) * input, 1.f, 100.f);;         
+                        if (negative) {
+                            wows[voice] = input;         
+                        }
                         break;
 
                     case 4:
-                        amplitudes[voice] = std::clamp((1.f/100.f) * input, 0.f, 1.f);                
+                        amplitudes[voice] = input / 100;                
                         break;
 
                     case 5:
-                        lfos[voice] = std::clamp((100.f/1000.f) * input, 0.f, 100.f); 
+                        if (negative) {
+                            lfos[voice] = input / 1000; 
+                        } 
                         break;
 
                     case 6:
