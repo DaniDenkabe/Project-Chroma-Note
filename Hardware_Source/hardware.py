@@ -53,6 +53,7 @@ encoderList = [Encoder(4, 0), Encoder(4, 1), Encoder(4, 29), Encoder(4, 4), Enco
                Encoder(0, 1), Encoder(1, 1), Encoder(2, 1), Encoder(3, 1), Encoder(4, 10),
                Encoder(4, 9)]
 dataList = [0] * 155
+pressCheckList = [True, True, True]
 start = time.time()
 ctrl = 0
 selectedVoice = 4
@@ -474,11 +475,23 @@ def interrupt3B(channel):
     if pin0 == 3:
         button_pressed(selectedVoice, 26, -1)
     if pin0 == 4:
-        button_pressed(selectedVoice, 17, 1)
+        if pressCheckList[0]:
+            button_pressed(selectedVoice, 17, 1)
+            pressCheckList[0] = False
+        else:
+            pressCheckList[0] = True
     if pin0 == 5:
-        button_pressed(selectedVoice, 20, 1)
+        if pressCheckList[1]:
+            button_pressed(selectedVoice, 20, 1)
+            pressCheckList[1] = False
+        else:
+            pressCheckList[1] = True
     if pin0 == 6:
-        button_pressed(selectedVoice, 27, 1)
+        if pressCheckList[2]:
+            button_pressed(selectedVoice, 27, 1)
+            pressCheckList[2] = False
+        else:
+            pressCheckList[2] = True
 
 
 def interrupt4A(channel):
