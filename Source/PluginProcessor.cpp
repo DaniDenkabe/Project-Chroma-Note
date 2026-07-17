@@ -631,7 +631,7 @@ void Project_Chromatic_AberationAudioProcessor::setVariables(int index, bool set
                     case 0:
                         gainAmounts[voice] = input; 
                         break;
-                        p
+                        
                        
                     case 1:
                         pitchSemis[voice] = input / 2;         
