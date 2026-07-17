@@ -658,7 +658,7 @@ void Project_Chromatic_AberationAudioProcessor::setVariables(int index, bool set
                             lfos[voice] = input / 1000; 
                         } 
                         break;
-
+                    }
                   
             } catch (const std::invalid_argument& e) {
                 
