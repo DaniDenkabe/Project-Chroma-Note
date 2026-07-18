@@ -627,6 +627,7 @@ void Project_Chromatic_AberationAudioProcessor::setVariables(int index, bool set
                 int param = std::stof(strParam);
                 bool negative = input < 0;
 
+                std::cout << "voice: " << voice << " input: " << input << " param: " << param;
                 switch (param) {
                     case 0:
                         gainAmounts[voice] = input; 
