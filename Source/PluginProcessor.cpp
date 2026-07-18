@@ -626,7 +626,7 @@ std::ifstream file(std::string(home) + "/data.txt");
                 int param = std::stof(strParam);
                 bool negative = input < 0;
 
-                std::cout << "voice: " << voice << " input: " << input << " param: " << param << "\n";
+//                std::cout << "voice: " << voice << " input: " << input << " param: " << param << "\n";
                 switch (param) {
                     case 0:
                         gainAmounts[voice] = input; 
@@ -658,7 +658,108 @@ std::ifstream file(std::string(home) + "/data.txt");
                             lfos[voice] = input / 1000; 
                         } 
                         break;
-                    }
+
+                    case 6:
+                          saturations[voice] = std::clamp((10.f/100.f) * input, 0.f, 10.f); 
+                          break;
+
+                      case 7:
+                          highFreqs[voice] = std::clamp((100.f/1.f) * input, 20.f, 20000.f);        
+                          break;
+
+                      case 8:
+                          lowFreqs[voice] =  std::clamp((100.f/1.f) * input, 20.f, 20000.f);    
+                          break;
+
+                      case 9:
+                          sampleFactors[voice] =  std::clamp((12.f/12.f) * input, 0.f, 12.f);
+                          break;
+
+                      case 10:
+                          bitDepths[voice] =  std::clamp((1.f/1.f) * input, 6.f, 16.f);         
+                          break;
+
+                      case 11:
+                          threshs[voice] = std::clamp((1.f/2.f) * input, -50.f, 0.f);          
+                          break;
+
+                      case 12:
+                          ratios[voice] =  std::clamp((1.f/1.f) * input, 1.f, 100.f);  
+                          break;
+
+                      case 13:
+                          attacks[voice] =  std::clamp((2.f/1.f) * input, 0.f, 200.f);       
+                          break;
+
+                      case 14:
+                          releases[voice] = std::clamp((2.f/1.f) * input, 0.f, 200.f);              
+                          break;
+
+                      case 15:
+                          delayAmounts[voice] = std::clamp((100.f/1.f) * input, 0.f, 100000.f);        
+                          break;
+
+                      case 16:
+                          loopLengths[voice] = std::clamp((1.f/10.f) * input, 1.f, 20.f);          
+                          break;
+
+                      case 17:
+                          loopIsOn[voice] = std::clamp((1.f/1.f) * input, 0.f, 1.f); 
+                          break;
+
+                      case 18:
+                          delaySpaces[voice] = std::clamp((100.f/1.f) * input, 3.f, 10000.f);             
+                          break;
+
+                      case 19:
+                          delayFeedbacks[voice] = std::clamp((0.1f/1.f) * input, 0.f, 1.f);    
+                          break;
+
+                      case 20:
+                          delayIsOn[voice] = std::clamp((1.f/1.f) * input, 0.f, 1.f);             
+                          break;
+
+                      case 21:
+                          onSpaces[voice] = std::clamp((1000.f/1.f) * input, 1.f, 50000.f);            
+                          break;
+
+                      case 22:
+                          offSpaces[voice] = std::clamp((1000.f/1.f) * input, 1.f, 50000.f);             
+                          break;
+
+                      case 23:
+                          onOffsets[voice] = std::clamp((1000.f/1.f) * input, 1.f, 50000.f); 
+                          break;
+
+                      case 24:
+                          offOffsets[voice] = std::clamp((1000.f/1.f) * input, 1.f, 50000.f);
+                          break;
+
+                      case 25:
+                          stutterAttacks[voice] = std::clamp((1.f/50.f) * input, 0.f, 1.f);  
+                          break;
+
+                      case 26:
+                          stutterReleases[voice] = std::clamp((1.f/50.f) * input, 0.f, 1.f);
+                          break;
+
+                      case 27:
+                          stutterIsOn[voice] = std::clamp((1.f/1.f) * input, 0.f, 1.f);
+                          break;
+
+                      case 28:
+                          noiseMags[voice] = std::clamp((1.f/10000.f) * input, 0.f, 0.0001f);     
+                          break;
+
+                      case 29:
+                          bends[voice] = std::clamp((1.f/15.f) * input, 0.f, 1.f);  
+                          break;
+
+                      case 30:
+                          pans[voice] = std::clamp((1.f/10.f) * input, -1.f, 1.f);             
+                          break;
+                      }
+                
                   
             } catch (const std::invalid_argument& e) {
                 
