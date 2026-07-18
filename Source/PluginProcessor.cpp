@@ -639,13 +639,13 @@ void Project_Chromatic_AberationAudioProcessor::setVariables(int index, bool set
                         break;
 
                     case 2:
-                        if (negative) {
+                        if (!negative) {
                             freqs[voice] = input / 100;
                         }
                         break;
 
                     case 3:
-                        if (negative) {
+                        if (!negative) {
                             wows[voice] = input;         
                         }
                         break;
@@ -655,7 +655,7 @@ void Project_Chromatic_AberationAudioProcessor::setVariables(int index, bool set
                         break;
 
                     case 5:
-                        if (negative) {
+                        if (!negative) {
                             lfos[voice] = input / 1000; 
                         } 
                         break;
