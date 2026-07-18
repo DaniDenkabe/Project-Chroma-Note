@@ -681,7 +681,7 @@ void Project_Chromatic_AberationAudioProcessor::setVariables(int index, bool set
             shift = ((100 - lfos[index]) * shift + lfos[index] * -amplitudes[index]) / 100;
         }
 
-        pitchSemis[index] += shift;
+        //pitchSemis[index] += shift;
     }
 }
 
