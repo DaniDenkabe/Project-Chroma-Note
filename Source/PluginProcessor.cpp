@@ -679,8 +679,7 @@ std::ifstream file(std::string(home) + "/data.txt");
         } else if (shift < 0) {
             shift = ((100 - lfos[index]) * shift + lfos[index] * -amplitudes[index]) / 100;
         }
-        std::cout << shift;
-        //pitchSemis[index] += shift;
+        pitchSemis[index] += shift;
     }
 }
 
