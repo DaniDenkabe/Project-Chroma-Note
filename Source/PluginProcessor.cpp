@@ -680,7 +680,7 @@ void Project_Chromatic_AberationAudioProcessor::setVariables(int index, bool set
         } else if (shift < 0) {
             shift = ((100 - lfos[index]) * shift + lfos[index] * -amplitudes[index]) / 100;
         }
-
+        std::cout << shift;
         //pitchSemis[index] += shift;
     }
 }
