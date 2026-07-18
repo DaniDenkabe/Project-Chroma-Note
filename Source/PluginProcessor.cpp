@@ -609,8 +609,7 @@ void Project_Chromatic_AberationAudioProcessor::setVariables(int index, bool set
 
 
         const char* home = std::getenv("HOME");
-
-        std::ifstream file(std::string(home) + "/data.txt");
+std::ifstream file(std::string(home) + "/data.txt");
         std::string strVoice;
         std::string strParam;
         std::string data;
@@ -724,7 +723,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout Project_Chromatic_AberationA
         layout.add(std::make_unique<juce::AudioParameterFloat>("Pitch" + num, "Pitch" + num, juce::NormalisableRange<float>(-10.f, 10.f, 0.1f, 1.f), 1));
         layout.add(std::make_unique<juce::AudioParameterFloat>("Freq" + num, "Freq" + num, juce::NormalisableRange<float>(0.0001, 5.f, 0.0001, 1.f), 0.1f));
         layout.add(std::make_unique<juce::AudioParameterFloat>("WOW" + num, "WOW" + num, juce::NormalisableRange<float>(1, 50000.f, 1.f, 1.f), 0));
-        layout.add(std::make_unique<juce::AudioParameterFloat>("Amplitude" + num, "Amplitude" + num, juce::NormalisableRange<float>(0, 5.f, 0.005, 1.f), 0.2f));
+        layout.add(std::make_unique<juce::AudioParameterFloat>("Amplitude" + num, "Amplitude" + num, juce::NormalisableRange<float>(0, 5.f, 0.005, 1.f), 0.f));
         layout.add(std::make_unique<juce::AudioParameterFloat>("LFO" + num, "LFO" + num, juce::NormalisableRange<float>(0, 100.f, 0.05, 1.f), 0));
         
         layout.add(std::make_unique<juce::AudioParameterFloat>("High Pass" + num, "High Pass" + num, juce::NormalisableRange<float>(20.f, 20000.f, 1.f, 1.f), 20.f));
