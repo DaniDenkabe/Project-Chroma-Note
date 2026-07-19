@@ -518,10 +518,12 @@ def interrupt4A(channel):
         print("Hall Effect Sensor Activated")
     if pin0 == 2:
 
+        print("Hall Effect 1")
     if pin0 == 4:
 
+        print("Hall Effect 2 Sensor Activated")
     if pin0 == 6:
-
+        print("Hall Effect 3 Sensor Activated")
 
 
 
