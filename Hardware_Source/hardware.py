@@ -514,25 +514,14 @@ def interrupt4A(channel):
     pin1_state = (values >> pin1) & 1
 
     if pin0 == 0:
-        encoderList[16].prev_CLK_state = encoderList[16].CLK_state
-        encoderList[16].CLK_state = pin0_state
-        encoderList[16].DT_state = pin1_state
-        rotary_turned(encoderList[16])
+
+        print("Hall Effect Sensor Activated")
     if pin0 == 2:
-        encoderList[17].prev_CLK_state = encoderList[17].CLK_state
-        encoderList[17].CLK_state = pin0_state
-        encoderList[17].DT_state = pin1_state
-        rotary_turned(encoderList[17])
+
     if pin0 == 4:
-        encoderList[18].prev_CLK_state = encoderList[18].CLK_state
-        encoderList[18].CLK_state = pin0_state
-        encoderList[18].DT_state = pin1_state
-        rotary_turned(encoderList[18])
+
     if pin0 == 6:
-        encoderList[19].prev_CLK_state = encoderList[19].CLK_state
-        encoderList[19].CLK_state = pin0_state
-        encoderList[19].DT_state = pin1_state
-        rotary_turned(encoderList[19])
+
 
 
 
