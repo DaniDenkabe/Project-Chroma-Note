@@ -5,6 +5,7 @@ import smbus2 as smbus
 from pathlib import Path
 
 home = Path.home()
+hallCounter = 0
 
 DIRECTION_CW = 0
 DIRECTION_CCW = 1
@@ -498,6 +499,7 @@ def interrupt4A(channel):
  #   print("!!!")
 
     global selectedVoice
+    global hallCounter
 
     intf = bus.read_byte_data(MCP_ADDR4,0x0E)
     values = bus.read_byte_data(MCP_ADDR4, 0x10)
@@ -515,7 +517,10 @@ def interrupt4A(channel):
 
     if pin0 == 0:
 
-        print("Hall Effect Sensor Activated")
+        print("Hall Effect Sensor Activated" + hallCounter)
+        print("--------------------------")
+        print("")
+        hallCounter += 1
     if pin0 == 2:
 
         print("Hall Effect 1")
