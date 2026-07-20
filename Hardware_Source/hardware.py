@@ -517,7 +517,7 @@ def interrupt4A(channel):
 
     if pin0 == 0:
 
-        print("Hall Effect Sensor Activated" + hallCounter)
+        print("Hall Effect Sensor Activated" + str(hallCounter))
         print("--------------------------")
         print("")
         hallCounter += 1
