@@ -133,7 +133,7 @@ private:
     std::vector <int> delayVolOffsets, delaySpaceOffsets, delaySpaces, onSpaces,
       offSpaces, onOffsets, offOffsets;
 
-    std::vector <bool> delayIsOn, stutterIsOn;
+    std::vector <bool> delayIsOn, stutterIsOn, mutes;
 
     std::vector <juce::SmoothedValue<float, juce::ValueSmoothingTypes::Linear>*> wowAmps;
     using Filter = juce::dsp::IIR::Filter<float>;

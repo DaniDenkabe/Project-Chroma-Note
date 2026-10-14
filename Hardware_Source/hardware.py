@@ -43,16 +43,56 @@ INTB_PIN5 = 8
 MCP_ADDR0 = 0x20
 MCP_ADDR1 = 0x21
 MCP_ADDR2 = 0x22
-MCP_ADDR3 = 0x23
-MCP_ADDR4 = 0x24
-MCP_ADDR5 = 0x27
+MCP_ADDR3 = 0x24
+MCP_ADDR4 = 0x27
+MCP_ADDR5 = 0x23
 
-encoderList = [Encoder(4, 0), Encoder(4, 1), Encoder(4, 29), Encoder(4, 4), Encoder(4, 2),
-               Encoder(4, 5), Encoder(4, 3), Encoder(4, 28), Encoder(4, 18), Encoder(4, 19),
-               Encoder(4, 11), Encoder(4, 12), Encoder(4, 7), Encoder(4, 8), Encoder(4, 16), 
-               Encoder(4, 30), Encoder(0, 29), Encoder(1, 29), Encoder(2, 29), Encoder(3, 29),
-               Encoder(0, 1), Encoder(1, 1), Encoder(2, 1), Encoder(3, 1), Encoder(4, 10),
-               Encoder(4, 9)]
+GAIN = 0
+PITCH = 1
+FREQ = 2
+WOW = 3 
+AMP = 4
+LFO = 5
+SAT = 6
+HIGHFREQ = 7
+LOWFREQ = 8
+SAMPLERATE = 9
+BIT = 10 
+THRESH = 11 
+RATIO = 12
+ATTACK = 13
+REALEASE = 14 
+DELAY_AMOUNT = 15 
+LOOP_LENGTH = 16 
+LOOP_IS_ON = 17
+DELAY_SPACE = 18
+DELAY_FEEDBACK = 19
+DELAY_IS_ON = 20
+ON_SPACE = 21 
+OFF_SPACE = 22
+ON_OFFSET = 23 
+OFF_OFFSET = 24 
+STUTTER_ATTACK = 25 
+STUTTER_RELEASE = 26
+STUTTER_IS_ON = 27 
+NOISE_MAG = 28
+BEND = 29
+PAN = 30
+MUTE = 31
+
+encoderList = {"P/G0" : Encoder(0, GAIN), "BEND0" : Encoder(0, BEND), "P/G1" : Encoder(1, GAIN),
+               "BEND1" : Encoder(1, BEND), "P/G2" : Encoder(2, GAIN), "BEND2" : Encoder(2, BEND), 
+               "P/G3" : Encoder(3, GAIN), "BEND3" : Encoder(3, BEND), "P/G4" : Encoder(4, GAIN), 
+               "BEND4" : Encoder(4, BEND), "AMP" : Encoder(4, AMP), "FREQ" : Encoder(4, FREQ), 
+               "LFO" : Encoder(4, LFO), "WOW" : Encoder(4, WOW), "BIT" : Encoder(4, BIT), 
+               "SR" : Encoder(4, SAMPLERATE), "NOISE" : Encoder(4, NOISE_MAG), "SAT" : Encoder(4, SAT),
+               "DELAY SPACE" : Encoder(4, DELAY_SPACE), "DELAY FEEDBACK" : Encoder(4, DELAY_FEEDBACK),
+               "COMP THRESH" : Encoder(4, THRESH), "COMP RATIO" : Encoder(4, RATIO),
+               "LOWFREQ" : Encoder(4, LOWFREQ), "HIGHFREQ" : Encoder(4, HIGHFREQ),
+               "PAN" : Encoder(4, PAN), "LOOP LENGTH" : Encoder(4, LOOP_LENGTH),
+               "ON SPACE" : Encoder(4, ON_SPACE), "OFF SPACE" : Encoder(4, OFF_SPACE),
+               "ON OFFSET" : Encoder(4, ON_OFFSET), "OFF OFFSET" : Encoder(4, OFF_OFFSET),
+               "STUTTER RELEASE" : Encoder(4, STUTTER_RELEASE), "STUTTER ATTACK" : Encoder(4, STUTTER_ATTACK)}
 dataList = [0] * 155
 pressCheckList = [True, True, True]
 start = time.time()
@@ -85,7 +125,7 @@ bus.write_byte_data(MCP_ADDR0, 0x0D, 0b11111111)
 bus.write_byte_data(MCP_ADDR1, 0x0D, 0b11111111)
 bus.write_byte_data(MCP_ADDR2, 0x0D, 0b11111111)
 bus.write_byte_data(MCP_ADDR3, 0x0D, 0b11111111)
-bus.write_byte_data(MCP_ADDR4, 0x0D, 0b11111111)
+bus.write_byte_data(MCP_ADDR4, 0x0D, 0b00011111)
 
 bus.write_byte_data(MCP_ADDR0, 0x00, 0xFF)  # IODIRA = inputs
 bus.write_byte_data(MCP_ADDR1, 0x00, 0xFF)  # IODIRA = inputs
@@ -97,7 +137,7 @@ bus.write_byte_data(MCP_ADDR0, 0x01, 0xFF)  # IODIRB = inputs
 bus.write_byte_data(MCP_ADDR1, 0x01, 0xFF)  # IODIRB = inputs
 bus.write_byte_data(MCP_ADDR2, 0x01, 0xFF)  # IODIRB = inputs
 bus.write_byte_data(MCP_ADDR3, 0x01, 0xFF)  # IODIRB = inputs
-bus.write_byte_data(MCP_ADDR4, 0x01, 0xFF)  # IODIRB = inputs
+bus.write_byte_data(MCP_ADDR4, 0x01, 0b00011111)  # IODIRB = inputs
 
 
 
@@ -123,24 +163,24 @@ bus.write_byte_data(MCP_ADDR4, 0x08, 0x00)  # INTCONA (interrupt on change)
 bus.read_byte_data(MCP_ADDR4, 0x10)  # INTCAP 
 
 
-bus.write_byte_data(MCP_ADDR0, 0x05, 0xFF)  # GPINTENA (enable interrupts)
-bus.write_byte_data(MCP_ADDR0, 0x09, 0x00)  # INTCONA (interrupt on change)
+bus.write_byte_data(MCP_ADDR0, 0x05, 0xFF)  # GPINTENB (enable interrupts)
+bus.write_byte_data(MCP_ADDR0, 0x09, 0x00)  # INTCONB (interrupt on change)
 bus.read_byte_data(MCP_ADDR0, 0x11)  # INTCAP
 
-bus.write_byte_data(MCP_ADDR1, 0x05, 0xFF)  # GPINTENA (enable interrupts)
-bus.write_byte_data(MCP_ADDR1, 0x09, 0x00)  # INTCONA (interrupt on change)
+bus.write_byte_data(MCP_ADDR1, 0x05, 0xFF)  # GPINTENB (enable interrupts)
+bus.write_byte_data(MCP_ADDR1, 0x09, 0x00)  # INTCONB (interrupt on change)
 bus.read_byte_data(MCP_ADDR1, 0x11)  # INTCAP
 
-bus.write_byte_data(MCP_ADDR2, 0x05, 0xFF)  # GPINTENA (enable interrupts)
-bus.write_byte_data(MCP_ADDR2, 0x09, 0x00)  # INTCONA (interrupt on change)
+bus.write_byte_data(MCP_ADDR2, 0x05, 0xFF)  # GPINTENB (enable interrupts)
+bus.write_byte_data(MCP_ADDR2, 0x09, 0x00)  # INTCONB (interrupt on change)
 bus.read_byte_data(MCP_ADDR2, 0x11)  # INTCAP
 
-bus.write_byte_data(MCP_ADDR3, 0x05, 0xFF)  # GPINTENA (enable interrupts)
-bus.write_byte_data(MCP_ADDR3, 0x09, 0x00)  # INTCONA (interrupt on change)
+bus.write_byte_data(MCP_ADDR3, 0x05, 0xFF)  # GPINTENB (enable interrupts)
+bus.write_byte_data(MCP_ADDR3, 0x09, 0x00)  # INTCONB (interrupt on change)
 bus.read_byte_data(MCP_ADDR3, 0x11)  # INTCAP
 
-bus.write_byte_data(MCP_ADDR4, 0x05, 0xFF)  # GPINTENA (enable interrupts)
-bus.write_byte_data(MCP_ADDR4, 0x09, 0x00)  # INTCONA (interrupt on change)
+bus.write_byte_data(MCP_ADDR4, 0x05, 0b00011111)  # GPINTENB (enable interrupts)
+bus.write_byte_data(MCP_ADDR4, 0x09, 0b11100000)  # INTCONB (interrupt on change)
 bus.read_byte_data(MCP_ADDR4, 0x11)  # INTCAP
 
 
@@ -167,24 +207,17 @@ def interrupt0A(channel):
     pin1_state = (values >> pin1) & 1
     
     if pin0 == 0:
-        encoderList[0].prev_CLK_state = encoderList[0].CLK_state
-        encoderList[0].CLK_state = pin0_state
-        encoderList[0].DT_state = pin1_state
-        rotary_turned(encoderList[0])
+        encoderList["AMP"].voice = selectedVoice
+        rotary_turned(encoderList["AMP"], pin0_state, pin1_state)
     if pin0 == 2:
-        encoderList[1].prev_CLK_state = encoderList[1].CLK_state
-        encoderList[1].CLK_state = pin0_state
-        encoderList[1].DT_state = pin1_state
-        rotary_turned(encoderList[1])
+        encoderList["FREQ"].voice = selectedVoice
+        rotary_turned(encoderList["FREQ"], pin0_state, pin1_state)
     if pin0 == 4:
-        encoderList[2].prev_CLK_state = encoderList[2].CLK_state
-        encoderList[2].CLK_state = pin0_state
-        encoderList[2].DT_state = pin1_state
-        rotary_turned(encoderList[2])       
+        encoderList["LFO"].voice = selectedVoice
+        rotary_turned(encoderList["LFO"], pin0_state, pin1_state)       
     if pin0 == 6:
-        ctrl = (ctrl + 1) % 3
-    if pin0 == 7:
-        selectedVoice = 4
+        encoderList["WOW"].voice = selectedVoice
+        rotary_turned(encoderList["WOW"], pin0_state, pin1_state)
 
 def interrupt0B(channel):
  #   print("!!!")
@@ -208,22 +241,17 @@ def interrupt0B(channel):
 
     
     if pin0 == 0:
-        encoderList[24].voice = selectedVoice
-        encoderList[24].prev_CLK_state = encoderList[24].CLK_state
-        encoderList[24].CLK_state = pin0_state
-        encoderList[24].DT_state = pin1_state
-        rotary_turned(encoderList[24])
+        encoderList["BIT"].voice = selectedVoice
+        rotary_turned(encoderList["BIT"], pin0_state, pin1_state)
     if pin0 == 2:
-        encoderList[25].voice = selectedVoice
-        encoderList[25].prev_CLK_state = encoderList[25].CLK_state
-        encoderList[25].CLK_state = pin0_state
-        encoderList[25].DT_state = pin1_state
-        rotary_turned(encoderList[25])
-    if pin0 == 5:
-        print("Selected Voice is now 4")
-        selectedVoice = 4
+        encoderList["SR"].voice = selectedVoice
+        rotary_turned(encoderList["SR"], pin0_state, pin1_state)
+    if pin0 == 4:
+        encoderList["NOISE"].voice = selectedVoice
+        rotary_turned(encoderList["NOISE"], pin0_state, pin1_state)
     if pin0 == 6:
-        print("!!!")
+        encoderList["SAT"].voice = selectedVoice
+        rotary_turned(encoderList["SAT"], pin0_state, pin1_state)
 
  
 
@@ -250,29 +278,19 @@ def interrupt1A(channel):
     pin1_state = (values >> pin1) & 1
     
     if pin0 == 0:
-        encoderList[3].voice = selectedVoice
-        encoderList[3].prev_CLK_state = encoderList[3].CLK_state
-        encoderList[3].CLK_state = pin0_state
-        encoderList[3].DT_state = pin1_state
-        rotary_turned(encoderList[3])
+        encoderList["DELAY SPACE"].voice = selectedVoice
+        rotary_turned(encoderList["DELAY SPACE"], pin0_state, pin1_state)
     if pin0 == 2:
-        encoderList[4].voice = selectedVoice
-        encoderList[4].prev_CLK_state = encoderList[4].CLK_state
-        encoderList[4].CLK_state = pin0_state
-        encoderList[4].DT_state = pin1_state
-        rotary_turned(encoderList[4])
+        encoderList["DELAY FEEDBACK"].voice = selectedVoice
+        rotary_turned(encoderList["DELAY FEEDBACK"], pin0_state, pin1_state)
     if pin0 == 4:
-        encoderList[5].voice = selectedVoice
-        encoderList[5].prev_CLK_state = encoderList[5].CLK_state
-        encoderList[5].CLK_state = pin0_state
-        encoderList[5].DT_state = pin1_state
-        rotary_turned(encoderList[5])       
+        encoderList["COMP THRESH"].voice = selectedVoice
+        rotary_turned(encoderList["COMP THRESH"], pin0_state, pin1_state)
     if pin0 == 6:
-        encoderList[6].voice = selectedVoice
-        encoderList[6].prev_CLK_state = encoderList[6].CLK_state
-        encoderList[6].CLK_state = pin0_state
-        encoderList[6].DT_state = pin1_state
-        rotary_turned(encoderList[6])    
+        encoderList["COMP RATIO"].voice = selectedVoice
+        rotary_turned(encoderList["COMP RATIO"], pin0_state, pin1_state)
+
+
 
 
 
@@ -298,18 +316,18 @@ def interrupt1B(channel):
 
     
     if pin0 == 0:
-        encoderList[7].voice = selectedVoice
-        encoderList[7].prev_CLK_state = encoderList[7].CLK_state
-        encoderList[7].CLK_state = pin0_state
-        encoderList[7].DT_state = pin1_state
-        rotary_turned(encoderList[7])
+        encoderList["LOWFREQ"].voice = selectedVoice
+        rotary_turned(encoderList["LOWFREQ"], pin0_state, pin1_state)
     if pin0 == 2:
-        button_pressed(selectedVoice, 6, 1)
-    if pin0 == 3:
-        button_pressed(selectedVoice, 6, -1)
-    if pin0 >= 4:
-        selectedVoice = pin0 - 4
-        print("selectedVoice: " + str(selectedVoice))
+        encoderList["HIGHFREQ"].voice = selectedVoice
+        rotary_turned(encoderList["HIGHFREQ"], pin0_state, pin1_state)
+    if pin0 == 4:
+        encoderList["PAN"].voice = selectedVoice
+        rotary_turned(encoderList["PAN"], pin0_state, pin1_state)
+    if pin0 >= 6:
+        encoderList["LOOP LENGTH"].voice = selectedVoice
+        rotary_turned(encoderList["LOOP LENGTH"], pin0_state, pin1_state)
+
 
 
 
@@ -333,32 +351,17 @@ def interrupt2A(channel):
     pin1_state = (values >> pin1) & 1
     
     if pin0 == 0:
-        encoderList[8].voice = selectedVoice
-        encoderList[8].prev_CLK_state = encoderList[8].CLK_state
-        encoderList[8].CLK_state = pin0_state
-        encoderList[8].DT_state = pin1_state
-        rotary_turned(encoderList[8])
-
+        encoderList["ON SPACE"].voice = selectedVoice
+        rotary_turned(encoderList["ON SPACE"], pin0_state, pin1_state)
     if pin0 == 2:
-        encoderList[9].voice = selectedVoice
-        encoderList[9].prev_CLK_state = encoderList[9].CLK_state
-        encoderList[9].CLK_state = pin0_state
-        encoderList[9].DT_state = pin1_state
-        rotary_turned(encoderList[9])
-
+        encoderList["OFF SPACE"].voice = selectedVoice
+        rotary_turned(encoderList["OFF SPACE"], pin0_state, pin1_state)
     if pin0 == 4:
-        encoderList[10].voice = selectedVoice
-        encoderList[10].prev_CLK_state = encoderList[10].CLK_state
-        encoderList[10].CLK_state = pin0_state
-        encoderList[10].DT_state = pin1_state
-        rotary_turned(encoderList[10])
-
+        encoderList["ON OFFSET"].voice = selectedVoice
+        rotary_turned(encoderList["ON OFFSET"], pin0_state, pin1_state)
     if pin0 == 6:
-        encoderList[11].voice = selectedVoice
-        encoderList[11].prev_CLK_state = encoderList[11].CLK_state
-        encoderList[11].CLK_state = pin0_state
-        encoderList[11].DT_state = pin1_state
-        rotary_turned(encoderList[11])
+        encoderList["OFF OFFSET"].voice = selectedVoice
+        rotary_turned(encoderList["OFF OFFSET"], pin0_state, pin1_state)
 
 
 def interrupt2B(channel):
@@ -382,30 +385,47 @@ def interrupt2B(channel):
     pin0_state = (values >> pin0) & 1
     pin1_state = (values >> pin1) & 1
  
-    if pin0 == 0:
-        encoderList[12].voice = selectedVoice
-        encoderList[12].prev_CLK_state = encoderList[12].CLK_state
-        encoderList[12].CLK_state = pin0_state
-        encoderList[12].DT_state = pin1_state
-        rotary_turned(encoderList[12])
+    if pin0 == 0
+        if pressCheckList[0]:
+            button_pressed(selectedVoice, STUTTER_IS_ON, 1)
+
+            value = bus.read_byte_data(address, 0x12)
+            value ^= 0b01000000
+            bus.write_byte_data(address, 0x12, value)
+
+            pressCheckList[0] = False
+        else:
+            pressCheckList[0] = True
+    if pin0 == 1:
+        if pressCheckList[1]:
+            button_pressed(selectedVoice, LOOP_IS_ON, 1)
+
+            value = bus.read_byte_data(address, 0x12)
+            value ^= 0b10000000
+            bus.write_byte_data(address, 0x12, value)
+
+            pressCheckList[1] = False
+        else:
+            pressCheckList[1] = True
     if pin0 == 2:
-        encoderList[13].voice = selectedVoice
-        encoderList[13].prev_CLK_state = encoderList[13].CLK_state
-        encoderList[13].CLK_state = pin0_state
-        encoderList[13].DT_state = pin1_state
-        rotary_turned(encoderList[13])
-    if pin0 == 4:
-        encoderList[14].voice = selectedVoice
-        encoderList[14].prev_CLK_state = encoderList[14].CLK_state
-        encoderList[14].CLK_state = pin0_state
-        encoderList[14].DT_state = pin1_state
-        rotary_turned(encoderList[14])
-    if pin0 == 6:
-        encoderList[15].voice = selectedVoice
-        encoderList[15].prev_CLK_state = encoderList[15].CLK_state
-        encoderList[15].CLK_state = pin0_state
-        encoderList[15].DT_state = pin1_state
-        rotary_turned(encoderList[15])
+        if pressCheckList[2]:
+            button_pressed(selectedVoice, DELAY_IS_ON, 1)
+
+            value = bus.read_byte_data(address, 0x12)
+            value ^= 0b00100000
+            bus.write_byte_data(address, 0x12, value)
+
+            pressCheckList[2] = False
+        else:
+            pressCheckList[2] = True
+    if pin0 == 3
+        encoderList["STUTTER RELEASE"].voice = selectedVoice
+        rotary_turned(encoderList["STUTTER RELEASE"], pin0_state, pin1_state)
+    if pin0 == 5:
+        encoderList["STUTTER ATTACK"].voice = selectedVoice
+        rotary_turned(encoderList["STUTTER ATTACK"], pin0_state, pin1_state)
+    if pin0 == 7:
+        selectedVoice = 4
 
 
 
@@ -429,21 +449,29 @@ def interrupt3A(channel):
     pin1_state = (values >> pin1) & 1
 
     if pin0 == 0:
-        button_pressed(selectedVoice, 21, 1)
-    if pin0 == 1:
-        button_pressed(selectedVoice, 21, -1)
+        if ctrl == 0:
+            encoderList["P/G0"].param = PITCH
+        else:
+            encoderList["P/G0"].param = GAIN
+        rotary_turned(encoderList["P/G0"], pin0_state, pin1_state)
     if pin0 == 2:
-        button_pressed(selectedVoice, 22, 1)
-    if pin0 == 3:
-        button_pressed(selectedVoice, 22, -1)
+        if ctrl == 0:
+            encoderList["P/G1"].param = PITCH
+        else:
+            encoderList["P/G1"].param = GAIN
+        rotary_turned(encoderList["P/G1"], pin0_state, pin1_state)
     if pin0 == 4:
-        button_pressed(selectedVoice, 23, 1)
-    if pin0 == 5:
-        button_pressed(selectedVoice, 23, -1)
+        if ctrl == 0:
+            encoderList["P/G2"].param = PITCH
+        else:
+            encoderList["P/G2"].param = GAIN
+        rotary_turned(encoderList["P/G2"], pin0_state, pin1_state)
     if pin0 == 6:
-        button_pressed(selectedVoice, 24, 1)
-    if pin0 == 7:
-        button_pressed(selectedVoice, 24, -1)
+        if ctrl == 0:
+            encoderList["P/G3"].param = PITCH
+        else:
+            encoderList["P/G3"].param = GAIN
+        rotary_turned(encoderList["P/G3"], pin0_state, pin1_state)
 
  
 
@@ -468,38 +496,35 @@ def interrupt3B(channel):
 
 
     if pin0 == 0:
-        button_pressed(selectedVoice, 25, 1)
-    if pin0 == 1:
-        button_pressed(selectedVoice, 25, -1)
+        if ctrl == 0:
+            encoderList["BEND0"].param = BEND
+        else:
+            encoderList["BEND0"].param = DELAY_AMOUNT
+        rotary_turned(encoderList["BEND0"], pin0_state, pin1_state)
     if pin0 == 2:
-        button_pressed(selectedVoice, 26, 1)
-    if pin0 == 3:
-        button_pressed(selectedVoice, 26, -1)
+        if ctrl == 0:
+            encoderList["BEND1"].param = BEND
+        else:
+            encoderList["BEND1"].param = DELAY_AMOUNT
+        rotary_turned(encoderList["BEND1"], pin0_state, pin1_state)
     if pin0 == 4:
-        if pressCheckList[0]:
-            button_pressed(selectedVoice, 17, 1)
-            pressCheckList[0] = False
+        if ctrl == 0:
+            encoderList["BEND2"].param = BEND
         else:
-            pressCheckList[0] = True
-    if pin0 == 5:
-        if pressCheckList[1]:
-            button_pressed(selectedVoice, 20, 1)
-            pressCheckList[1] = False
-        else:
-            pressCheckList[1] = True
+            encoderList["BEND2"].param = DELAY_AMOUNT
+        rotary_turned(encoderList["BEND2"], pin0_state, pin1_state)
     if pin0 == 6:
-        if pressCheckList[2]:
-            button_pressed(selectedVoice, 27, 1)
-            pressCheckList[2] = False
+        if ctrl == 0:
+            encoderList["BEND3"].param = BEND
         else:
-            pressCheckList[2] = True
+            encoderList["BEND3"].param = DELAY_AMOUNT
+        rotary_turned(encoderList["BEND3"], pin0_state, pin1_state)
 
 
 def interrupt4A(channel):
  #   print("!!!")
 
     global selectedVoice
-    global hallCounter
 
     intf = bus.read_byte_data(MCP_ADDR4,0x0E)
     values = bus.read_byte_data(MCP_ADDR4, 0x10)
@@ -516,20 +541,21 @@ def interrupt4A(channel):
     pin1_state = (values >> pin1) & 1
 
     if pin0 == 0:
-
-        print("Hall Effect Sensor Activated" + str(hallCounter))
-        print("--------------------------")
-        print("")
-        hallCounter += 1
+        button_pressed(3, MUTE, 1) 
+    if pin0 == 1:
+        button_pressed(2, MUTE, 1) 
     if pin0 == 2:
-
-        print("Hall Effect 1")
+        button_pressed(1, MUTE, 1) 
+    if pin0 == 3:
+        button_pressed(0, MUTE, 1) 
     if pin0 == 4:
-
-        print("Hall Effect 2 Sensor Activated")
+        selectedVoice = 0
+    if pin0 == 5:
+        selectedVoice = 1
     if pin0 == 6:
-        print("Hall Effect 3 Sensor Activated")
-
+        selectedVoice = 2
+    if pin0 == 7:
+        selectedVoice = 3
 
 
 def interrupt4B(channel):
@@ -553,49 +579,18 @@ def interrupt4B(channel):
     pin1_state = (values >> pin1) & 1
 
     if pin0 == 0:
-        if ctrl == 0:
-            encoderList[20].param = 0
-        elif ctrl == 1:
-            encoderList[20].param = 1
-        elif ctrl == 2:
-            encoderList[20].param = 28
-        encoderList[20].prev_CLK_state = encoderList[20].CLK_state
-        encoderList[20].CLK_state = pin0_state
-        encoderList[20].DT_state = pin1_state
-        rotary_turned(encoderList[20])
+        rotary_turned(encoderList["BEND4"], pin0_state, pin1_state)
     if pin0 == 2:
-        if ctrl == 0:
-            encoderList[21].param = 0
-        elif ctrl == 1:
-            encoderList[21].param = 1
-        elif ctrl == 2:
-            encoderList[21].param = 28
-        encoderList[21].prev_CLK_state = encoderList[21].CLK_state
-        encoderList[21].CLK_state = pin0_state
-        encoderList[21].DT_state = pin1_state
-        rotary_turned(encoderList[21])
+        if ctrl:
+            encoderList["P/G4"].param = GAIN
+        else:
+            encoderList["P/G4"].param = PITCH           
+        rotary_turned(encoderList["P/G4"], pin0_state, pin1_state)
     if pin0 == 4:
-        if ctrl == 0:
-            encoderList[22].param = 0
-        elif ctrl == 1:
-            encoderList[22].param = 1
-        elif ctrl == 2:
-            encoderList[22].param = 28
-        encoderList[22].prev_CLK_state = encoderList[22].CLK_state
-        encoderList[22].CLK_state = pin0_state
-        encoderList[22].DT_state = pin1_state
-        rotary_turned(encoderList[22])
-    if pin0 == 6:
-        if ctrl == 0:
-            encoderList[23].param = 0
-        elif ctrl == 1:
-            encoderList[23].param = 1
-        elif ctrl == 2:
-            encoderList[23].param = 28
-        encoderList[23].prev_CLK_state = encoderList[23].CLK_state
-        encoderList[23].CLK_state = pin0_state
-        encoderList[23].DT_state = pin1_state
-        rotary_turned(encoderList[23])
+        if ctrl:
+            ctrl = 0 
+        else:
+            ctrl = 1
 
 
 
@@ -603,8 +598,12 @@ def interrupt4B(channel):
 
 
 
-def rotary_turned(e):
+
+def rotary_turned(e, pin0_state, pin1_state):
         # Read the current state of the rotary encoder's CLK pin
+        e.prev_CLK_state = e.CLK_state
+        e.CLK_state = pin0_state
+        e.DT_state = pin1_state       
         CLK_state = e.CLK_state
         prev_CLK_state = e.prev_CLK_state
         DT_state = e.DT_state
