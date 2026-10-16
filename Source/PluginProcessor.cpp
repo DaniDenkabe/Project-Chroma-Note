@@ -758,6 +758,7 @@ std::ifstream file(std::string(home) + "/data.txt");
 
                     case 29:
                         bends[voice] = std::clamp((1.f/15.f) * input, 0.f, 1.f);  
+                        added = 
                         break;
 
                     case 30:
@@ -785,13 +786,19 @@ std::ifstream file(std::string(home) + "/data.txt");
         counters[index] += freqs[index];
 
         
-        float shift = (wowAmps[index]->getNextValue()) * sin(counters[index] * (4 + (wows[index] / 5))) + amplitudes[index] * sin(counters[index] * freqs[index]);
+        float shift = /*(wowAmps[index]->getNextValue()) * sin(counters[index] * (4 + (wows[index] / 5)))*/ + amplitudes[index] * sin(counters[index] * freqs[index]);
         if (shift > 0) {
             shift = ((100 - lfos[index]) * shift + lfos[index] * amplitudes[index]) / 100;
         } else if (shift < 0) {
             shift = ((100 - lfos[index]) * shift + lfos[index] * -amplitudes[index]) / 100;
         }
         pitchSemis[index] += shift;
+
+
+
+        bends[index] = wows[index] * (1.5 * sin(counters[index] / (2 + 0.5 * wows[index])) + sin(counters[index] / 1.6)) - (0.1 - wows[index] / 2);
+        if (bends[index] < 0) 
+            bends[index] = 0;
     }
 }
 
